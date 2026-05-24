@@ -1,0 +1,340 @@
+.recharge-page {
+  min-height: 100vh;
+  padding: 110rpx 18rpx calc(80rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, #c8e8a0 0%, #a8d068 55%, #7eb832 100%);
+  box-sizing: border-box;
+}
+
+.recharge-topbar {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 0 8rpx 34rpx;
+}
+
+.recharge-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recharge-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.recharge-topbar__title {
+  flex: 1;
+  text-align: center;
+  padding-right: 52rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.recharge-account {
+  padding: 30rpx 28rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(135deg, #6aa325 0%, #4e8218 100%);
+  box-shadow: 0 14rpx 40rpx rgba(42, 62, 20, 0.22);
+}
+
+.recharge-account__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.recharge-account__name-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.recharge-account__name-value {
+  margin-top: 8rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #fff;
+  word-break: break-all;
+}
+
+.recharge-account__refresh {
+  min-width: 112rpx;
+  height: 52rpx;
+  padding: 0 22rpx;
+  border-radius: 999rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.42);
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #111;
+  box-sizing: border-box;
+}
+
+.recharge-account__stats {
+  margin-top: 26rpx;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+}
+
+.recharge-account__stat {
+  min-height: 126rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.55);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.recharge-account__stat-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+.recharge-account__stat-value {
+  margin-top: 10rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #fff;
+  word-break: break-all;
+}
+
+.recharge-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 32rpx;
+  padding: 0 8rpx;
+}
+
+.recharge-section__link {
+  font-size: 30rpx;
+  color: #8b5a00;
+}
+
+.recharge-product-card {
+  margin-top: 20rpx;
+  padding: 26rpx;
+  border-radius: 30rpx;
+  background: #fff;
+  border: 2rpx solid rgba(126, 184, 50, 0.2);
+  box-shadow: 0 16rpx 36rpx rgba(42, 62, 20, 0.12);
+}
+
+.recharge-product__main {
+  display: flex;
+  align-items: stretch;
+  gap: 22rpx;
+}
+
+.recharge-product__poster {
+  position: relative;
+  width: 210rpx;
+  min-height: 210rpx;
+  padding: 16rpx;
+  border-radius: 26rpx;
+  background: #fff8e5;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.recharge-product__poster-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 20rpx;
+  display: block;
+  background: #fff;
+}
+
+.recharge-product__poster-hot {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 999rpx;
+  background: #ff5a2d;
+  font-size: 18rpx;
+  font-weight: 800;
+  color: #fff;
+  z-index: 1;
+}
+
+.recharge-product__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rpx 0 4rpx;
+}
+
+.recharge-product__payline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8rpx 10rpx;
+}
+
+.recharge-product__pay-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #ff6f00;
+}
+
+.recharge-product__pay-amount {
+  font-size: 56rpx;
+  line-height: 1;
+  font-weight: 800;
+  color: #ff6f00;
+}
+
+.recharge-product__pay-divider {
+  font-size: 28rpx;
+  color: #d5a05c;
+}
+
+.recharge-product__meta-inline {
+  font-size: 28rpx;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #d97800;
+}
+
+.recharge-product__promo {
+  margin-top: 20rpx;
+  padding: 18rpx 18rpx 16rpx;
+  border-radius: 22rpx;
+  background: #fff6ea;
+  border: 1rpx solid rgba(255, 155, 57, 0.16);
+}
+
+.recharge-product__promo-save {
+  font-size: 23rpx;
+  line-height: 1.55;
+  color: #cb6c00;
+}
+
+.recharge-product__promo-reward {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.45;
+  color: #ff7a00;
+  font-weight: 700;
+}
+
+.recharge-product__footer {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.recharge-product__quantity-label {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.recharge-product__quantity-meta {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #7d7d7d;
+}
+
+.recharge-quantity {
+  width: 270rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  background: #f2f3f5;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.recharge-quantity__btn {
+  width: 78rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46rpx;
+  color: #232323;
+}
+
+.recharge-quantity__btn--disabled {
+  color: #bcc0c7;
+}
+
+.recharge-quantity__value {
+  flex: 1;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1rpx solid rgba(35, 35, 35, 0.1);
+  border-right: 1rpx solid rgba(35, 35, 35, 0.1);
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.recharge-submit-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-top: 34rpx;
+}
+
+.recharge-submit {
+  height: 108rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.recharge-submit--cash {
+  background: #2d2d2d;
+  color: #fff;
+}
+
+.recharge-submit--points {
+  background: #ffd126;
+  color: #111;
+}
+
+.recharge-desc {
+  margin-top: 42rpx;
+  padding: 0 2rpx;
+}
+
+.recharge-desc__title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.recharge-desc__item {
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #111;
+}

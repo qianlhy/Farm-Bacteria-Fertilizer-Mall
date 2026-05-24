@@ -1,0 +1,6 @@
+<view class="page-shell action-page">
+  <view class="action-card soft-card">
+    <view class="action-card__title">订购中心</view>
+    <view class="action-card__desc">这里可以继续扩展商品列表、规格选择、购物车和支付流程。</view>
+  </view>
+</view>

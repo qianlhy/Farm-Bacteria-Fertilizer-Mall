@@ -1,0 +1,35 @@
+<view class="tabbar-shell">
+  <view class="tabbar">
+    <block wx:for="{{list}}" wx:key="pagePath">
+      <view
+        class="tabbar__item {{item.raised ? 'tabbar__item--raised' : ''}}"
+        data-path="{{item.pagePath}}"
+        data-index="{{index}}"
+        bindtap="switchTab"
+      >
+        <view wx:if="{{item.raised}}" class="tabbar__raised-wrap">
+          <view class="tabbar__raised-circle {{selected === index ? 'tabbar__raised-circle--active' : ''}}">
+            <image
+              class="tabbar__raised-icon {{selected === index ? 'tabbar__raised-icon--active' : ''}}"
+              src="{{selected === index ? item.activeIcon : item.icon}}"
+              mode="aspectFit"
+            />
+          </view>
+        </view>
+
+        <view wx:else class="tabbar__icon-shell">
+          <image
+            class="tabbar__icon-image {{selected === index ? 'tabbar__icon-image--active' : ''}}"
+            src="{{selected === index ? item.activeIcon : item.icon}}"
+            mode="aspectFit"
+          />
+          <view wx:if="{{item.key === 'mine' && !loggedIn}}" class="tabbar__login-dot"></view>
+        </view>
+
+        <view class="tabbar__label {{selected === index ? 'tabbar__label--active' : ''}} {{item.raised ? 'tabbar__label--raised' : ''}}">
+          {{item.text}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,26 @@
+<view class="recharge-records-page">
+  <view class="recharge-records-topbar">
+    <view class="recharge-records-topbar__back" bindtap="goBack">
+      <view class="recharge-records-topbar__back-icon"></view>
+    </view>
+    <view class="recharge-records-topbar__title">充值记录</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="recharge-records-empty">加载中...</view>
+  <view wx:elif="{{!records.length}}" class="recharge-records-empty">暂无充值记录</view>
+
+  <block wx:if="{{records.length}}" wx:for="{{records}}" wx:key="orderNo">
+    <view class="recharge-record-card">
+      <view class="recharge-record-card__left">
+        <view class="recharge-record-card__channel">{{item.channelName}}</view>
+        <view class="recharge-record-card__time">{{item.paidAt}}</view>
+        <view class="recharge-record-card__amount">{{item.productName}} × {{item.quantity}} = {{item.totalKg}}Kg</view>
+        <view class="recharge-record-card__gift">支付方式：{{item.paymentMethod}}</view>
+      </view>
+      <view class="recharge-record-card__right">
+        <view class="recharge-record-card__price">￥{{item.paidPrice}}</view>
+        <view class="recharge-record-card__points">+{{item.pointsAwarded}}积分</view>
+      </view>
+    </view>
+  </block>
+</view>

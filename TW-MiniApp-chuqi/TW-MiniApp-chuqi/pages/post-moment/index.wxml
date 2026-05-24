@@ -1,0 +1,73 @@
+<view class="moment-page">
+  <view class="moment-topbar">
+    <view class="moment-topbar__back" bindtap="goBack">
+      <view class="moment-topbar__back-icon"></view>
+    </view>
+    <view class="moment-topbar__title">{{pageTitle}}</view>
+  </view>
+
+  <view class="moment-editor">
+    <view class="moment-media">
+      <view wx:if="{{images.length === 0}}" class="moment-media__picker" bindtap="chooseImages">
+        <view class="moment-media__plus">＋</view>
+      </view>
+      <view wx:else class="moment-media__grid">
+        <block wx:for="{{images}}" wx:key="*this" wx:for-index="imageIndex">
+          <view class="moment-media__image-card">
+            <image class="moment-media__image" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="previewImage" />
+            <view class="media-remove" data-index="{{imageIndex}}" catchtap="removeImage">
+              <view class="media-remove__line"></view>
+            </view>
+          </view>
+        </block>
+        <view wx:if="{{images.length < 9}}" class="moment-media__picker moment-media__picker--small" bindtap="chooseImages">
+          <view class="moment-media__plus">＋</view>
+        </view>
+      </view>
+    </view>
+
+    <input
+      class="moment-editor__title"
+      placeholder="标题"
+      maxlength="40"
+      value="{{title}}"
+      bindinput="onTitleChange"
+    />
+
+    <textarea
+      class="moment-editor__textarea"
+      placeholder="输入正文说明..."
+      maxlength="-1"
+      auto-height
+      cursor-spacing="120"
+      value="{{content}}"
+      bindinput="onInputChange"
+    />
+  </view>
+
+  <view class="moment-publishbar">
+    <view class="moment-location" bindtap="chooseLocation">
+      <view class="moment-location__left">
+        <text class="moment-location__icon">◉</text>
+        <text>{{selectedLocation || '添加地址'}}</text>
+      </view>
+      <view class="moment-location__arrow"></view>
+    </view>
+
+    <view
+      class="moment-publishbar__button {{publishEnabled ? 'moment-publishbar__button--active' : ''}}"
+      bindtap="publishPost"
+    >
+      发布
+    </view>
+  </view>
+
+  <view wx:if="{{showExitSheet}}" class="editor-sheet__mask" bindtap="closeExitSheet"></view>
+  <view wx:if="{{showExitSheet}}" class="editor-sheet">
+    <view class="editor-sheet__title">草稿尚未保存，是否退出？</view>
+    <view class="editor-sheet__action" bindtap="saveDraftAndExit">保存并退出</view>
+    <view class="editor-sheet__action" bindtap="discardDraftAndExit">不保存并退出</view>
+    <view class="editor-sheet__gap"></view>
+    <view class="editor-sheet__action editor-sheet__action--cancel" bindtap="closeExitSheet">返回编辑</view>
+  </view>
+</view>

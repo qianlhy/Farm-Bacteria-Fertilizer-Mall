@@ -1,0 +1,38 @@
+<view class="group-check-page">
+  <view class="group-check-topbar">
+    <view class="group-check-topbar__back" bindtap="goBack">
+      <view class="group-check-topbar__back-icon"></view>
+    </view>
+    <view class="group-check-topbar__title">{{currentTitle}}</view>
+  </view>
+
+  <view class="group-check-tabs">
+    <block wx:for="{{platformTabs}}" wx:key="key">
+      <view
+        class="group-check-tabs__item {{item.key === activeTab ? 'group-check-tabs__item--active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="switchTab"
+      >
+        {{item.label}}
+      </view>
+    </block>
+  </view>
+
+  <view class="group-check-card">
+    <input
+      class="group-check-card__input"
+      placeholder="{{currentPlaceholder || '请输入核销码'}}"
+      value="{{codeInput}}"
+      bindinput="onCodeInput"
+    />
+  </view>
+
+  <view class="group-check-submit" bindtap="submitCheck">立即核销</view>
+
+  <view class="group-check-desc">
+    <view class="group-check-desc__title">核销说明：</view>
+    <view class="group-check-desc__item">1. 打开团购平台订单页面，复制券码，将券码粘贴至上面的文本输入框。</view>
+    <view class="group-check-desc__item">2. 点击上面的“立即核销”按钮，核销成功后到账卡券。</view>
+    <view class="group-check-desc__item">3. 核销成功，不予退款。</view>
+  </view>
+</view>

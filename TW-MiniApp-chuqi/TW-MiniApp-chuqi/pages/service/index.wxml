@@ -1,0 +1,249 @@
+<view class="pickup-page">
+  <view class="pickup-stage">
+    <view class="pickup-stage__glow pickup-stage__glow--left"></view>
+    <view class="pickup-stage__glow pickup-stage__glow--right"></view>
+  </view>
+
+  <view class="pickup-shell">
+    <view class="pickup-hero">
+      <view class="pickup-hero__copy">
+        <view class="pickup-hero__eyebrow">提货中心</view>
+        <view class="pickup-hero__title">按包装物和配送方式完成提货</view>
+        <view class="pickup-hero__desc">县城范围内可配送，包装物费用可现金或积分支付，配送费可现金、运补或组合支付。</view>
+      </view>
+      <image class="pickup-hero__icon" src="/assets/svg-icons/pickup-active.svg" mode="aspectFit" />
+    </view>
+
+    <view class="pickup-balance-card">
+      <view class="pickup-balance-card__name">{{accountName}}</view>
+      <view class="pickup-balance-card__stats">
+        <view class="pickup-balance-card__stat">
+          <view class="pickup-balance-card__label">提货余额(Kg)</view>
+          <view class="pickup-balance-card__value">{{pickupBalanceText}}</view>
+        </view>
+        <view class="pickup-balance-card__stat">
+          <view class="pickup-balance-card__label">运补余额(元)</view>
+          <view class="pickup-balance-card__value">{{freightSubsidyBalanceText}}</view>
+        </view>
+        <view class="pickup-balance-card__stat">
+          <view class="pickup-balance-card__label">积分余额</view>
+          <view class="pickup-balance-card__value">{{pointsBalanceText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="pickup-card soft-card">
+      <view class="pickup-card__title">包装物选择</view>
+      <view class="pickup-card__subtitle">先选包装物，再选对应规格。</view>
+
+      <block wx:for="{{packagingOptions}}" wx:key="key">
+        <view
+          class="pickup-package {{selectedPackagingKey === item.key ? 'pickup-package--active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="selectPackaging"
+        >
+          <view class="pickup-package__main">
+            <view class="pickup-package__head">
+              <view class="pickup-package__name">{{item.title}}</view>
+              <view class="pickup-package__badge">{{item.unitLabel}}</view>
+            </view>
+            <view class="pickup-package__detail">{{item.detail}}</view>
+            <view class="pickup-package__price">{{item.priceHint}}</view>
+          </view>
+          <view class="pickup-package__dot"></view>
+        </view>
+      </block>
+
+      <view class="pickup-chip-row">
+        <block wx:for="{{selectedPackaging.conditions}}" wx:key="key">
+          <view
+            class="pickup-chip {{selectedConditionKey === item.key ? 'pickup-chip--active' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="selectCondition"
+          >
+            {{item.label}}
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="pickup-card soft-card">
+      <view class="pickup-card__title">配送方式</view>
+      <view class="pickup-card__subtitle">配送起送量为 1 吨，县城范围外暂不支持配送。</view>
+
+      <view class="pickup-method-grid">
+        <block wx:for="{{deliveryOptions}}" wx:key="key">
+          <view
+            class="pickup-method {{deliveryMethod === item.key ? 'pickup-method--active' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="selectDeliveryMethod"
+          >
+            <view class="pickup-method__title">{{item.title}}</view>
+            <view class="pickup-method__desc">{{item.desc}}</view>
+          </view>
+        </block>
+      </view>
+
+      <view wx:if="{{needsCountyScope}}" class="pickup-chip-row pickup-chip-row--compact">
+        <view
+          class="pickup-chip {{areaScope === 'county' ? 'pickup-chip--active' : ''}}"
+          data-key="county"
+          bindtap="selectAreaScope"
+        >县城范围内</view>
+        <view
+          class="pickup-chip {{areaScope === 'outside' ? 'pickup-chip--active' : ''}}"
+          data-key="outside"
+          bindtap="selectAreaScope"
+        >县城范围外</view>
+      </view>
+
+      <view wx:if="{{needsCountyScope && areaScope === 'county'}}" class="pickup-address">
+        <view class="pickup-address__title">卸货地址</view>
+        <view class="pickup-address__field">
+          <view class="pickup-address__icon">卸</view>
+          <input
+            class="pickup-address__input"
+            placeholder="请输入卸货地址"
+            value="{{deliveryAddress}}"
+            bindinput="onDeliveryAddressInput"
+          />
+        </view>
+        <view class="pickup-address__hint">配送时请填写县城范围内的具体卸货地址。</view>
+      </view>
+
+      <view wx:if="{{deliveryWarning}}" class="pickup-alert pickup-alert--warn">{{deliveryWarning}}</view>
+      <view wx:else class="pickup-inline-tip">{{deliveryHint}}</view>
+    </view>
+
+    <view class="pickup-card soft-card">
+      <view class="pickup-card__title">提货数量</view>
+      <view class="pickup-card__subtitle">按当前包装物的单位数量填写，系统会自动换算为公斤。</view>
+
+      <view class="pickup-quantity">
+        <view class="pickup-quantity__meta">
+          <view class="pickup-quantity__summary">{{quantitySummaryText}}</view>
+          <view class="pickup-inline-tip">{{quantityHint}}</view>
+        </view>
+
+        <view class="pickup-stepper">
+          <view class="pickup-stepper__btn" bindtap="decreaseQuantity">-</view>
+          <input
+            class="pickup-stepper__input"
+            type="number"
+            value="{{quantityText}}"
+            bindinput="onQuantityInput"
+            bindblur="onQuantityBlur"
+          />
+          <view class="pickup-stepper__btn" bindtap="increaseQuantity">+</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="pickup-card soft-card">
+      <view class="pickup-card__title">费用明细</view>
+      <view class="pickup-breakdown">
+        <view class="pickup-breakdown__row">
+          <text>本次提货</text>
+          <text>{{totalKgText}}Kg</text>
+        </view>
+        <view class="pickup-breakdown__row">
+          <text>包装物规格</text>
+          <text>{{packagingSummaryText}}</text>
+        </view>
+        <view class="pickup-breakdown__row">
+          <text>包装物费用</text>
+          <text>￥{{packagingFeeText}}</text>
+        </view>
+        <view class="pickup-breakdown__row">
+          <text>积分支付参考</text>
+          <text>{{packagingPointsCostText}}积分</text>
+        </view>
+        <view class="pickup-breakdown__row">
+          <text>配送费</text>
+          <text>{{deliveryMethod === 'delivery' ? '￥' + deliveryFeeText : '免费'}}</text>
+        </view>
+        <view class="pickup-breakdown__row">
+          <text>提货后余额</text>
+          <text>{{balanceAfterText}}Kg</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="pickup-card soft-card">
+      <view class="pickup-card__title">支付方式</view>
+
+      <view class="pickup-pay-block">
+        <view class="pickup-pay-block__head">
+          <view class="pickup-pay-block__title">包装物费用</view>
+          <view class="pickup-pay-block__amount">￥{{packagingFeeText}}</view>
+        </view>
+        <view wx:if="{{packagingPayAvailable}}" class="pickup-pay-grid">
+          <block wx:for="{{packagingPayOptions}}" wx:key="key">
+            <view
+              class="pickup-pay-option {{packagingPayMethod === item.key ? 'pickup-pay-option--active' : ''}}"
+              data-key="{{item.key}}"
+              bindtap="selectPackagingPayMethod"
+            >
+              <view class="pickup-pay-option__title">{{item.title}}</view>
+              <view class="pickup-pay-option__desc">{{item.desc}}</view>
+            </view>
+          </block>
+        </view>
+        <view class="pickup-inline-tip">{{packagingPayHint}}</view>
+      </view>
+
+      <view class="pickup-pay-block">
+        <view class="pickup-pay-block__head">
+          <view class="pickup-pay-block__title">配送费</view>
+          <view class="pickup-pay-block__amount">{{deliveryMethod === 'delivery' ? '￥' + deliveryFeeText : '免费'}}</view>
+        </view>
+        <view wx:if="{{freightAvailable}}" class="pickup-pay-grid pickup-pay-grid--triple">
+          <block wx:for="{{freightPayOptions}}" wx:key="key">
+            <view
+              class="pickup-pay-option {{freightPayMethod === item.key ? 'pickup-pay-option--active' : ''}}"
+              data-key="{{item.key}}"
+              bindtap="selectFreightPayMethod"
+            >
+              <view class="pickup-pay-option__title">{{item.title}}</view>
+              <view class="pickup-pay-option__desc">{{item.desc}}</view>
+            </view>
+          </block>
+        </view>
+        <view class="pickup-inline-tip">{{freightPayHint}}</view>
+        <view class="pickup-inline-tip pickup-inline-tip--emphasis">运补仅能抵扣县城范围内的配送费，不能抵扣提货公斤数。</view>
+      </view>
+    </view>
+
+    <view class="pickup-card pickup-card--summary soft-card">
+      <view class="pickup-card__title">本次结算</view>
+      <view class="pickup-summary">
+        <view class="pickup-summary__row">
+          <text>现金支付</text>
+          <text>{{totalCashLabel}}</text>
+        </view>
+        <view class="pickup-summary__row">
+          <text>积分支付</text>
+          <text>{{totalPointsLabel}}</text>
+        </view>
+        <view class="pickup-summary__row">
+          <text>运补抵扣</text>
+          <text>{{subsidyLabel}}</text>
+        </view>
+        <view class="pickup-summary__row">
+          <text>提货后运补</text>
+          <text>￥{{freightSubsidyAfterText}}</text>
+        </view>
+        <view class="pickup-summary__row">
+          <text>提货后积分</text>
+          <text>{{pointsAfterText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{primaryError}}" class="pickup-alert pickup-alert--error">{{primaryError}}</view>
+
+    <view class="pickup-submit {{canSubmit ? '' : 'pickup-submit--disabled'}}" bindtap="submitPickup">
+      确认提货并扣减余额
+    </view>
+  </view>
+</view>

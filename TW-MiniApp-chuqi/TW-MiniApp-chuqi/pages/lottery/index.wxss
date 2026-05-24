@@ -1,0 +1,19 @@
+.action-page {
+  padding: 120rpx 24rpx 80rpx;
+}
+
+.action-card {
+  padding: 30rpx;
+}
+
+.action-card__title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.action-card__desc {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #726654;
+}

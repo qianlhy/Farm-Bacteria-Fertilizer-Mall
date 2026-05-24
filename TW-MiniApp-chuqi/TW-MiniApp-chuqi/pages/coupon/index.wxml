@@ -1,0 +1,6 @@
+<view class="page-shell action-page">
+  <view class="action-card soft-card">
+    <view class="action-card__title">领券有礼</view>
+    <view class="action-card__desc">这里可以接优惠券列表、领取规则和分享裂变活动。</view>
+  </view>
+</view>

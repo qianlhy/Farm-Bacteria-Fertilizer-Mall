@@ -1,0 +1,229 @@
+.login-page {
+  min-height: 100vh;
+  padding: 104rpx 32rpx 80rpx;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.login-topbar {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.login-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.login-topbar__title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+
+.login-brand {
+  margin-top: 100rpx;
+  text-align: center;
+}
+
+.login-brand__title {
+  font-size: 82rpx;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #373737;
+}
+
+.login-brand__subtitle {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  color: #6f6f6f;
+}
+
+.login-form {
+  margin-top: 80rpx;
+  padding: 0 16rpx;
+}
+
+.login-form__label {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 32rpx;
+}
+
+.login-form__phone-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid #e8e8e8;
+  padding-bottom: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.login-form__prefix {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.login-form__input {
+  flex: 1;
+  font-size: 34rpx;
+  color: #1f1f1f;
+  min-height: 0;
+}
+
+.login-form__agree-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 48rpx;
+  margin-top: 24rpx;
+}
+
+.login-form__checkbox {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #ccc;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.login-form__checkbox--checked {
+  background: #16c55f;
+  border-color: #16c55f;
+}
+
+.login-form__agree-text {
+  font-size: 26rpx;
+  color: #888;
+}
+
+.login-form__link {
+  font-size: 26rpx;
+  color: #16c55f;
+}
+
+.login-form__btn {
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: #16c55f;
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.login-form__btn::after {
+  border: none;
+}
+
+.login-form__btn--loading {
+  background: #a8d8b0;
+  color: #fff;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin: 56rpx 0 40rpx;
+}
+
+.login-divider__line {
+  flex: 1;
+  height: 2rpx;
+  background: #ececec;
+}
+
+.login-divider__text {
+  font-size: 26rpx;
+  color: #aaa;
+}
+
+.login-wechat__btn {
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.login-wechat__btn::after {
+  border: none;
+}
+
+.login-wechat__btn--loading {
+  background: #9ad9b3;
+}
+
+.login-wechat__icon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.login-wechat__preview {
+  margin-top: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.login-wechat__avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #f3f3f3;
+}
+
+.login-wechat__avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #07c160;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.login-wechat__nickname {
+  font-size: 28rpx;
+  color: #444;
+}

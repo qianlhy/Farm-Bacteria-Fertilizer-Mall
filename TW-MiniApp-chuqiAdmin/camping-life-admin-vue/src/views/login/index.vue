@@ -1,0 +1,78 @@
+<template>
+  <div class="login-container">
+    <div class="login-box">
+      <h1>农家菌肥商城</h1>
+      <h2>管理后台</h2>
+      <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="handleLogin">
+        <el-form-item prop="username">
+          <el-input v-model="form.username" placeholder="用户名" prefix-icon="User" />
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input v-model="form.password" type="password" placeholder="密码" prefix-icon="Lock" show-password @keyup.enter="handleLogin" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" :loading="loading" class="login-btn" @click="handleLogin">登 录</el-button>
+        </el-form-item>
+      </el-form>
+      <div class="tips">默认账号: admin / admin123</div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores/user'
+import { adminLogin } from '@/api'
+
+const router = useRouter()
+const userStore = useUserStore()
+const formRef = ref()
+const loading = ref(false)
+
+const form = reactive({ username: 'admin', password: 'admin123' })
+const rules = {
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+}
+
+async function handleLogin() {
+  const valid = await formRef.value.validate().catch(() => false)
+  if (!valid) return
+  loading.value = true
+  try {
+    const res = await adminLogin(form)
+    if (res.code === 200) {
+      userStore.setUser(res.data)
+      ElMessage.success('登录成功')
+      router.push('/dashboard')
+    } else {
+      ElMessage.error(res.message)
+    }
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<style scoped>
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.login-box {
+  background: white;
+  padding: 48px 40px;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  width: 400px;
+}
+.login-box h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 8px; }
+.login-box h2 { text-align: center; color: #666; font-size: 16px; margin-bottom: 32px; font-weight: normal; }
+.login-btn { width: 100%; height: 44px; font-size: 16px; }
+.tips { text-align: center; color: #999; font-size: 12px; margin-top: 16px; }
+</style>

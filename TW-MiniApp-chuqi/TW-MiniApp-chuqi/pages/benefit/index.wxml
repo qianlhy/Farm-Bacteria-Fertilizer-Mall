@@ -1,0 +1,14 @@
+<view class="benefit-page">
+  <view class="benefit-hero">
+    <view class="benefit-hero__eyebrow">ACTIVITY BENEFITS</view>
+    <view class="benefit-hero__title">活动福利</view>
+  </view>
+
+  <block wx:for="{{benefits}}" wx:key="title">
+    <view class="benefit-card">
+      <view class="benefit-card__title">{{item.title}}</view>
+      <view class="benefit-card__desc">{{item.desc}}</view>
+      <view class="benefit-card__button" data-title="{{item.title}}" bindtap="handleBenefitAction">{{item.action}}</view>
+    </view>
+  </block>
+</view>

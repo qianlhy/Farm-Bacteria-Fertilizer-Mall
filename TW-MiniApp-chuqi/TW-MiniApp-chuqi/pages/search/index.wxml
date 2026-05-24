@@ -1,0 +1,202 @@
+<view class="search-page">
+  <view class="search-topbar">
+    <view class="search-topbar__close" bindtap="closePage">
+      <view class="search-topbar__close-line search-topbar__close-line--a"></view>
+      <view class="search-topbar__close-line search-topbar__close-line--b"></view>
+    </view>
+  </view>
+
+  <view class="search-input-wrap">
+    <view class="search-input">
+      <view class="search-input__icon"></view>
+      <input
+        class="search-input__field"
+        placeholder="搜搜你感兴趣的"
+        value="{{keyword}}"
+        bindinput="handleInput"
+        bindconfirm="handleConfirm"
+        confirm-type="search"
+        focus
+      />
+    </view>
+  </view>
+
+  <view wx:if="{{!keyword}}" class="history-block">
+    <view class="history-block__header">
+      <view class="history-block__title">搜索历史</view>
+      <view class="history-trash" bindtap="clearHistory">
+        <view class="history-trash__lid"></view>
+        <view class="history-trash__body">
+          <view class="history-trash__line"></view>
+          <view class="history-trash__line"></view>
+        </view>
+      </view>
+    </view>
+    <view class="history-tags">
+      <block wx:for="{{history}}" wx:key="*this">
+        <view class="history-tag" data-keyword="{{item}}" bindtap="selectHistory">{{item}}</view>
+      </block>
+    </view>
+  </view>
+
+  <view wx:else class="search-results-shell">
+    <scroll-view scroll-x class="search-tabs" enable-flex>
+      <block wx:for="{{tabs}}" wx:key="key">
+        <view class="search-tab {{activeTab === item.key ? 'search-tab--active' : ''}}" data-key="{{item.key}}" bindtap="switchTab">
+          {{item.label}}
+        </view>
+      </block>
+    </scroll-view>
+
+    <scroll-view scroll-y class="search-results">
+      <view wx:if="{{!hasResults}}" class="search-empty">
+        <view class="search-empty__title">没有找到相关内容</view>
+        <view class="search-empty__desc">换个关键词试试看。</view>
+      </view>
+
+      <block wx:if="{{hasResults && activeTab === 'all'}}">
+        <view wx:if="{{userPreview.length}}" class="search-section">
+          <view class="search-section__header" data-key="users" bindtap="openSectionTab">
+            <view class="search-section__title">用户</view>
+            <view class="search-section__arrow"></view>
+          </view>
+          <block wx:for="{{userPreview}}" wx:key="id">
+            <view class="user-row">
+              <view class="user-row__avatar" style="background: {{item.avatarColor}};">{{item.avatarText}}</view>
+              <view class="user-row__content">
+                <view class="user-row__name">{{item.name}}</view>
+                <view class="user-row__desc">{{item.desc}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <view wx:if="{{dynamicPreview.length}}" class="search-section">
+          <view class="search-section__header" data-key="dynamics" bindtap="openSectionTab">
+            <view class="search-section__title">动态</view>
+            <view class="search-section__arrow"></view>
+          </view>
+          <block wx:for="{{dynamicPreview}}" wx:key="id">
+            <view class="content-row">
+              <view class="content-row__thumb" style="background: {{item.thumb}};"></view>
+              <view class="content-row__content">
+                <view class="content-row__title">{{item.title}}</view>
+                <view class="content-row__summary">{{item.summary}}</view>
+                <view class="content-row__meta">{{item.meta}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <view wx:if="{{manualPreview.length}}" class="search-section">
+          <view class="search-section__header" data-key="manuals" bindtap="openSectionTab">
+            <view class="search-section__title">使用手册</view>
+            <view class="search-section__arrow"></view>
+          </view>
+          <block wx:for="{{manualPreview}}" wx:key="id">
+            <view class="manual-row">
+              <view class="manual-row__title">{{item.title}}</view>
+              <view class="manual-row__category">{{item.category}}</view>
+              <view class="manual-row__summary">{{item.summary}}</view>
+            </view>
+          </block>
+        </view>
+
+        <view wx:if="{{newsPreview.length}}" class="search-section">
+          <view class="search-section__header" data-key="news" bindtap="openSectionTab">
+            <view class="search-section__title">资讯</view>
+            <view class="search-section__arrow"></view>
+          </view>
+          <block wx:for="{{newsPreview}}" wx:key="id">
+            <view class="content-row">
+              <view class="content-row__thumb" style="background: {{item.thumb}};"></view>
+              <view class="content-row__content">
+                <view class="content-row__title">{{item.title}}</view>
+                <view class="content-row__meta">{{item.source}} | {{item.date}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <view wx:if="{{productPreview.length}}" class="search-section">
+          <view class="search-section__header" data-key="products" bindtap="openSectionTab">
+            <view class="search-section__title">商品</view>
+            <view class="search-section__arrow"></view>
+          </view>
+          <view class="product-grid">
+            <block wx:for="{{productPreview}}" wx:key="id">
+              <view class="product-card">
+                <view class="product-card__cover" style="background: {{item.cover}};"></view>
+                <view class="product-card__name">{{item.name}}</view>
+                <view class="product-card__tag">{{item.tag}}</view>
+                <view class="product-card__desc">{{item.desc}}</view>
+                <view class="product-card__price">{{item.price}}</view>
+              </view>
+            </block>
+          </view>
+        </view>
+      </block>
+
+      <block wx:if="{{hasResults && activeTab === 'users'}}">
+        <block wx:for="{{users}}" wx:key="id">
+          <view class="user-row">
+            <view class="user-row__avatar" style="background: {{item.avatarColor}};">{{item.avatarText}}</view>
+            <view class="user-row__content">
+              <view class="user-row__name">{{item.name}}</view>
+              <view class="user-row__desc">{{item.desc}}</view>
+            </view>
+          </view>
+        </block>
+      </block>
+
+      <block wx:if="{{hasResults && activeTab === 'dynamics'}}">
+        <block wx:for="{{dynamics}}" wx:key="id">
+          <view class="content-row">
+            <view class="content-row__thumb" style="background: {{item.thumb}};"></view>
+            <view class="content-row__content">
+              <view class="content-row__title">{{item.title}}</view>
+              <view class="content-row__summary">{{item.summary}}</view>
+              <view class="content-row__meta">{{item.meta}}</view>
+            </view>
+          </view>
+        </block>
+      </block>
+
+      <block wx:if="{{hasResults && activeTab === 'manuals'}}">
+        <block wx:for="{{manuals}}" wx:key="id">
+          <view class="manual-row">
+            <view class="manual-row__title">{{item.title}}</view>
+            <view class="manual-row__category">{{item.category}}</view>
+            <view class="manual-row__summary">{{item.summary}}</view>
+          </view>
+        </block>
+      </block>
+
+      <block wx:if="{{hasResults && activeTab === 'news'}}">
+        <block wx:for="{{news}}" wx:key="id">
+          <view class="content-row">
+            <view class="content-row__thumb" style="background: {{item.thumb}};"></view>
+            <view class="content-row__content">
+              <view class="content-row__title">{{item.title}}</view>
+              <view class="content-row__meta">{{item.source}} | {{item.date}}</view>
+            </view>
+          </view>
+        </block>
+      </block>
+
+      <block wx:if="{{hasResults && activeTab === 'products'}}">
+        <view class="product-grid">
+          <block wx:for="{{products}}" wx:key="id">
+            <view class="product-card">
+              <view class="product-card__cover" style="background: {{item.cover}};"></view>
+              <view class="product-card__name">{{item.name}}</view>
+              <view class="product-card__tag">{{item.tag}}</view>
+              <view class="product-card__desc">{{item.desc}}</view>
+              <view class="product-card__price">{{item.price}}</view>
+            </view>
+          </block>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</view>

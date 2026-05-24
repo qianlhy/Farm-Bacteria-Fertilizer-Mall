@@ -1,0 +1,27 @@
+page {
+  background: #f0ece2;
+  color: #3d3427;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.page-shell {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #8c806e;
+}
+
+.soft-card {
+  background: rgba(255, 253, 248, 0.98);
+  border-radius: 28rpx;
+  box-shadow: 0 12rpx 28rpx rgba(86, 61, 28, 0.07);
+}

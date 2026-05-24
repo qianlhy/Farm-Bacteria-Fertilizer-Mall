@@ -1,0 +1,68 @@
+.benefit-officer-page {
+  min-height: 100vh;
+  padding: 104rpx 24rpx 80rpx;
+  background: linear-gradient(180deg, #c8e8a0 0%, #a8d068 55%, #7eb832 100%);
+  box-sizing: border-box;
+}
+
+.benefit-officer-topbar {
+  display: flex;
+  align-items: center;
+  padding: 0 8rpx 24rpx;
+}
+
+.benefit-officer-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-officer-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.benefit-officer-hero {
+  padding: 40rpx 16rpx 26rpx;
+}
+
+.benefit-officer-hero__title {
+  font-size: 82rpx;
+  line-height: 1.08;
+  font-weight: 800;
+  color: #17110d;
+}
+
+.benefit-officer-card {
+  margin-top: 20rpx;
+  padding: 28rpx 24rpx 34rpx;
+  border-radius: 34rpx;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18rpx 34rpx rgba(42, 62, 20, 0.14);
+}
+
+.benefit-officer-card__qr-wrap {
+  border-radius: 28rpx;
+  border: 12rpx solid #7eb832;
+  overflow: hidden;
+  background: #fff;
+}
+
+.benefit-officer-card__qr {
+  width: 100%;
+  display: block;
+}
+
+.benefit-officer-card__hint {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 30rpx;
+  line-height: 1.6;
+  font-weight: 700;
+  color: #17110d;
+}

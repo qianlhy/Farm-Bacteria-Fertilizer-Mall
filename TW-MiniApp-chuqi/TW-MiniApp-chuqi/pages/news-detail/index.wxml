@@ -1,0 +1,92 @@
+<view class="detail-page" wx:if="{{article}}">
+  <view class="detail-hero" wx:if="{{article.heroMode === 'swiper' || article.heroMode === 'cover'}}">
+    <swiper
+      class="detail-hero__swiper"
+      autoplay="{{article.heroSlides.length > 1}}"
+      circular="{{article.heroSlides.length > 1}}"
+      interval="4200"
+      duration="500"
+      bindchange="handleSlideChange"
+    >
+      <block wx:for="{{article.heroSlides}}" wx:key="id" wx:for-item="slideItem">
+        <swiper-item>
+          <image
+            wx:if="{{slideItem.type === 'image'}}"
+            class="detail-hero__image {{article.heroImageMode === 'contain' ? 'detail-hero__image--contain' : ''}}"
+            src="{{slideItem.src}}"
+            mode="{{article.heroImageMode === 'contain' ? 'aspectFit' : 'aspectFill'}}"
+          />
+          <view wx:else class="article-hero__slide {{slideItem.imageClass}}"></view>
+        </swiper-item>
+      </block>
+    </swiper>
+
+    <view class="detail-topbar">
+      <view class="detail-topbar__back" bindtap="goBack">
+        <view class="detail-topbar__back-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="detail-hero detail-hero--video" wx:elif="{{article.heroMode === 'video'}}">
+    <video
+      class="detail-hero__video"
+      src="{{article.heroVideo.src}}"
+      poster="{{article.heroVideo.poster}}"
+      object-fit="cover"
+      controls
+      autoplay
+    ></video>
+
+    <view class="detail-topbar">
+      <view class="detail-topbar__back" bindtap="goBack">
+        <view class="detail-topbar__back-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="detail-content">
+    <view wx:if="{{article.heroMode === 'swiper' && article.heroSlides.length > 1}}" class="detail-hero__segments">
+      <block wx:for="{{article.heroSlides}}" wx:key="id">
+        <view class="detail-hero__segment {{index === currentSlide ? 'detail-hero__segment--active' : ''}}"></view>
+      </block>
+    </view>
+
+    <view class="detail-heading">
+      <view class="detail-heading__title">{{article.title}}</view>
+      <view wx:if="{{article.subtitle}}" class="detail-heading__subtitle">{{article.subtitle}}</view>
+      <view wx:if="{{article.sourceType === 'custom'}}" class="detail-admin-actions">
+        <view class="detail-admin-actions__button" bindtap="editArticle">重新编辑</view>
+        <view class="detail-admin-actions__button detail-admin-actions__button--danger" bindtap="deleteArticle">删除</view>
+      </view>
+    </view>
+
+    <view class="detail-body">
+      <block wx:for="{{article.bodyBlocks}}" wx:key="id" wx:for-item="blockItem">
+        <view wx:if="{{blockItem.type === 'text' && blockItem.value}}" class="detail-body__paragraph">{{blockItem.value}}</view>
+
+        <image
+          wx:elif="{{blockItem.type === 'image'}}"
+          class="detail-gallery__image"
+          src="{{blockItem.src}}"
+          mode="widthFix"
+          data-src="{{blockItem.src}}"
+          bindtap="previewDetailImage"
+        />
+
+        <view wx:elif="{{blockItem.type === 'video'}}" class="detail-video-card">
+          <video
+            class="detail-video-card__player"
+            src="{{blockItem.src}}"
+            poster="{{blockItem.poster || blockItem.src}}"
+            object-fit="cover"
+            controls
+          ></video>
+          <view wx:if="{{blockItem.durationText}}" class="detail-video-card__duration">{{blockItem.durationText}}</view>
+        </view>
+      </block>
+    </view>
+
+    <view wx:if="{{article.location}}" class="detail-location">{{article.location}}</view>
+  </view>
+</view>

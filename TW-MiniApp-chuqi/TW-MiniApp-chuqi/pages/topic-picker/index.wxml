@@ -1,0 +1,43 @@
+<view class="topic-page">
+  <view class="topic-topbar">
+    <view class="topic-topbar__back" bindtap="goBack">
+      <view class="topic-topbar__back-icon"></view>
+    </view>
+  </view>
+
+  <view class="topic-search">
+    <view class="topic-search__bar">
+      <text class="topic-search__icon">⌕</text>
+      <input
+        class="topic-search__input"
+        placeholder="你的话题"
+        value="{{keyword}}"
+        bindinput="onKeywordChange"
+      />
+      <view wx:if="{{keyword}}" class="topic-search__clear" bindtap="clearKeyword">×</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!keyword}}" class="topic-section">
+    <view class="topic-section__title">热门话题</view>
+    <block wx:for="{{hotTopics}}" wx:key="name">
+      <view class="topic-row" data-topic="{{item.name}}" bindtap="chooseTopic">
+        <view class="topic-row__name">#{{item.name}}#</view>
+        <view class="topic-row__meta">{{item.participants}}人参与</view>
+      </view>
+    </block>
+  </view>
+
+  <view wx:else class="topic-section">
+    <view wx:if="{{showCreateTopic}}" class="topic-row" bindtap="createTopic">
+      <view class="topic-row__name">#{{createTopicName}}#</view>
+      <view class="topic-row__create">创建话题</view>
+    </view>
+    <block wx:for="{{filteredTopics}}" wx:key="name">
+      <view class="topic-row" data-topic="{{item.name}}" bindtap="chooseTopic">
+        <view class="topic-row__name">#{{item.name}}#</view>
+        <view class="topic-row__meta">{{item.participants}}人参与</view>
+      </view>
+    </block>
+  </view>
+</view>

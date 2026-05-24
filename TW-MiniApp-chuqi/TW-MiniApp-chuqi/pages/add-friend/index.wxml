@@ -1,0 +1,52 @@
+<view class="add-friend-page">
+  <view class="add-friend-topbar">
+    <view class="add-friend-topbar__back" bindtap="goBack">
+      <view class="add-friend-topbar__back-icon"></view>
+    </view>
+  </view>
+
+  <view class="add-friend-search">
+    <view class="add-friend-search__bar">
+      <view class="add-friend-search__icon"></view>
+      <input
+        class="add-friend-search__input"
+        placeholder="搜索用户名或手机号"
+        value="{{keyword}}"
+        bindinput="onKeywordChange"
+        confirm-type="search"
+        focus
+      />
+      <view wx:if="{{keyword}}" class="add-friend-search__clear" bindtap="clearKeyword">×</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!searched}}" class="add-friend-empty">
+    <view class="add-friend-empty__title">添加好友</view>
+    <view class="add-friend-empty__desc">通过用户名或手机号搜索，找到后即可发送好友申请。</view>
+  </view>
+
+  <view wx:elif="{{searched && results.length === 0}}" class="add-friend-empty">
+    <view class="add-friend-empty__title">没有找到对应用户</view>
+    <view class="add-friend-empty__desc">换一个用户名或手机号再试试。</view>
+  </view>
+
+  <view wx:else class="add-friend-results">
+    <block wx:for="{{results}}" wx:key="id">
+      <view class="friend-row">
+        <view class="friend-row__avatar">{{item.avatarText}}</view>
+        <view class="friend-row__content">
+          <view class="friend-row__name">{{item.name}}</view>
+          <view class="friend-row__meta">{{item.phone}}</view>
+          <view class="friend-row__desc">{{item.desc}}</view>
+        </view>
+        <view
+          class="friend-row__action {{item.added ? 'friend-row__action--added' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="addFriend"
+        >
+          {{item.added ? '已申请' : '添加'}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

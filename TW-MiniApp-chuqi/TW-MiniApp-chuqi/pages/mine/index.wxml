@@ -1,0 +1,59 @@
+<view class="mine-page">
+  <view class="mine-header">
+    <view class="mine-header__avatar-wrap" bindtap="handleLoginTap">
+      <image
+        wx:if="{{loggedIn && avatar}}"
+        class="mine-header__avatar-image"
+        src="{{avatar}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="mine-header__avatar">{{loggedIn && nickname ? nickname.slice(0, 1) : '农'}}</view>
+      <view wx:if="{{!loggedIn}}" class="mine-header__login-tip">点击登录</view>
+    </view>
+    <view wx:if="{{loggedIn}}" class="mine-header__user-info">
+      <view class="mine-header__nickname">{{nickname || phone}}</view>
+      <view class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
+    </view>
+    <view wx:else class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
+  </view>
+
+  <view class="mine-balance-card">
+    <view class="mine-balance-card__identity">
+      <view class="mine-balance-card__phone">{{loggedIn ? phone : '登录后查看'}}</view>
+      <view class="mine-balance-card__plate">车牌号：{{license}}</view>
+    </view>
+
+    <view class="mine-balance-card__stats">
+      <view class="mine-balance-card__stat">
+        <view class="mine-balance-card__value">{{wallet}}</view>
+        <view class="mine-balance-card__label">账户余额</view>
+      </view>
+      <view class="mine-balance-card__stat">
+        <view class="mine-balance-card__value">{{coupon}}</view>
+        <view class="mine-balance-card__label">卡券余额</view>
+      </view>
+      <view class="mine-balance-card__stat">
+        <view class="mine-balance-card__value">{{points}}</view>
+        <view class="mine-balance-card__label">积分余额</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="mine-banner">
+    <image class="mine-banner__photo" src="/assets/trial/hero.jpg" mode="aspectFill" />
+    <image class="mine-banner__tank" src="/assets/trial/tank.png.jpeg" mode="aspectFit" />
+    <view class="mine-banner__text">加入肽为农家菌肥合伙人计划</view>
+  </view>
+
+  <view class="mine-grid">
+    <block wx:for="{{tools}}" wx:key="title">
+      <view class="mine-grid__item" data-index="{{index}}" bindtap="handleToolTap">
+        <view class="mine-grid__icon-wrap">
+          <image class="mine-grid__icon" src="{{item.icon}}" mode="aspectFit" />
+          <view wx:if="{{item.badge}}" class="mine-grid__badge">{{item.badge}}</view>
+        </view>
+        <view class="mine-grid__label">{{item.title}}</view>
+      </view>
+    </block>
+  </view>
+</view>

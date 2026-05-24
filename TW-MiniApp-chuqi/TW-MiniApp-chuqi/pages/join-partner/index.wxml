@@ -1,0 +1,41 @@
+<view class="join-page">
+  <view class="join-topbar">
+    <view class="join-topbar__back" bindtap="goBack">
+      <view class="join-topbar__back-icon"></view>
+    </view>
+    <view class="join-topbar__title">我要加盟</view>
+  </view>
+
+  <view class="join-brand">
+    <view class="join-brand__title">肽为生态</view>
+    <view class="join-brand__subtitle">绿色生态，提质增产，提升地力</view>
+  </view>
+
+  <view class="join-types">
+    <block wx:for="{{partnerTypes}}" wx:key="key">
+      <view class="join-types__item" data-key="{{item.key}}" bindtap="selectType">
+        <view class="join-types__label">{{item.label}}</view>
+        <view class="join-types__radio {{selectedType === item.key ? 'join-types__radio--active' : ''}}"></view>
+      </view>
+    </block>
+  </view>
+
+  <view class="join-form">
+    <view class="join-form__row">
+      <view class="join-form__label">姓名</view>
+      <input class="join-form__input" placeholder="请输入姓名" value="{{name}}" bindinput="onNameInput" />
+    </view>
+
+    <view class="join-form__row">
+      <view class="join-form__label">电话</view>
+      <input class="join-form__input" placeholder="请输入电话" value="{{phone}}" bindinput="onPhoneInput" />
+    </view>
+
+    <view class="join-form__row">
+      <view class="join-form__label">城市</view>
+      <input class="join-form__input" placeholder="请输入城市" value="{{city}}" bindinput="onCityInput" />
+    </view>
+  </view>
+
+  <view class="join-submit" bindtap="submitForm">立即提交</view>
+</view>

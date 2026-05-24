@@ -1,0 +1,137 @@
+<view class="page-shell explore-page">
+  <view wx:if="{{plusMenuVisible}}" class="page-mask" bindtap="closePlusMenu"></view>
+
+  <view class="hero">
+    <view class="hero__status">
+      <view class="hero__tools">
+        <view class="hero__action hero__action--plus" bindtap="togglePlusMenu">
+          <text class="hero__plus">+</text>
+        </view>
+      </view>
+
+      <view wx:if="{{plusMenuVisible}}" class="plus-menu" catchtap="noop">
+        <view class="plus-menu__section-title">发资讯</view>
+        <block wx:for="{{plusMenuItems}}" wx:key="key" wx:for-item="menuItem">
+          <view wx:if="{{menuItem.section === '资讯'}}" class="plus-menu__item" data-path="{{menuItem.path}}" bindtap="handlePlusMenuTap">
+            <image class="plus-menu__icon" src="{{menuItem.icon}}" mode="aspectFit" />
+            <view class="plus-menu__label">{{menuItem.label}}</view>
+          </view>
+        </block>
+
+        <view class="plus-menu__divider"></view>
+        <view class="plus-menu__section-title">发朋友圈</view>
+        <block wx:for="{{plusMenuItems}}" wx:key="key" wx:for-item="menuItem">
+          <view wx:if="{{menuItem.section === '朋友圈'}}" class="plus-menu__item" data-path="{{menuItem.path}}" bindtap="handlePlusMenuTap">
+            <image class="plus-menu__icon" src="{{menuItem.icon}}" mode="aspectFit" />
+            <view class="plus-menu__label">{{menuItem.label}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="news-hero">
+      <swiper
+        class="news-hero__swiper"
+        autoplay
+        circular
+        interval="3800"
+        duration="500"
+        disable-touch="false"
+        bindchange="handleNewsChange"
+      >
+        <block wx:for="{{headlineNews}}" wx:key="id" wx:for-item="newsItem">
+          <swiper-item>
+            <view
+              class="news-slide {{newsItem.imageClass}}"
+              data-id="{{newsItem.id}}"
+              data-source-type="{{newsItem.sourceType || 'default'}}"
+              bindtap="openNewsDetail"
+            >
+              <view wx:if="{{newsItem.coverImage}}" class="news-slide__image-shell">
+                <image
+                  class="news-slide__image"
+                  src="{{newsItem.coverImage}}"
+                  mode="heightFix"
+                />
+              </view>
+              <view wx:if="{{newsItem.coverImage}}" class="news-slide__shade"></view>
+              <view class="news-slide__overlay">
+                <view class="news-slide__title">{{newsItem.title}}</view>
+              </view>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+
+      <view wx:if="{{headlineNews.length > 1}}" class="news-hero__segments">
+        <block wx:for="{{headlineNews}}" wx:key="id">
+          <view class="news-hero__segment {{index === currentNewsIndex ? 'news-hero__segment--active' : ''}}"></view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="moments-section">
+    <block wx:for="{{momentFeed}}" wx:key="id" wx:for-item="feedItem">
+      <view
+        class="content-card"
+        data-id="{{feedItem.id}}"
+        data-source-type="{{feedItem.sourceType || 'default'}}"
+        bindtap="openContentDetail"
+      >
+        <view class="content-card__title">{{feedItem.title}}</view>
+        <view class="content-card__content">{{feedItem.content}}</view>
+
+        <view
+          wx:if="{{feedItem.images.length}}"
+          class="content-gallery
+            {{feedItem.images.length === 1 ? 'content-gallery--single' : ''}}
+            {{feedItem.images.length === 2 ? 'content-gallery--two' : ''}}
+            {{feedItem.images.length === 3 ? 'content-gallery--three' : ''}}
+            {{feedItem.images.length === 4 ? 'content-gallery--four' : ''}}
+            {{feedItem.images.length === 6 ? 'content-gallery--six' : ''}}
+            {{feedItem.images.length === 9 ? 'content-gallery--nine' : ''}}"
+        >
+          <block wx:for="{{feedItem.images}}" wx:key="*this" wx:for-item="imageSrc">
+            <image
+              class="content-gallery__image"
+              src="{{imageSrc}}"
+              mode="aspectFill"
+              data-src="{{imageSrc}}"
+              data-urls="{{feedItem.images}}"
+              catchtap="previewMomentImage"
+            />
+          </block>
+        </view>
+
+        <view wx:if="{{feedItem.templateType === 'video'}}" class="content-video-card">
+          <video
+            wx:if="{{feedItem.videoPath}}"
+            class="content-video__player"
+            src="{{feedItem.videoPath}}"
+            poster="{{feedItem.videoPoster || feedItem.videoPath}}"
+            object-fit="cover"
+            controls
+          ></video>
+          <view wx:else class="content-video" catchtap="openMomentVideo">
+            <image class="content-video__poster" src="{{feedItem.videoPoster}}" mode="aspectFill" />
+            <view class="content-video__shade"></view>
+            <view class="content-video__play">
+              <view class="content-video__play-icon"></view>
+            </view>
+            <view class="content-video__label">{{feedItem.videoLabel}}</view>
+          </view>
+          <view wx:if="{{feedItem.videoDuration}}" class="content-video__duration">{{feedItem.videoDuration}}</view>
+        </view>
+
+        <view wx:if="{{feedItem.location || feedItem.sourceType === 'custom'}}" class="content-card__footer">
+          <view wx:if="{{feedItem.location}}" class="content-card__location">{{feedItem.location}}</view>
+          <view wx:if="{{feedItem.sourceType === 'custom'}}" class="content-card__actions">
+            <view class="content-card__action" data-id="{{feedItem.id}}" data-template="{{feedItem.templateType}}" catchtap="editMoment">重新编辑</view>
+            <view class="content-card__action content-card__action--danger" data-id="{{feedItem.id}}" catchtap="deleteMoment">删除</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

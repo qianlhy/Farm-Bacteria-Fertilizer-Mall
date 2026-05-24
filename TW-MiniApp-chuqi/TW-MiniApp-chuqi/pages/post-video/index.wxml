@@ -1,0 +1,77 @@
+<view class="video-page">
+  <view class="video-topbar">
+    <view class="video-topbar__back" bindtap="goBack">
+      <view class="video-topbar__back-icon"></view>
+    </view>
+    <view class="video-topbar__title">{{pageTitle}}</view>
+  </view>
+
+  <view class="video-editor">
+    <view class="video-media">
+      <view wx:if="{{!video}}" class="video-media__picker" bindtap="promptVideoSource">
+        <view class="video-media__plus">＋</view>
+      </view>
+      <view wx:else class="video-card">
+        <image class="video-card__cover" src="{{video.thumbTempFilePath || video.path}}" mode="aspectFill" />
+        <view class="media-remove" catchtap="removeVideo">
+          <view class="media-remove__line"></view>
+        </view>
+        <view class="video-card__duration">{{video.durationText}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{video}}" class="video-cover-tools">
+      <view wx:if="{{!customCover}}" class="video-cover-tools__button" bindtap="chooseCustomCover">添加封面</view>
+      <view wx:else class="video-cover-preview">
+        <image class="video-cover-preview__image" src="{{customCover}}" mode="aspectFill" />
+        <view class="media-remove" catchtap="removeCustomCover">
+          <view class="media-remove__line"></view>
+        </view>
+      </view>
+    </view>
+
+    <input
+      class="video-editor__title"
+      placeholder="标题"
+      maxlength="40"
+      value="{{title}}"
+      bindinput="onTitleChange"
+    />
+
+    <textarea
+      class="video-editor__textarea"
+      placeholder="输入视频说明..."
+      maxlength="-1"
+      auto-height
+      cursor-spacing="120"
+      value="{{content}}"
+      bindinput="onInputChange"
+    />
+  </view>
+
+  <view class="video-publishbar">
+    <view class="video-location" bindtap="chooseLocation">
+      <view class="video-location__left">
+        <text class="video-location__icon">◉</text>
+        <text>{{selectedLocation || '添加地址'}}</text>
+      </view>
+      <view class="video-location__arrow"></view>
+    </view>
+
+    <view
+      class="video-publishbar__button {{publishEnabled ? 'video-publishbar__button--active' : ''}}"
+      bindtap="publishPost"
+    >
+      发布
+    </view>
+  </view>
+
+  <view wx:if="{{showExitSheet}}" class="editor-sheet__mask" bindtap="closeExitSheet"></view>
+  <view wx:if="{{showExitSheet}}" class="editor-sheet">
+    <view class="editor-sheet__title">草稿尚未保存，是否退出？</view>
+    <view class="editor-sheet__action" bindtap="saveDraftAndExit">保存并退出</view>
+    <view class="editor-sheet__action" bindtap="discardDraftAndExit">不保存并退出</view>
+    <view class="editor-sheet__gap"></view>
+    <view class="editor-sheet__action editor-sheet__action--cancel" bindtap="closeExitSheet">返回编辑</view>
+  </view>
+</view>

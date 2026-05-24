@@ -1,0 +1,242 @@
+.trial-page {
+  min-height: 100vh;
+  background: #fff;
+  color: #222;
+  padding-bottom: 164rpx;
+  box-sizing: border-box;
+}
+
+.trial-hero {
+  position: relative;
+  height: 520rpx;
+  overflow: hidden;
+  background: #cfd7c9;
+}
+
+.trial-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.trial-hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 180rpx;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(12, 18, 10, 0.28));
+  filter: none;
+}
+
+.trial-topbar {
+  position: absolute;
+  top: 104rpx;
+  left: 24rpx;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+.trial-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+}
+
+.trial-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trial-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #fffef8;
+  border-bottom: 5rpx solid #fffef8;
+  transform: rotate(45deg);
+}
+
+.trial-topbar__record {
+  width: 54rpx;
+  height: 68rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trial-topbar__record-card {
+  position: relative;
+  width: 40rpx;
+  height: 54rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.14);
+  border: 4rpx solid rgba(255, 255, 255, 0.82);
+  box-sizing: border-box;
+}
+
+.trial-topbar__record-line {
+  position: absolute;
+  left: 8rpx;
+  width: 12rpx;
+  height: 5rpx;
+  border-radius: 999rpx;
+  background: #fffef8;
+}
+
+.trial-topbar__record-line--top {
+  top: 12rpx;
+}
+
+.trial-topbar__record-line--mid {
+  top: 20rpx;
+}
+
+.trial-topbar__record-check {
+  position: absolute;
+  right: 4rpx;
+  bottom: 6rpx;
+  width: 19rpx;
+  height: 19rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fffef8;
+  box-sizing: border-box;
+}
+
+.trial-topbar__record-check::before {
+  content: '';
+  position: absolute;
+  left: 4rpx;
+  top: 2rpx;
+  width: 5rpx;
+  height: 9rpx;
+  border-right: 4rpx solid #fffef8;
+  border-bottom: 4rpx solid #fffef8;
+  transform: rotate(40deg);
+}
+
+.trial-hero__copy {
+  position: absolute;
+  left: 24rpx;
+  right: 80rpx;
+  bottom: 72rpx;
+  z-index: 2;
+  color: #fffef8;
+}
+
+.trial-hero__title {
+  font-size: 56rpx;
+  line-height: 1.18;
+  font-weight: 700;
+}
+
+.trial-hero__subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: rgba(255, 254, 248, 0.9);
+}
+
+.trial-form {
+  padding: 34rpx 24rpx 0;
+}
+
+.trial-form__title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #222;
+}
+
+.trial-field {
+  display: flex;
+  align-items: center;
+  min-height: 104rpx;
+  border-bottom: 1rpx solid #ece9e2;
+}
+
+.trial-field--service {
+  align-items: center;
+}
+
+.trial-field__label {
+  width: 112rpx;
+  flex: 0 0 112rpx;
+  font-size: 30rpx;
+  color: #3a342c;
+}
+
+.trial-field__value {
+  flex: 1;
+  font-size: 30rpx;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trial-field__arrow {
+  width: 16rpx;
+  height: 16rpx;
+  margin-left: 16rpx;
+  border-top: 3rpx solid #b3ab9f;
+  border-right: 3rpx solid #b3ab9f;
+  transform: rotate(45deg);
+}
+
+.trial-phone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.trial-phone__code {
+  font-size: 30rpx;
+  color: #222;
+}
+
+.trial-phone__chevron {
+  width: 10rpx;
+  height: 10rpx;
+  margin-left: 12rpx;
+  border-right: 2rpx solid #9c9285;
+  border-bottom: 2rpx solid #9c9285;
+  transform: rotate(45deg) translateY(-2rpx);
+}
+
+.trial-phone__input {
+  flex: 1;
+  height: 88rpx;
+  margin-left: 22rpx;
+  font-size: 30rpx;
+  color: #222;
+}
+
+.trial-submit {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 18rpx 24rpx calc(18rpx + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.trial-submit__button {
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9d9dd;
+  color: #fffef8;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.trial-submit__button--active {
+  background: #10152a;
+}

@@ -1,0 +1,18 @@
+<view class="benefit-officer-page">
+  <view class="benefit-officer-topbar">
+    <view class="benefit-officer-topbar__back" bindtap="goBack">
+      <view class="benefit-officer-topbar__back-icon"></view>
+    </view>
+  </view>
+
+  <view class="benefit-officer-hero">
+    <view class="benefit-officer-hero__title">加福利官领补贴</view>
+  </view>
+
+  <view class="benefit-officer-card">
+    <view class="benefit-officer-card__qr-wrap" bindtap="previewQr">
+      <image class="benefit-officer-card__qr" src="{{qrImage}}" mode="widthFix" />
+    </view>
+    <view class="benefit-officer-card__hint">长按识别二维码，加福利官进群领取补贴。</view>
+  </view>
+</view>

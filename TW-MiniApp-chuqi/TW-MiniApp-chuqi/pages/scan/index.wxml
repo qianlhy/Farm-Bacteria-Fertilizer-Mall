@@ -1,0 +1,38 @@
+<view class="scan-page">
+  <camera
+    class="scan-camera"
+    device-position="back"
+    flash="off"
+    mode="scanCode"
+    bindscancode="handleScanCode"
+  />
+
+  <view class="scan-overlay">
+    <view class="scan-topbar">
+      <view class="scan-back" bindtap="goBack">
+        <view class="scan-back__icon"></view>
+      </view>
+    </view>
+
+    <view class="scan-frame">
+      <view class="scan-corner scan-corner--tl"></view>
+      <view class="scan-corner scan-corner--tr"></view>
+      <view class="scan-corner scan-corner--bl"></view>
+      <view class="scan-corner scan-corner--br"></view>
+      <view class="scan-line"></view>
+    </view>
+
+    <view class="scan-bottom">
+      <view class="scan-action" bindtap="toggleTorch">
+        <view class="scan-action__circle">
+          <view class="scan-icon scan-icon--flash {{torchOn ? 'scan-icon--flash-on' : ''}}"></view>
+        </view>
+      </view>
+      <view class="scan-action" bindtap="chooseFromAlbum">
+        <view class="scan-action__circle">
+          <view class="scan-icon scan-icon--album"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

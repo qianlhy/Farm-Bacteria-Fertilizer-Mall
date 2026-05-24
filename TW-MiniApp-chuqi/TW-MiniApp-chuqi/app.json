@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/login/index",
+    "pages/recharge/index",
+    "pages/recharge-records/index",
+    "pages/group-check/index",
+    "pages/join-partner/index",
+    "pages/benefit-officer/index",
+    "pages/explore/index",
+    "pages/service/index",
+    "pages/benefit/index",
+    "pages/mine/index",
+    "pages/news-detail/index",
+    "pages/location-picker/index",
+    "pages/search/index",
+    "pages/scan/index",
+    "pages/topic-picker/index",
+    "pages/post-moment/index",
+    "pages/post-video/index",
+    "pages/post-article/index",
+    "pages/add-friend/index",
+    "pages/command/index",
+    "pages/trial/index",
+    "pages/trial-success/index",
+    "pages/trial-docs/index",
+    "pages/trial-records/index",
+    "pages/lottery/index",
+    "pages/order/index",
+    "pages/coupon/index"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#f0ece2",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7d7568",
+    "selectedColor": "#7d5c29",
+    "backgroundColor": "#fffdf8",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "assets/tabbar/explore.png",
+        "selectedIconPath": "assets/tabbar/explore-active.png"
+      },
+      {
+        "pagePath": "pages/explore/index",
+        "text": "探索",
+        "iconPath": "assets/tabbar/explore.png",
+        "selectedIconPath": "assets/tabbar/explore-active.png"
+      },
+      {
+        "pagePath": "pages/service/index",
+        "text": "提货",
+        "iconPath": "assets/tabbar/service.png",
+        "selectedIconPath": "assets/tabbar/service-active.png"
+      },
+      {
+        "pagePath": "pages/benefit/index",
+        "text": "福利",
+        "iconPath": "assets/tabbar/service.png",
+        "selectedIconPath": "assets/tabbar/service-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "assets/tabbar/mine.png",
+        "selectedIconPath": "assets/tabbar/mine-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

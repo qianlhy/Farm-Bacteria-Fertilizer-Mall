@@ -1,0 +1,94 @@
+<view class="article-page">
+  <view class="article-topbar">
+    <view class="article-topbar__back" bindtap="goBack">
+      <view class="article-topbar__back-icon"></view>
+    </view>
+    <view class="article-topbar__title">{{pageTitle}}</view>
+  </view>
+
+  <view class="article-editor">
+    <view wx:if="{{!coverImage}}" class="article-cover article-cover--picker" bindtap="chooseCover">
+      <view class="article-cover__plus">＋</view>
+      <view class="article-cover__hint">设置封面</view>
+    </view>
+    <view wx:else class="article-cover-wrap">
+      <image class="article-cover" src="{{coverImage}}" mode="aspectFill" />
+      <view class="media-remove" catchtap="removeCoverImage">
+        <view class="media-remove__line"></view>
+      </view>
+    </view>
+
+    <input
+      class="article-title"
+      placeholder="标题"
+      maxlength="40"
+      value="{{title}}"
+      bindinput="onTitleChange"
+    />
+
+    <view class="article-divider"></view>
+
+    <view class="article-blocks">
+      <block wx:for="{{articleBlocks}}" wx:key="id" wx:for-item="blockItem">
+        <textarea
+          wx:if="{{blockItem.type === 'text'}}"
+          class="article-text-block"
+          placeholder="输入正文内容..."
+          maxlength="-1"
+          auto-height
+          cursor-spacing="120"
+          value="{{blockItem.value}}"
+          data-index="{{index}}"
+          bindinput="onBlockTextChange"
+          bindfocus="onBlockFocus"
+        />
+
+        <view wx:elif="{{blockItem.type === 'image'}}" class="article-image-block">
+          <image
+            class="article-image-block__image"
+            src="{{blockItem.src}}"
+            mode="aspectFill"
+            data-src="{{blockItem.src}}"
+            bindtap="previewBlockImage"
+          />
+          <view class="media-remove" data-index="{{index}}" catchtap="removeBlockImage">
+            <view class="media-remove__line"></view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="article-tools article-tools--floating">
+    <view class="article-tool article-tool--wide" bindtap="chooseBlockImage">
+      <text class="article-tool__icon">▣</text>
+      <text>配图</text>
+    </view>
+  </view>
+
+  <view class="article-publishbar">
+    <view class="article-location" bindtap="chooseLocation">
+      <view class="article-location__left">
+        <text class="article-location__icon">◉</text>
+        <text class="article-location__text">{{selectedLocation || '添加地址'}}</text>
+      </view>
+      <view class="article-location__arrow"></view>
+    </view>
+
+    <view
+      class="article-publishbar__button {{publishEnabled ? 'article-publishbar__button--active' : ''}}"
+      bindtap="publishPost"
+    >
+      发布
+    </view>
+  </view>
+
+  <view wx:if="{{showExitSheet}}" class="editor-sheet__mask" bindtap="closeExitSheet"></view>
+  <view wx:if="{{showExitSheet}}" class="editor-sheet">
+    <view class="editor-sheet__title">草稿尚未保存，是否退出？</view>
+    <view class="editor-sheet__action" bindtap="saveDraftAndExit">保存并退出</view>
+    <view class="editor-sheet__action" bindtap="discardDraftAndExit">不保存并退出</view>
+    <view class="editor-sheet__gap"></view>
+    <view class="editor-sheet__action editor-sheet__action--cancel" bindtap="closeExitSheet">返回编辑</view>
+  </view>
+</view>

@@ -1,0 +1,69 @@
+<view class="login-page">
+  <view class="login-topbar">
+    <view class="login-topbar__back" bindtap="goBack">
+      <view class="login-topbar__back-icon"></view>
+    </view>
+    <view class="login-topbar__title">快速登录</view>
+  </view>
+
+  <view class="login-brand">
+    <view class="login-brand__title">农家菌肥</view>
+    <view class="login-brand__subtitle">农家好肥，服务田间地头</view>
+  </view>
+
+  <view class="login-form">
+    <view class="login-form__label">手机号登录</view>
+    <view class="login-form__phone-row">
+      <view class="login-form__prefix">+86</view>
+      <input
+        class="login-form__input"
+        type="number"
+        placeholder="请输入手机号"
+        maxlength="11"
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+        bindblur="onPhoneBlur"
+      />
+    </view>
+
+    <view class="login-form__agree-row" bindtap="toggleAgree">
+      <view class="login-form__checkbox {{agreed ? 'login-form__checkbox--checked' : ''}}"></view>
+      <text class="login-form__agree-text">已阅读并同意</text>
+      <text class="login-form__link">《用户协议》</text>
+      <text class="login-form__agree-text">和</text>
+      <text class="login-form__link">《隐私政策》</text>
+    </view>
+
+    <button
+      class="login-form__btn {{loading ? 'login-form__btn--loading' : ''}}"
+      bindtap="doLogin"
+      disabled="{{loading || wxLoading}}"
+    >
+      <text wx:if="{{!loading}}">登录</text>
+      <text wx:else>登录中...</text>
+    </button>
+
+    <view class="login-divider">
+      <view class="login-divider__line"></view>
+      <text class="login-divider__text">或</text>
+      <view class="login-divider__line"></view>
+    </view>
+
+    <view class="login-wechat">
+      <view class="login-form__label">微信登录</view>
+      <button
+        class="login-wechat__btn {{wxLoading ? 'login-wechat__btn--loading' : ''}}"
+        bindtap="doWechatLogin"
+        disabled="{{loading || wxLoading}}"
+      >
+        <view class="login-wechat__icon">微</view>
+        <text>{{wxLoading ? '授权登录中...' : '微信授权登录'}}</text>
+      </button>
+      <view wx:if="{{wxNickname}}" class="login-wechat__preview">
+        <image wx:if="{{wxAvatar}}" class="login-wechat__avatar" src="{{wxAvatar}}" mode="aspectFill" />
+        <view wx:else class="login-wechat__avatar login-wechat__avatar--placeholder">微</view>
+        <text class="login-wechat__nickname">{{wxNickname}}</text>
+      </view>
+    </view>
+  </view>
+</view>

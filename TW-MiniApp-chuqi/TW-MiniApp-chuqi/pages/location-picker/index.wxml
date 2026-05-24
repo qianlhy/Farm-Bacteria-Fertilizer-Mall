@@ -1,0 +1,37 @@
+<view class="location-page">
+  <view class="location-sheet">
+    <view class="location-sheet__header">
+      <view class="location-sheet__title">添加地址</view>
+      <view class="location-sheet__close" bindtap="closePage">×</view>
+    </view>
+
+    <view class="location-search">
+      <view class="location-search__bar">
+        <text class="location-search__icon">⌕</text>
+        <input
+          class="location-search__input"
+          placeholder="输入城市、区县、街道或乡镇"
+          value="{{keyword}}"
+          bindinput="onKeywordChange"
+        />
+      </view>
+    </view>
+
+    <view class="location-option" bindtap="chooseNone">
+      <view class="location-option__icon">⌖</view>
+      <view class="location-option__content">
+        <view class="location-option__name">不显示位置</view>
+      </view>
+    </view>
+
+    <block wx:for="{{locations}}" wx:key="name">
+      <view class="location-option" data-value="{{item.value}}" bindtap="chooseLocation">
+        <view class="location-option__icon">◉</view>
+        <view class="location-option__content">
+          <view class="location-option__name">{{item.name}}</view>
+          <view class="location-option__detail">{{item.detail}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

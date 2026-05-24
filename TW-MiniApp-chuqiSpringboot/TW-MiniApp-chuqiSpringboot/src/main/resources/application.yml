@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: farm-fertilizer-mall
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/farm_fertilizer_mall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: root
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.nongjia.mall.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+jwt:
+  secret: farm-fertilizer-mall-secret-key-2024-nongjia-key
+  ttl: 86400000
+
+app:
+  upload-path: /uploads
+  upload-url: http://localhost:8080/uploads/
+
+wechat:
+  app-id: wxae83cc107f51591e
+  app-secret: ${WECHAT_APP_SECRET:}
+  mock-enabled: true

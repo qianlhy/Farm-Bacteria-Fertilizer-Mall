@@ -1,0 +1,60 @@
+<view class="home-page">
+  <view class="home-stage">
+    <image class="home-stage__image" src="/assets/home/about_useful.jpg" mode="aspectFill" />
+    <view class="home-stage__veil"></view>
+  </view>
+
+  <view class="home-card">
+    <view class="home-card__account" bindtap="handleIdentityTap">
+      <view class="home-card__identity">
+        <text wx:if="{{loggedIn}}" class="home-card__name-text">{{userName || userPhone}}</text>
+        <text wx:else class="home-card__name-text home-card__name-text--guest">点击登录</text>
+      </view>
+      <view wx:if="{{loggedIn}}" class="home-card__phone-text">{{userPhone}}</view>
+      <view class="home-card__balance">
+        <view class="home-card__balance-label">余额 (Kg)</view>
+        <view class="home-card__balance-value">{{fertilizerBalance}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{loggedIn}}" class="home-card__stats">
+      <view class="home-card__stat">
+        <view class="home-card__stat-value">{{couponBalance}}</view>
+        <view class="home-card__stat-label">卡券</view>
+      </view>
+      <view class="home-card__stat-divider"></view>
+      <view class="home-card__stat">
+        <view class="home-card__stat-value">{{freightSubsidy}}</view>
+        <view class="home-card__stat-label">运补</view>
+      </view>
+      <view class="home-card__stat-divider"></view>
+      <view class="home-card__stat">
+        <view class="home-card__stat-value">{{pointsBalance}}</view>
+        <view class="home-card__stat-label">积分</view>
+      </view>
+    </view>
+
+    <view class="home-card__top-actions">
+      <block wx:for="{{topActions}}" wx:key="title">
+        <view class="home-card__feature" data-title="{{item.title}}" bindtap="openFeature">
+          <view class="home-card__feature-icon-wrap home-card__feature-icon-wrap--{{item.accent}}">
+            <image class="home-card__feature-icon" src="{{item.icon}}" mode="aspectFit" />
+          </view>
+          <view class="home-card__feature-copy">
+            <view class="home-card__feature-title">{{item.title}}</view>
+            <view class="home-card__feature-desc">{{item.desc}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="home-card__bottom-actions">
+      <block wx:for="{{bottomActions}}" wx:key="title">
+        <view class="home-card__bottom-item" data-title="{{item.title}}" bindtap="openFeature">
+          <view class="home-card__bottom-title">{{item.title}}</view>
+          <view wx:if="{{item.badge}}" class="home-card__badge">{{item.badge}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

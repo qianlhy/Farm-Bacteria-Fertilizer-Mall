@@ -1,0 +1,109 @@
+.topic-page {
+  min-height: 100vh;
+  background: #fff;
+  color: #1f1f1f;
+  padding-top: 166rpx;
+  box-sizing: border-box;
+}
+
+.topic-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  padding: 104rpx 28rpx 18rpx;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.topic-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.topic-search {
+  padding: 0 24rpx;
+}
+
+.topic-search__bar {
+  height: 76rpx;
+  border-radius: 16rpx;
+  background: #f6f6f6;
+  display: flex;
+  align-items: center;
+  padding: 0 18rpx;
+}
+
+.topic-search__icon {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #b1b1b1;
+}
+
+.topic-search__input {
+  flex: 1;
+  margin-left: 12rpx;
+  font-size: 28rpx;
+}
+
+.topic-search__clear {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 18rpx;
+  background: #b8b8b8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.topic-section {
+  padding: 30rpx 24rpx 40rpx;
+}
+
+.topic-section__title {
+  margin-bottom: 18rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #3a3a3a;
+}
+
+.topic-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88rpx;
+}
+
+.topic-row__name {
+  flex: 1;
+  padding-right: 20rpx;
+  font-size: 38rpx;
+  line-height: 1.45;
+  color: #171717;
+}
+
+.topic-row__meta,
+.topic-row__create {
+  flex: 0 0 auto;
+  font-size: 24rpx;
+  color: #9f9f9f;
+}
+
+.topic-row__create {
+  color: #6ea7cf;
+}

@@ -1,0 +1,91 @@
+<view class="recharge-page">
+  <view class="recharge-topbar">
+    <view class="recharge-topbar__back" bindtap="goBack">
+      <view class="recharge-topbar__back-icon"></view>
+    </view>
+    <view class="recharge-topbar__title">充值</view>
+  </view>
+
+  <view class="recharge-account">
+    <view class="recharge-account__header">
+      <view>
+        <view class="recharge-account__name-label">账户名</view>
+        <view class="recharge-account__name-value">{{accountName}}</view>
+      </view>
+      <view class="recharge-account__refresh" bindtap="refreshBalance">刷新</view>
+    </view>
+
+    <view class="recharge-account__stats">
+      <view class="recharge-account__stat">
+        <view class="recharge-account__stat-label">余额(Kg)</view>
+        <view class="recharge-account__stat-value">{{balance}}</view>
+      </view>
+      <view class="recharge-account__stat">
+        <view class="recharge-account__stat-label">积分数量</view>
+        <view class="recharge-account__stat-value">{{points}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="recharge-section">
+    <view class="recharge-section__link" bindtap="openRechargeRecords">充值记录</view>
+  </view>
+
+  <view class="recharge-product-card">
+    <view class="recharge-product__main">
+      <view class="recharge-product__poster">
+        <view class="recharge-product__poster-hot">HOT</view>
+        <image class="recharge-product__poster-image" src="{{productImage}}" mode="aspectFit" />
+      </view>
+
+      <view class="recharge-product__info">
+        <view class="recharge-product__payline">
+          <text class="recharge-product__pay-label">共实付</text>
+          <text class="recharge-product__pay-amount">￥{{totalPaidPrice}}</text>
+          <text class="recharge-product__pay-divider">|</text>
+          <text class="recharge-product__meta-inline">原价 ￥{{originalPrice}}</text>
+        </view>
+
+        <view class="recharge-product__promo">
+          <view class="recharge-product__promo-save">共减 ￥{{totalSavings}}（可用{{totalPointsCost}}积分兑换）</view>
+          <view class="recharge-product__promo-reward">并获得 {{rewardPoints}} 积分</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="recharge-product__footer">
+      <view>
+        <view class="recharge-product__quantity-label">购买数量</view>
+        <view class="recharge-product__quantity-meta">每件 = {{amountText}}</view>
+      </view>
+
+      <view class="recharge-quantity">
+        <view
+          class="recharge-quantity__btn {{quantity <= 1 ? 'recharge-quantity__btn--disabled' : ''}}"
+          data-action="minus"
+          bindtap="changeQuantity"
+        >-</view>
+        <view class="recharge-quantity__value">{{quantity}}</view>
+        <view class="recharge-quantity__btn" data-action="plus" bindtap="changeQuantity">+</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="recharge-submit-row">
+    <view class="recharge-submit recharge-submit--cash {{submitting ? 'recharge-submit--disabled' : ''}}" bindtap="submitCashRecharge">
+      <text wx:if="{{!submitting}}">现金支付 ￥{{totalPaidPrice}}</text>
+      <text wx:else>处理中...</text>
+    </view>
+    <view class="recharge-submit recharge-submit--points {{submitting ? 'recharge-submit--disabled' : ''}}" bindtap="submitPointsExchange">
+      <text wx:if="{{!submitting}}">积分兑换 {{totalPointsCost}}积分</text>
+      <text wx:else>处理中...</text>
+    </view>
+  </view>
+
+  <view class="recharge-desc">
+    <view class="recharge-desc__title">充值说明：</view>
+    <view class="recharge-desc__item">1. 当前页面金额已按 {{discountRate * 100}} 折计算，数量变化时价格会同步更新。</view>
+    <view class="recharge-desc__item">2. 积分兑换按折后金额 1:10 换算，可与现金支付二选一。</view>
+    <view class="recharge-desc__item">3. 充值额度全国肽为服务点通用。</view>
+  </view>
+</view>

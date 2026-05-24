@@ -1,0 +1,127 @@
+.join-page {
+  min-height: 100vh;
+  padding: 110rpx 24rpx 80rpx;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.join-topbar {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 0 8rpx 32rpx;
+}
+
+.join-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.join-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.join-topbar__title {
+  flex: 1;
+  text-align: center;
+  padding-right: 52rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.join-brand {
+  margin-top: 90rpx;
+  text-align: center;
+}
+
+.join-brand__title {
+  font-size: 74rpx;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #2b2b2b;
+}
+
+.join-brand__subtitle {
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.join-types {
+  margin-top: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  padding: 0 12rpx;
+}
+
+.join-types__item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.join-types__label {
+  font-size: 30rpx;
+  color: #111;
+}
+
+.join-types__radio {
+  width: 26rpx;
+  height: 26rpx;
+  border-radius: 50%;
+  border: 2rpx solid #cfcfcf;
+  box-sizing: border-box;
+}
+
+.join-types__radio--active {
+  border-color: #111;
+  box-shadow: inset 0 0 0 6rpx #111;
+}
+
+.join-form {
+  margin-top: 36rpx;
+}
+
+.join-form__row {
+  display: grid;
+  grid-template-columns: 84rpx 1fr;
+  align-items: center;
+  gap: 18rpx;
+  margin-bottom: 26rpx;
+}
+
+.join-form__label {
+  font-size: 32rpx;
+  color: #111;
+}
+
+.join-form__input {
+  height: 80rpx;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  border: 1rpx solid #d9d9d9;
+  font-size: 28rpx;
+}
+
+.join-submit {
+  margin-top: 110rpx;
+  height: 108rpx;
+  border-radius: 28rpx;
+  background: #2d2d2d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 700;
+}

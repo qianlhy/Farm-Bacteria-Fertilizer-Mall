@@ -1,0 +1,64 @@
+<view class="trial-page">
+  <view class="trial-hero">
+    <image class="trial-hero__bg" src="/assets/trial/hero.jpg" mode="aspectFill" />
+    <view class="trial-topbar">
+      <view class="trial-topbar__left">
+        <view class="trial-topbar__back" bindtap="goBack">
+          <view class="trial-topbar__back-icon"></view>
+        </view>
+        <view class="trial-topbar__record" bindtap="openRecords">
+          <view class="trial-topbar__record-card">
+            <view class="trial-topbar__record-line trial-topbar__record-line--top"></view>
+            <view class="trial-topbar__record-line trial-topbar__record-line--mid"></view>
+            <view class="trial-topbar__record-check"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="trial-hero__copy">
+      <view class="trial-hero__title">{{products[selectedProductIndex].name}}</view>
+      <view class="trial-hero__subtitle">{{products[selectedProductIndex].subtitle}}</view>
+    </view>
+  </view>
+
+  <view class="trial-form">
+    <view class="trial-form__title">预约试用</view>
+
+    <view class="trial-field" bindtap="chooseProduct">
+      <view class="trial-field__label">试用品</view>
+      <view class="trial-field__value">{{products[selectedProductIndex].name}}</view>
+      <view class="trial-field__arrow"></view>
+    </view>
+
+    <view class="trial-field trial-field--service" bindtap="chooseServicePoint">
+      <view class="trial-field__label">服务点</view>
+      <view class="trial-field__value">{{servicePoints[selectedServiceIndex].name}}</view>
+      <view class="trial-field__arrow"></view>
+    </view>
+
+    <view class="trial-field">
+      <view class="trial-field__label">手机号</view>
+      <view class="trial-phone">
+        <view class="trial-phone__code">{{phoneCode}}</view>
+        <view class="trial-phone__chevron"></view>
+        <input
+          class="trial-phone__input"
+          type="number"
+          maxlength="11"
+          value="{{phone}}"
+          bindinput="onPhoneInput"
+        />
+      </view>
+    </view>
+  </view>
+
+  <view class="trial-submit">
+    <view
+      class="trial-submit__button {{canSubmit ? 'trial-submit__button--active' : ''}}"
+      bindtap="submitTrialBooking"
+    >
+      立即预约
+    </view>
+  </view>
+</view>

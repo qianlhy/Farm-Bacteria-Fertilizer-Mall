@@ -1,0 +1,31 @@
+<view class="command-page">
+  <view class="command-glow command-glow--top"></view>
+  <view class="command-glow command-glow--bottom"></view>
+
+  <view class="command-topbar">
+    <view class="command-topbar__back" bindtap="goBack">
+      <view class="command-topbar__back-icon"></view>
+    </view>
+  </view>
+
+  <view class="command-body">
+    <view class="command-title">活动口令</view>
+
+    <view class="command-form">
+      <input
+        class="command-form__input"
+        placeholder="输入口令，参与精彩活动"
+        value="{{commandValue}}"
+        bindinput="handleInput"
+        confirm-type="search"
+        focus
+      />
+      <view
+        class="command-form__action {{canQuery ? 'command-form__action--active' : ''}}"
+        bindtap="submitCommand"
+      >
+        查询
+      </view>
+    </view>
+  </view>
+</view>

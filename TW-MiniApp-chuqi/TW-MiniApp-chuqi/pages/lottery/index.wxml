@@ -1,0 +1,6 @@
+<view class="page-shell action-page">
+  <view class="action-card soft-card">
+    <view class="action-card__title">每日抽奖</view>
+    <view class="action-card__desc">这里可以接抽奖资格判断、奖品展示和中奖记录。</view>
+  </view>
+</view>

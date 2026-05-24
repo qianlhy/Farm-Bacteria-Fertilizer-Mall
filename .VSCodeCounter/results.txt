@@ -1,0 +1,73 @@
+Date : 2026-05-24 21:48:34
+Directory : c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue
+Total : 26 files,  4998 codes, 0 comments, 123 blanks, all 5121 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |      3,724 |          0 |          2 |      3,726 |
+| Vue        |         12 |      1,036 |          0 |         83 |      1,119 |
+| JavaScript |          5 |        176 |          0 |         27 |        203 |
+| XML        |          4 |         27 |          0 |          2 |         29 |
+| CSS        |          1 |         19 |          0 |          5 |         24 |
+| HTML       |          1 |         13 |          0 |          1 |         14 |
+| Markdown   |          1 |          3 |          0 |          3 |          6 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                |         26 |      4,998 |          0 |        123 |      5,121 |
+| public                                                                                                                           |          2 |         25 |          0 |          1 |         26 |
+| src                                                                                                                              |         19 |      1,201 |          0 |        114 |      1,315 |
+| src\api                                                                                                                          |          1 |         58 |          0 |         11 |         69 |
+| src\assets                                                                                                                       |          2 |          2 |          0 |          1 |          3 |
+| src\components                                                                                                                   |          1 |         90 |          0 |          6 |         96 |
+| src\router                                                                                                                       |          1 |         39 |          0 |          5 |         44 |
+| src\stores                                                                                                                       |          1 |         30 |          0 |          5 |         35 |
+| src\views                                                                                                                        |         10 |        936 |          0 |         74 |      1,010 |
+| src\views\config                                                                                                                 |          1 |         44 |          0 |          6 |         50 |
+| src\views\content                                                                                                                |          1 |         85 |          0 |          8 |         93 |
+| src\views\dashboard                                                                                                              |          1 |        148 |          0 |          8 |        156 |
+| src\views\layout                                                                                                                 |          1 |         88 |          0 |          5 |         93 |
+| src\views\login                                                                                                                  |          1 |         73 |          0 |          6 |         79 |
+| src\views\order                                                                                                                  |          1 |         80 |          0 |          7 |         87 |
+| src\views\orders                                                                                                                 |          2 |        176 |          0 |         15 |        191 |
+| src\views\partner                                                                                                                |          1 |         79 |          0 |          8 |         87 |
+| src\views\users                                                                                                                  |          1 |        163 |          0 |         11 |        174 |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                         | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\README.md                     | Markdown   |          3 |          0 |          3 |          6 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\index.html                    | HTML       |         13 |          0 |          1 |         14 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\package-lock.json             | JSON       |      3,698 |          0 |          1 |      3,699 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\package.json                  | JSON       |         26 |          0 |          1 |         27 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\public\favicon.svg            | XML        |          1 |          0 |          0 |          1 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\public\icons.svg              | XML        |         24 |          0 |          1 |         25 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\App.vue                   | Vue        |         10 |          0 |          3 |         13 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\api\index.js              | JavaScript |         58 |          0 |         11 |         69 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\assets\vite.svg           | XML        |          1 |          0 |          1 |          2 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\assets\vue.svg            | XML        |          1 |          0 |          0 |          1 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\components\HelloWorld.vue | Vue        |         90 |          0 |          6 |         96 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\main.js                   | JavaScript |         17 |          0 |          4 |         21 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\router\index.js           | JavaScript |         39 |          0 |          5 |         44 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\stores\user.js            | JavaScript |         30 |          0 |          5 |         35 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\style.css                 | CSS        |         19 |          0 |          5 |         24 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\config\index.vue    | Vue        |         44 |          0 |          6 |         50 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\content\list.vue    | Vue        |         85 |          0 |          8 |         93 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\dashboard\index.vue | Vue        |        148 |          0 |          8 |        156 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\layout\index.vue    | Vue        |         88 |          0 |          5 |         93 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\login\index.vue     | Vue        |         73 |          0 |          6 |         79 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\order\trial.vue     | Vue        |         80 |          0 |          7 |         87 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\orders\pickup.vue   | Vue        |         95 |          0 |          9 |        104 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\orders\recharge.vue | Vue        |         81 |          0 |          6 |         87 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\partner\list.vue    | Vue        |         79 |          0 |          8 |         87 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\src\views\users\list.vue      | Vue        |        163 |          0 |         11 |        174 |
+| c:\Users\Administrator\Desktop\2026年1月7日\卡歌\农家菌肥商城小程序\TW-MiniApp-chuqiAdmin\camping-life-admin-vue\vite.config.js                | JavaScript |         32 |          0 |          2 |         34 |
+| Total                                                                                                                            |            |      4,998 |          0 |        123 |      5,121 |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

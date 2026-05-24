@@ -1,0 +1,90 @@
+<view class="trial-docs-page">
+  <view class="trial-docs-topbar">
+    <view class="trial-docs-topbar__back" bindtap="goBack">
+      <view class="trial-docs-topbar__back-icon"></view>
+    </view>
+    <view class="trial-docs-topbar__title">完善信息和资料</view>
+  </view>
+
+  <view class="trial-docs-form">
+    <view class="trial-docs-field">
+      <view class="trial-docs-field__label">全称</view>
+      <input
+        class="trial-docs-field__input"
+        placeholder="填写公司名称/个人姓名"
+        value="{{fullName}}"
+        bindinput="onFullNameInput"
+      />
+    </view>
+
+    <view class="trial-docs-field">
+      <view class="trial-docs-field__label">联系电话</view>
+      <input
+        class="trial-docs-field__input"
+        type="number"
+        maxlength="11"
+        placeholder="电话号码"
+        value="{{contactPhone}}"
+        bindinput="onContactPhoneInput"
+      />
+    </view>
+
+    <view class="trial-docs-section">
+      <view class="trial-docs-field">
+        <view class="trial-docs-field__label">收货人</view>
+        <input
+          class="trial-docs-field__input"
+          placeholder="填写收货人姓名"
+          value="{{consignee}}"
+          bindinput="onConsigneeInput"
+        />
+      </view>
+
+      <view class="trial-docs-field">
+        <view class="trial-docs-field__label">收货人电话</view>
+        <input
+          class="trial-docs-field__input"
+          type="number"
+          maxlength="11"
+          placeholder="请输入收货人手机号码"
+          value="{{consigneePhone}}"
+          bindinput="onConsigneePhoneInput"
+        />
+      </view>
+
+      <view class="trial-docs-map-block">
+        <view class="trial-docs-map-head">
+          <view class="trial-docs-field__label">当前地点</view>
+          <view class="trial-docs-location" bindtap="fillCurrentLocation">获取当前地址</view>
+        </view>
+        <view class="trial-docs-map-shell">
+          <map
+            class="trial-docs-map"
+            latitude="{{mapLatitude}}"
+            longitude="{{mapLongitude}}"
+            scale="15"
+            show-location
+          ></map>
+          <view class="trial-docs-map__pin"></view>
+        </view>
+        <view class="trial-docs-map__caption">{{currentLocationText || '点击上方按钮获取地图上的当前位置'}}</view>
+      </view>
+
+      <view class="trial-docs-field">
+        <view class="trial-docs-field__label">详细收货地址</view>
+        <input
+          class="trial-docs-field__input"
+          placeholder="请输入送货地址"
+          value="{{deliveryAddress}}"
+          bindinput="onDeliveryAddressInput"
+        />
+      </view>
+    </view>
+  </view>
+
+  <view class="trial-docs-footer">
+    <view class="trial-docs-footer__button {{canSubmit ? 'trial-docs-footer__button--active' : ''}}" bindtap="submitDocs">
+      提交完善
+    </view>
+  </view>
+</view>
