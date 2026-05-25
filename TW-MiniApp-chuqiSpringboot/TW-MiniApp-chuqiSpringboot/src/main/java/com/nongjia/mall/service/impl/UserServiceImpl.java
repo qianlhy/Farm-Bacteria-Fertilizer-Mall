@@ -142,6 +142,7 @@ public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impleme
         walletDTO.setFertilizerBalance(wallet != null ? wallet.getFertilizerBalance().doubleValue() : 0.0);
         walletDTO.setCouponBalance(wallet != null ? wallet.getCouponBalance().doubleValue() : 0.0);
         walletDTO.setFreightSubsidy(wallet != null ? wallet.getFreightSubsidy().doubleValue() : 0.0);
+        walletDTO.setPackagingCredit(wallet != null && wallet.getPackagingCredit() != null ? wallet.getPackagingCredit().doubleValue() : 0.0);
         walletDTO.setPointsBalance(wallet != null ? wallet.getPointsBalance() : 0L);
         dto.setWallet(walletDTO);
         return dto;

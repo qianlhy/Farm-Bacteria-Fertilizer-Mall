@@ -1,6 +1,6 @@
 Page({
   data: {
-    qrImage: '/assets/benefit/benefit-officer-qr.jpg'
+    qrImage: '/pages/benefit-officer/assets/benefit-officer-qr.jpg'
   },
 
   goBack() {

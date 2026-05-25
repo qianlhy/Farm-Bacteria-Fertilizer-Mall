@@ -34,6 +34,7 @@ CREATE TABLE `user_wallet` (
   `fertilizer_balance` DECIMAL(12,2) DEFAULT 0.00 COMMENT '化肥余额(kg)',
   `coupon_balance` DECIMAL(10,2) DEFAULT 0.00 COMMENT '优惠券余额',
   `freight_subsidy` DECIMAL(10,2) DEFAULT 0.00 COMMENT '运费补贴',
+  `packaging_credit` DECIMAL(10,2) DEFAULT 0.00 COMMENT '包装费抵扣余额',
   `points_balance` BIGINT DEFAULT 0 COMMENT '积分余额',
   `total_points_earned` BIGINT DEFAULT 0 COMMENT '累计获得积分',
   `total_points_used` BIGINT DEFAULT 0 COMMENT '累计使用积分',
@@ -232,6 +233,29 @@ CREATE TABLE `group_order` (
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团购核销表';
 
+-- 10.1 兑换码表
+DROP TABLE IF EXISTS `redemption_code`;
+CREATE TABLE `redemption_code` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `code` VARCHAR(32) NOT NULL COMMENT '兑换码',
+  `batch_no` VARCHAR(32) DEFAULT NULL COMMENT '批次号',
+  `freight_amount` DECIMAL(10,2) DEFAULT 0.00 COMMENT '运费补贴(元)',
+  `packaging_amount` DECIMAL(10,2) DEFAULT 0.00 COMMENT '包装费抵扣(元)',
+  `points_amount` BIGINT DEFAULT 0 COMMENT '积分奖励',
+  `status` TINYINT DEFAULT 1 COMMENT '状态:1未使用 2已使用 3已过期 4已禁用',
+  `user_id` BIGINT DEFAULT NULL COMMENT '兑换用户ID',
+  `redeemed_at` DATETIME DEFAULT NULL COMMENT '兑换时间',
+  `expires_at` DATETIME DEFAULT NULL COMMENT '过期时间',
+  `remark` VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  `created_by` BIGINT DEFAULT NULL COMMENT '创建管理员ID',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `uk_code` (`code`),
+  KEY `idx_batch_no` (`batch_no`),
+  KEY `idx_status` (`status`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='兑换码表';
+
 -- 11. 管理员表
 DROP TABLE IF EXISTS `admin_user`;
 CREATE TABLE `admin_user` (
@@ -322,3 +346,7 @@ INSERT INTO `sys_config` (`config_key`, `config_value`, `config_type`, `config_n
 ('product.package.blue_bucket_min_count', '40', 'number', '蓝桶配送起送桶数', 'package', 7, '蓝桶配送最低桶数'),
 ('trial.product.name', '农家菌肥', 'string', '试用产品名称', 'trial', 2, '试用预约产品名'),
 ('trial.product.subtitle', '绿色生态，提质增产，提升地力', 'string', '试用产品描述', 'trial', 3, '试用预约产品描述');
+
+-- 已有库升级（按需执行）
+-- ALTER TABLE `user_wallet` ADD COLUMN `packaging_credit` DECIMAL(10,2) DEFAULT 0.00 COMMENT '包装费抵扣余额' AFTER `freight_subsidy`;
+-- CREATE TABLE `redemption_code` (...见上文 redemption_code 表定义...);

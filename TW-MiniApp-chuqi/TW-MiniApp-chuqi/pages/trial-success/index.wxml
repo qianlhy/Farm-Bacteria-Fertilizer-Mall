@@ -6,7 +6,7 @@
   </view>
 
   <view class="trial-success-card">
-    <image class="trial-success-card__art" src="/assets/trial/envelope-background.png.jpeg" mode="aspectFill" />
+    <image class="trial-success-card__art" src="/pages/trial/assets/envelope-background.jpg" mode="aspectFill" />
 
     <view class="trial-success-card__content">
       <view class="trial-success-card__title" bindtap="triggerCancelTrial">
@@ -36,7 +36,7 @@
       </view>
     </view>
 
-    <image class="trial-success-card__tank" src="/assets/trial/tank.png.jpeg" mode="aspectFit" />
+    <image class="trial-success-card__tank" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
   </view>
 
   <view class="trial-success-actions">

@@ -1,4 +1,4 @@
-const { getDefaultLocations, searchLocations } = require('../../data/china-location/search')
+const { getDefaultLocations, searchLocations } = require('./china-location/search')
 
 Page({
   data: {

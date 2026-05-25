@@ -70,5 +70,9 @@ export const deleteContent = (postId) => request.post(`/admin/content/delete/${p
 export const getPartnerList = (params) => request.get('/admin/partner/list', { params: cleanParams(params) })
 export const handlePartner = (id, data) => request.post(`/admin/partner/handle/${id}`, data)
 
+export const generateRedemptionCodes = (data) => request.post('/admin/redemption/generate', data)
+export const getRedemptionCodeList = (params) => request.get('/admin/redemption/list', { params: cleanParams(params) })
+export const disableRedemptionCode = (id) => request.post(`/admin/redemption/disable/${id}`)
+
 export const getConfigList = () => request.get('/admin/config/list')
 export const updateConfig = (data) => request.post('/admin/config/update', data)

@@ -9,7 +9,7 @@ Page({
     points: '0',
     quantity: 1,
     productName: '1吨农家菌肥',
-    productImage: '/assets/recharge/final_tank_label.png.jpeg',
+    productImage: '/pages/recharge/assets/final_tank_label.jpg',
     amountText: '1 吨',
     amountKg: 1000,
     discountRate: 0.85,

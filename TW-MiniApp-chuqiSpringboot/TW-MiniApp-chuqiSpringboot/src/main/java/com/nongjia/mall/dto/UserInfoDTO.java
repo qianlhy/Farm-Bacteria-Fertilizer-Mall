@@ -18,6 +18,7 @@ public class UserInfoDTO {
         private Double fertilizerBalance;
         private Double couponBalance;
         private Double freightSubsidy;
+        private Double packagingCredit;
         private Long pointsBalance;
     }
 }

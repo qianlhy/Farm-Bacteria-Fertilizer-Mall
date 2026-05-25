@@ -74,6 +74,17 @@ function getFreightSubsidyBalance(user) {
   return Number(user.couponBalance || 0)
 }
 
+function getPackagingCreditBalance(user) {
+  if (!user) {
+    return 0
+  }
+  const wallet = user.wallet || {}
+  if (wallet.packagingCredit !== undefined && wallet.packagingCredit !== null) {
+    return Number(wallet.packagingCredit || 0)
+  }
+  return 0
+}
+
 function findPackagingOption(packagingOptions, key) {
   return packagingOptions.find(item => item.key === key) || packagingOptions[0]
 }
@@ -118,6 +129,7 @@ function buildViewModel(user, state, config, packagingOptions) {
   const wallet = user ? (user.wallet || {}) : {}
   const pickupBalance = Number(loggedIn ? (wallet.fertilizerBalance || user.fertilizerBalance || 0) : 0)
   const freightSubsidyBalance = getFreightSubsidyBalance(user)
+  const packagingCreditBalance = getPackagingCreditBalance(user)
   const pointsBalance = Number(loggedIn ? (wallet.pointsBalance || user.pointsBalance || 0) : 0)
   const packaging = findPackagingOption(packagingOptions, state.selectedPackagingKey)
   const condition = findCondition(packaging, state.selectedConditionKey)
@@ -147,6 +159,7 @@ function buildViewModel(user, state, config, packagingOptions) {
 
   let packagingCashDue = packagingFee
   let packagingPointsDue = 0
+  let packagingCreditUsed = 0
   let packagingPayHint = '转罐自备容器，不收包装物费用。'
 
   if (packagingFee > 0) {
@@ -154,8 +167,14 @@ function buildViewModel(user, state, config, packagingOptions) {
       packagingCashDue = 0
       packagingPointsDue = packagingPointsCost
       packagingPayHint = `本次包装物费用将使用 ${formatInteger(packagingPointsCost)} 积分抵扣。`
+    } else if (state.packagingPayMethod === 'credit') {
+      packagingCreditUsed = Math.min(packagingCreditBalance, packagingFee)
+      packagingCashDue = roundMoney(packagingFee - packagingCreditUsed)
+      packagingPayHint = packagingCreditBalance >= packagingFee
+        ? '包装物费用将由包装抵扣余额全额抵扣。'
+        : `当前包装抵扣仅够 ￥${formatMoney(packagingCreditUsed)}，剩余现金 ￥${formatMoney(packagingCashDue)}。`
     } else {
-      packagingPayHint = `包装物费用现金支付 ￥${formatMoney(packagingFee)}，或改用 ${formatInteger(packagingPointsCost)} 积分支付。`
+      packagingPayHint = `包装物费用现金支付 ￥${formatMoney(packagingFee)}，或改用包装抵扣 / 积分支付。`
     }
   }
 
@@ -188,7 +207,7 @@ function buildViewModel(user, state, config, packagingOptions) {
   }
 
   if (pickupBalance < totalKg) {
-    errors.push('账户余额不足，无法完成本次提货。')
+    errors.push(`化肥提货余额不足，本次需 ${formatInteger(totalKg)}Kg，当前 ${formatWeight(pickupBalance)}Kg。`)
   }
 
   if (isDelivery && !inCounty) {
@@ -207,6 +226,10 @@ function buildViewModel(user, state, config, packagingOptions) {
     errors.push('积分不足，无法使用积分支付包装物费用。')
   }
 
+  if (packagingFee > 0 && state.packagingPayMethod === 'credit' && packagingCreditBalance <= 0) {
+    errors.push('包装抵扣余额不足，请先兑换包装抵扣或使用其他支付方式。')
+  }
+
   if (deliveryFee > 0 && state.freightPayMethod === 'subsidy' && freightSubsidyBalance < deliveryFee) {
     errors.push('运补余额不足，请切换为组合支付或现金支付。')
   }
@@ -215,11 +238,13 @@ function buildViewModel(user, state, config, packagingOptions) {
   const balanceAfter = roundMoney(Math.max(pickupBalance - totalKg, 0))
   const pointsAfter = Math.max(pointsBalance - packagingPointsDue, 0)
   const freightSubsidyAfter = roundMoney(Math.max(freightSubsidyBalance - subsidyUsed, 0))
+  const packagingCreditAfter = roundMoney(Math.max(packagingCreditBalance - packagingCreditUsed, 0))
 
   return {
     accountName: loggedIn ? getAccountName(user) : '未登录',
     pickupBalanceText: formatWeight(pickupBalance),
     freightSubsidyBalanceText: formatMoney(freightSubsidyBalance),
+    packagingCreditBalanceText: formatMoney(packagingCreditBalance),
     pointsBalanceText: formatInteger(pointsBalance),
     selectedPackaging: packaging,
     selectedCondition: condition,
@@ -237,14 +262,19 @@ function buildViewModel(user, state, config, packagingOptions) {
     deliveryFeeText: formatMoney(deliveryFee),
     subsidyUsed,
     subsidyUsedText: formatMoney(subsidyUsed),
+    packagingCreditUsed,
+    packagingCreditUsedText: formatMoney(packagingCreditUsed),
     freightCashDue,
     totalCashDue,
-    totalCashLabel: totalCashDue > 0 ? `￥${formatMoney(totalCashDue)}` : '无需现金',
+    totalCashLabel: totalCashDue > 0 ? `￥${formatMoney(totalCashDue)}（线下支付）` : '无需现金',
+    deductKgLabel: `${formatInteger(totalKg)}Kg`,
     totalPointsLabel: packagingPointsDue > 0 ? `${formatInteger(packagingPointsDue)}积分` : '无需积分',
     subsidyLabel: subsidyUsed > 0 ? `￥${formatMoney(subsidyUsed)}` : '未使用',
+    packagingCreditLabel: packagingCreditUsed > 0 ? `￥${formatMoney(packagingCreditUsed)}` : '未使用',
     balanceAfterText: formatWeight(balanceAfter),
     pointsAfterText: formatInteger(pointsAfter),
     freightSubsidyAfterText: formatMoney(freightSubsidyAfter),
+    packagingCreditAfterText: formatMoney(packagingCreditAfter),
     deliveryHint,
     deliveryWarning,
     packagingPayHint,
@@ -287,6 +317,7 @@ function buildPickupPayload(state, viewModel) {
     totalKg: viewModel.totalKg,
     quantity: viewModel.quantity,
     packagePayment: state.packagingPayMethod,
+    packagingCreditUsed: viewModel.packagingCreditUsed,
     freightPayment: state.freightPayMethod,
     freightSubsidyUsed: viewModel.subsidyUsed,
     receiverAddress: state.deliveryAddress,
@@ -305,6 +336,7 @@ Page({
     accountName: '未登录',
     pickupBalanceText: '0',
     freightSubsidyBalanceText: '0',
+    packagingCreditBalanceText: '0',
     pointsBalanceText: '0',
     selectedPackagingKey: 'tonBucket',
     selectedConditionKey: 'used',
@@ -323,11 +355,14 @@ Page({
     packagingPointsCostText: '0',
     deliveryFeeText: '0',
     totalCashLabel: '无需现金',
+    deductKgLabel: '0Kg',
     totalPointsLabel: '无需积分',
     subsidyLabel: '未使用',
+    packagingCreditLabel: '未使用',
     balanceAfterText: '0',
     pointsAfterText: '0',
     freightSubsidyAfterText: '0',
+    packagingCreditAfterText: '0',
     deliveryHint: '',
     deliveryWarning: '',
     packagingPayHint: '',

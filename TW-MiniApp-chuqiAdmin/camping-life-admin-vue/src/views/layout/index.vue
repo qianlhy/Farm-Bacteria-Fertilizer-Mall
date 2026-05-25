@@ -25,6 +25,10 @@
           <el-icon><UserFilled /></el-icon>
           <span>合伙人申请</span>
         </el-menu-item>
+        <el-menu-item index="/redemption">
+          <el-icon><Ticket /></el-icon>
+          <span>兑换码管理</span>
+        </el-menu-item>
         <el-menu-item index="/config">
           <el-icon><Setting /></el-icon>
           <span>系统配置</span>

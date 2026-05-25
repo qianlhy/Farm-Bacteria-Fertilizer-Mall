@@ -2,32 +2,106 @@
   "pages": [
     "pages/home/index",
     "pages/login/index",
-    "pages/recharge/index",
-    "pages/recharge-records/index",
-    "pages/group-check/index",
-    "pages/join-partner/index",
-    "pages/benefit-officer/index",
     "pages/explore/index",
     "pages/service/index",
     "pages/benefit/index",
-    "pages/mine/index",
-    "pages/news-detail/index",
-    "pages/location-picker/index",
-    "pages/search/index",
-    "pages/scan/index",
-    "pages/topic-picker/index",
-    "pages/post-moment/index",
-    "pages/post-video/index",
-    "pages/post-article/index",
-    "pages/add-friend/index",
-    "pages/command/index",
-    "pages/trial/index",
-    "pages/trial-success/index",
-    "pages/trial-docs/index",
-    "pages/trial-records/index",
-    "pages/lottery/index",
-    "pages/order/index",
-    "pages/coupon/index"
+    "pages/mine/index"
+  ],
+  "subPackages": [
+    {
+      "root": "pages/recharge",
+      "name": "account",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/recharge-records",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/redeem-code",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/order",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/coupon",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/group-check",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/join-partner",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/benefit-officer",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/trial",
+      "name": "trial",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/trial-success",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/trial-docs",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/trial-records",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/news-detail",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/location-picker",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/search",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/scan",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/topic-picker",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/post-moment",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/post-video",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/post-article",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/add-friend",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/command",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/lottery",
+      "pages": ["index"]
+    }
   ],
   "window": {
     "navigationStyle": "custom",

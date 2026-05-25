@@ -113,6 +113,11 @@ Page({
       return
     }
 
+    if (item.title === '兑换码') {
+      wx.navigateTo({ url: '/pages/redeem-code/index' })
+      return
+    }
+
     wx.showToast({
       title: `${item.title} 功能开发中`,
       icon: 'none'

@@ -1,6 +1,6 @@
 <view class="trial-page">
   <view class="trial-hero">
-    <image class="trial-hero__bg" src="/assets/trial/hero.jpg" mode="aspectFill" />
+    <image class="trial-hero__bg" src="/pages/trial/assets/hero.jpg" mode="aspectFill" />
     <view class="trial-topbar">
       <view class="trial-topbar__left">
         <view class="trial-topbar__back" bindtap="goBack">

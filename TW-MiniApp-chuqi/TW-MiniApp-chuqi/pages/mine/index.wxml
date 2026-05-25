@@ -26,7 +26,7 @@
     <view class="mine-balance-card__stats">
       <view class="mine-balance-card__stat">
         <view class="mine-balance-card__value">{{wallet}}</view>
-        <view class="mine-balance-card__label">账户余额</view>
+        <view class="mine-balance-card__label">提货余额(Kg)</view>
       </view>
       <view class="mine-balance-card__stat">
         <view class="mine-balance-card__value">{{coupon}}</view>
@@ -40,8 +40,7 @@
   </view>
 
   <view class="mine-banner">
-    <image class="mine-banner__photo" src="/assets/trial/hero.jpg" mode="aspectFill" />
-    <image class="mine-banner__tank" src="/assets/trial/tank.png.jpeg" mode="aspectFit" />
+    <image class="mine-banner__photo" src="/assets/home/about_useful.jpg" mode="aspectFill" />
     <view class="mine-banner__text">加入肽为农家菌肥合伙人计划</view>
   </view>
 

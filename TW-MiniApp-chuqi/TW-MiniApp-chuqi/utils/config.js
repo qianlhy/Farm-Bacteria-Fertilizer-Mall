@@ -162,6 +162,7 @@ function buildPackagingPayOptions(config) {
   const cfg = normalizeProductConfig(config)
   return [
     { key: 'cash', title: '现金支付', desc: '包装物费用现金结算' },
+    { key: 'credit', title: '包装抵扣', desc: '使用兑换获得的包装费抵扣' },
     { key: 'points', title: '积分支付', desc: `按 1 元 = ${cfg.pointsRate} 积分抵扣` }
   ]
 }

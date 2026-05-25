@@ -1,0 +1,49 @@
+<view class="redeem-page">
+  <view class="redeem-topbar">
+    <view class="redeem-topbar__back" bindtap="goBack">
+      <view class="redeem-topbar__back-icon"></view>
+    </view>
+    <view class="redeem-topbar__title">兑换码</view>
+  </view>
+
+  <view class="redeem-account">
+    <view class="redeem-account__name">{{accountName}}</view>
+    <view class="redeem-account__stats">
+      <view class="redeem-account__stat">
+        <view class="redeem-account__label">运补(元)</view>
+        <view class="redeem-account__value">{{freightSubsidyText}}</view>
+      </view>
+      <view class="redeem-account__stat">
+        <view class="redeem-account__label">包装抵扣(元)</view>
+        <view class="redeem-account__value">{{packagingCreditText}}</view>
+      </view>
+      <view class="redeem-account__stat">
+        <view class="redeem-account__label">积分</view>
+        <view class="redeem-account__value">{{pointsText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="redeem-card">
+    <view class="redeem-card__title">输入兑换码</view>
+    <view class="redeem-card__desc">兑换后可获得运费补贴、包装费抵扣或积分，提货时可直接使用。</view>
+    <input
+      class="redeem-card__input"
+      placeholder="请输入兑换码"
+      value="{{codeInput}}"
+      bindinput="onCodeInput"
+      maxlength="20"
+    />
+    <view class="redeem-card__submit {{submitting ? 'redeem-card__submit--disabled' : ''}}" bindtap="submitRedeem">
+      {{submitting ? '兑换中...' : '立即兑换'}}
+    </view>
+  </view>
+
+  <view wx:if="{{lastResult}}" class="redeem-result">
+    <view class="redeem-result__title">本次兑换</view>
+    <view class="redeem-result__summary">{{lastResult.summary}}</view>
+    <view class="redeem-result__row">当前运补：￥{{lastResult.freightSubsidyAfter}}</view>
+    <view class="redeem-result__row">当前包装抵扣：￥{{lastResult.packagingCreditAfter}}</view>
+    <view class="redeem-result__row">当前积分：{{lastResult.pointsAfter}}</view>
+  </view>
+</view>

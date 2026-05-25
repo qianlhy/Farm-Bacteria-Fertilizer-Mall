@@ -84,13 +84,7 @@
 
         <view
           wx:if="{{feedItem.images.length}}"
-          class="content-gallery
-            {{feedItem.images.length === 1 ? 'content-gallery--single' : ''}}
-            {{feedItem.images.length === 2 ? 'content-gallery--two' : ''}}
-            {{feedItem.images.length === 3 ? 'content-gallery--three' : ''}}
-            {{feedItem.images.length === 4 ? 'content-gallery--four' : ''}}
-            {{feedItem.images.length === 6 ? 'content-gallery--six' : ''}}
-            {{feedItem.images.length === 9 ? 'content-gallery--nine' : ''}}"
+          class="content-gallery {{feedItem.images.length === 1 ? 'content-gallery--single' : ''}} {{feedItem.images.length === 2 ? 'content-gallery--two' : ''}} {{feedItem.images.length === 3 ? 'content-gallery--three' : ''}} {{feedItem.images.length === 4 ? 'content-gallery--four' : ''}} {{feedItem.images.length === 6 ? 'content-gallery--six' : ''}} {{feedItem.images.length === 9 ? 'content-gallery--nine' : ''}}"
         >
           <block wx:for="{{feedItem.images}}" wx:key="*this" wx:for-item="imageSrc">
             <image

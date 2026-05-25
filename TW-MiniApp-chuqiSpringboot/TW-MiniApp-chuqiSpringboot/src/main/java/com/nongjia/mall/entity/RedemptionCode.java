@@ -12,20 +12,23 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("user_wallet")
-public class UserWallet {
+@TableName("redemption_code")
+public class RedemptionCode implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    private String code;
+    private String batchNo;
+    private BigDecimal freightAmount;
+    private BigDecimal packagingAmount;
+    private Long pointsAmount;
+    /** 1未使用 2已使用 3已过期 4已禁用 */
+    private Integer status;
     private Long userId;
-    private BigDecimal fertilizerBalance;
-    private BigDecimal couponBalance;
-    private BigDecimal freightSubsidy;
-    private BigDecimal packagingCredit;
-    private Long pointsBalance;
-    private Long totalPointsEarned;
-    private Long totalPointsUsed;
-    private Integer version;
+    private LocalDateTime redeemedAt;
+    private LocalDateTime expiresAt;
+    private String remark;
+    private Long createdBy;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

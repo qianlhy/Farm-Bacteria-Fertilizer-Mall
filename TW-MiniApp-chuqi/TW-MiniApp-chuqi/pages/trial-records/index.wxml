@@ -36,7 +36,7 @@
         <view class="trial-progress-card__service-label">服务点</view>
       </view>
 
-      <image class="trial-progress-card__thumb" src="/assets/trial/tank.png.jpeg" mode="aspectFit" />
+      <image class="trial-progress-card__thumb" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
     </view>
 
     <view class="trial-progress-doc" bindtap="openDocsPage">

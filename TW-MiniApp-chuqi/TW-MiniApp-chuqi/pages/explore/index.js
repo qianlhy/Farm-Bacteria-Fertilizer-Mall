@@ -43,10 +43,7 @@ const defaultMomentFeed = [
     title: '客户案例：棚内状态更整齐',
     content: '连续使用后，棚内管理更顺手，作物整体状态也更稳定。这一组现场图主要用于展示客户案例和实际使用反馈。',
     images: [
-      '/assets/trial/hero.jpg',
-      '/assets/trial/tank.png.jpeg',
-      '/assets/trial/success-card-cropped.jpg',
-      '/assets/trial/success-bg.png.jpeg'
+      '/assets/home/about_useful.jpg'
     ],
     location: '泉州市·示范棚'
   },
@@ -57,7 +54,7 @@ const defaultMomentFeed = [
     currentMediaIndex: 0,
     title: '客户使用情况记录',
     content: '这一条以视频形式展示客户现场使用过程，后续可以继续补充不同场景下的真实使用画面与反馈内容。',
-    videoPoster: '/assets/trial/hero.jpg',
+    videoPoster: '/assets/home/about_useful.jpg',
     videoLabel: '现场短视频记录',
     videoDuration: '00:28',
     location: '厦门市·温室基地'

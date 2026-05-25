@@ -21,6 +21,15 @@ public interface UserWalletMapper extends BaseMapper<UserWallet> {
     @Update("UPDATE user_wallet SET freight_subsidy = freight_subsidy - #{amount}, version = version + 1 WHERE user_id = #{userId} AND freight_subsidy >= #{amount}")
     int deductFreightSubsidy(@Param("userId") Long userId, @Param("amount") Double amount);
 
+    @Update("UPDATE user_wallet SET freight_subsidy = freight_subsidy + #{amount}, version = version + 1 WHERE user_id = #{userId}")
+    int addFreightSubsidy(@Param("userId") Long userId, @Param("amount") Double amount);
+
+    @Update("UPDATE user_wallet SET packaging_credit = packaging_credit + #{amount}, version = version + 1 WHERE user_id = #{userId}")
+    int addPackagingCredit(@Param("userId") Long userId, @Param("amount") Double amount);
+
+    @Update("UPDATE user_wallet SET packaging_credit = packaging_credit - #{amount}, version = version + 1 WHERE user_id = #{userId} AND packaging_credit >= #{amount}")
+    int deductPackagingCredit(@Param("userId") Long userId, @Param("amount") Double amount);
+
     @Update("UPDATE user_wallet SET fertilizer_balance = fertilizer_balance - #{kg}, version = version + 1 WHERE user_id = #{userId} AND fertilizer_balance >= #{kg} AND version = #{version}")
     int deductFertilizer(@Param("userId") Long userId, @Param("kg") Double kg, @Param("version") Integer version);
 }

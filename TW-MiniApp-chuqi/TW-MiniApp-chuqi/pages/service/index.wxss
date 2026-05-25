@@ -440,6 +440,11 @@
   border-top: 1rpx solid rgba(45, 61, 31, 0.07);
 }
 
+.pickup-summary__row--emphasis {
+  font-weight: 600;
+  color: #2d3d1f;
+}
+
 .pickup-pay-block {
   margin-top: 22rpx;
 }

@@ -6,7 +6,26 @@
   "compileType": "miniprogram",
   "libVersion": "3.15.1",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "data" },
+      { "type": "folder", "value": "assets/trial" },
+      { "type": "folder", "value": "assets/recharge" },
+      { "type": "folder", "value": "assets/benefit" },
+      { "type": "folder", "value": "assets/menu" },
+      { "type": "suffix", "value": ".csv" },
+      { "type": "suffix", "value": ".xlsx" },
+      { "type": "suffix", "value": ".mp4" },
+      { "type": "file", "value": "pages/trial/assets/seal.png.jpeg" },
+      { "type": "file", "value": "pages/trial/assets/envelope-bg-clean.jpg" },
+      { "type": "file", "value": "pages/trial/assets/envelope-bg-card.jpg" },
+      { "type": "file", "value": "pages/trial/assets/envelope-bg-tight.jpg" },
+      { "type": "file", "value": "pages/trial/assets/envelope-bg-white.jpg" },
+      { "type": "file", "value": "pages/trial/assets/envelope-background.png.jpeg" },
+      { "type": "file", "value": "pages/trial/assets/tank.png.jpeg" },
+      { "type": "file", "value": "pages/trial/assets/success-bg.png.jpeg" },
+      { "type": "file", "value": "pages/trial/assets/success-card-cropped.jpg" },
+      { "type": "file", "value": "pages/recharge/assets/final_tank_label.png.jpeg" }
+    ],
     "include": []
   },
   "setting": {
@@ -18,7 +37,7 @@
     "compileHotReLoad": true,
     "compileWorklet": false,
     "uglifyFileName": false,
-    "uploadWithSourceMap": true,
+    "uploadWithSourceMap": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,

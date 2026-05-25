@@ -26,6 +26,10 @@
           <view class="pickup-balance-card__value">{{freightSubsidyBalanceText}}</view>
         </view>
         <view class="pickup-balance-card__stat">
+          <view class="pickup-balance-card__label">包装抵扣(元)</view>
+          <view class="pickup-balance-card__value">{{packagingCreditBalanceText}}</view>
+        </view>
+        <view class="pickup-balance-card__stat">
           <view class="pickup-balance-card__label">积分余额</view>
           <view class="pickup-balance-card__value">{{pointsBalanceText}}</view>
         </view>
@@ -177,7 +181,7 @@
           <view class="pickup-pay-block__title">包装物费用</view>
           <view class="pickup-pay-block__amount">￥{{packagingFeeText}}</view>
         </view>
-        <view wx:if="{{packagingPayAvailable}}" class="pickup-pay-grid">
+        <view wx:if="{{packagingPayAvailable}}" class="pickup-pay-grid pickup-pay-grid--triple">
           <block wx:for="{{packagingPayOptions}}" wx:key="key">
             <view
               class="pickup-pay-option {{packagingPayMethod === item.key ? 'pickup-pay-option--active' : ''}}"
@@ -217,8 +221,12 @@
     <view class="pickup-card pickup-card--summary soft-card">
       <view class="pickup-card__title">本次结算</view>
       <view class="pickup-summary">
+        <view class="pickup-summary__row pickup-summary__row--emphasis">
+          <text>扣减化肥</text>
+          <text>{{deductKgLabel}}</text>
+        </view>
         <view class="pickup-summary__row">
-          <text>现金支付</text>
+          <text>线下现金</text>
           <text>{{totalCashLabel}}</text>
         </view>
         <view class="pickup-summary__row">
@@ -230,8 +238,16 @@
           <text>{{subsidyLabel}}</text>
         </view>
         <view class="pickup-summary__row">
+          <text>包装抵扣</text>
+          <text>{{packagingCreditLabel}}</text>
+        </view>
+        <view class="pickup-summary__row">
           <text>提货后运补</text>
           <text>￥{{freightSubsidyAfterText}}</text>
+        </view>
+        <view class="pickup-summary__row">
+          <text>提货后包装抵扣</text>
+          <text>￥{{packagingCreditAfterText}}</text>
         </view>
         <view class="pickup-summary__row">
           <text>提货后积分</text>
@@ -243,7 +259,7 @@
     <view wx:if="{{primaryError}}" class="pickup-alert pickup-alert--error">{{primaryError}}</view>
 
     <view class="pickup-submit {{canSubmit ? '' : 'pickup-submit--disabled'}}" bindtap="submitPickup">
-      确认提货并扣减余额
+      确认提货（扣减 {{deductKgLabel}}）
     </view>
   </view>
 </view>
