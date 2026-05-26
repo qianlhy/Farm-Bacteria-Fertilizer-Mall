@@ -4,6 +4,9 @@
   <view class="hero">
     <view class="hero__status">
       <view class="hero__tools">
+        <view class="hero__action hero__action--search" bindtap="openSearch">
+          <text class="hero__search">搜</text>
+        </view>
         <view class="hero__action hero__action--plus" bindtap="togglePlusMenu">
           <text class="hero__plus">+</text>
         </view>
@@ -107,7 +110,7 @@
             object-fit="cover"
             controls
           ></video>
-          <view wx:else class="content-video" catchtap="openMomentVideo">
+          <view wx:else class="content-video" catchtap="openMomentVideo" data-poster="{{feedItem.videoPoster}}">
             <image class="content-video__poster" src="{{feedItem.videoPoster}}" mode="aspectFill" />
             <view class="content-video__shade"></view>
             <view class="content-video__play">
@@ -127,5 +130,10 @@
         </view>
       </view>
     </block>
+
+    <view wx:if="{{!momentFeed.length}}" class="moments-empty">
+      <view class="moments-empty__title">暂无动态内容</view>
+      <view class="moments-empty__desc">点击右上角 + 发布第一条资讯或朋友圈</view>
+    </view>
   </view>
 </view>

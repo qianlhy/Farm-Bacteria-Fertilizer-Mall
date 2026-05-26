@@ -258,8 +258,9 @@
 
     <view wx:if="{{primaryError}}" class="pickup-alert pickup-alert--error">{{primaryError}}</view>
 
-    <view class="pickup-submit {{canSubmit ? '' : 'pickup-submit--disabled'}}" bindtap="submitPickup">
-      确认提货（扣减 {{deductKgLabel}}）
+    <view class="pickup-submit {{canSubmit && !submitting ? '' : 'pickup-submit--disabled'}}" bindtap="submitPickup">
+      <text wx:if="{{submitting}}">提交中...</text>
+      <text wx:else>确认提货（扣减 {{deductKgLabel}}）</text>
     </view>
   </view>
 </view>

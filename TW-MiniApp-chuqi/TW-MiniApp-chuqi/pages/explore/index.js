@@ -213,7 +213,14 @@ Page({
   openContentDetail(event) {
     const { id, sourceType } = event.currentTarget.dataset
 
-    if (sourceType !== 'custom' || !id) {
+    if (!id) {
+      return
+    }
+
+    if (sourceType === 'custom') {
+      wx.navigateTo({
+        url: `/pages/news-detail/index?channel=moment&id=${id}`
+      })
       return
     }
 
@@ -234,6 +241,24 @@ Page({
   openSearch() {
     this.closePlusMenu()
     wx.navigateTo({ url: '/pages/search/index' })
+  },
+
+  openMomentVideo(event) {
+    const { poster } = event.currentTarget.dataset
+    this.closePlusMenu()
+
+    if (poster) {
+      wx.previewImage({
+        current: poster,
+        urls: [poster]
+      })
+      return
+    }
+
+    wx.showToast({
+      title: '演示内容，正式版将接入视频',
+      icon: 'none'
+    })
   },
 
   previewMomentImage(event) {

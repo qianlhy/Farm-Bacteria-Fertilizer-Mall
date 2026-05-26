@@ -1,4 +1,5 @@
 const { getUser, isLoggedIn, fetchUserInfo } = require('../../utils/auth')
+const { requireLogin } = require('../../utils/nav')
 const { fetchProductConfig } = require('../../utils/config')
 const { get, post } = require('../../utils/request')
 
@@ -26,8 +27,7 @@ Page({
   },
 
   onShow() {
-    if (!isLoggedIn()) {
-      wx.navigateTo({ url: '/pages/login/index' })
+    if (!requireLogin({ redirect: true })) {
       return
     }
     this.refreshPage(true)
@@ -74,6 +74,10 @@ Page({
 
   goBack() {
     wx.navigateBack()
+  },
+
+  refreshBalance() {
+    this.refreshPage(true)
   },
 
   openRechargeRecords() {

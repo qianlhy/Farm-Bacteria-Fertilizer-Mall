@@ -1,6 +1,31 @@
 <view class="page-shell action-page">
+  <view class="action-topbar">
+    <view class="action-topbar__back" bindtap="goBack">
+      <view class="action-topbar__back-icon"></view>
+    </view>
+    <view class="action-topbar__title">签到抽奖</view>
+  </view>
+
   <view class="action-card soft-card">
-    <view class="action-card__title">每日抽奖</view>
-    <view class="action-card__desc">这里可以接抽奖资格判断、奖品展示和中奖记录。</view>
+    <view class="action-card__title">每日签到</view>
+    <view class="action-card__desc">连续签到 7 天可领取额外积分奖励，签到后可参与抽奖。</view>
+
+    <view class="lottery-stats">
+      <view class="lottery-stats__item">
+        <view class="lottery-stats__value">{{streakDays}}</view>
+        <view class="lottery-stats__label">连续签到(天)</view>
+      </view>
+      <view class="lottery-stats__item">
+        <view class="lottery-stats__value">{{checkedInToday ? '已签' : '未签'}}</view>
+        <view class="lottery-stats__label">今日状态</view>
+      </view>
+    </view>
+
+    <view class="lottery-actions">
+      <view class="lottery-actions__button lottery-actions__button--primary" bindtap="handleCheckIn">
+        {{checkedInToday ? '今日已签到' : '立即签到'}}
+      </view>
+      <view class="lottery-actions__button" bindtap="handleDraw">签到后抽奖</view>
+    </view>
   </view>
 </view>

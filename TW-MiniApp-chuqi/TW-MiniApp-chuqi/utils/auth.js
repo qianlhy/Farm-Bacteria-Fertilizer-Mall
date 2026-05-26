@@ -38,7 +38,7 @@ function isLoggedIn() {
 }
 
 async function loginWithPhone(phone) {
-  const data = await request.post('/api/app/auth/login', { phone })
+  const data = await request.post('/api/app/auth/login', { phone }, { silent: true })
   const { token, userInfo } = data
   setToken(token)
   setUser(userInfo)
@@ -50,7 +50,7 @@ async function loginWithWeChat({ wxCode, nickname, avatar }) {
     wxCode,
     nickname,
     avatar
-  })
+  }, { silent: true })
   const { token, userInfo } = data
   setToken(token)
   setUser(userInfo)

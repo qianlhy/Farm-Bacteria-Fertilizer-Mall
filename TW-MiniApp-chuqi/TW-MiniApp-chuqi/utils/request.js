@@ -1,10 +1,43 @@
-const BASE_URL = 'http://localhost:8080'
+const { BASE_URL } = require('./env')
+
+let loadingCount = 0
+
+function showRequestLoading() {
+  if (loadingCount === 0) {
+    wx.showLoading({ title: '加载中...', mask: true })
+  }
+  loadingCount += 1
+}
+
+function hideRequestLoading() {
+  loadingCount = Math.max(0, loadingCount - 1)
+  if (loadingCount === 0) {
+    wx.hideLoading()
+  }
+}
+
+function goLoginPage() {
+  const pages = getCurrentPages()
+  const current = pages[pages.length - 1]
+  const route = current && current.route ? current.route : ''
+
+  if (route.includes('pages/login/index')) {
+    return
+  }
+
+  wx.redirectTo({
+    url: '/pages/login/index',
+    fail: () => {
+      wx.navigateTo({ url: '/pages/login/index' })
+    }
+  })
+}
 
 function request({ url, method = 'GET', data, header = {}, silent = false }) {
   return new Promise((resolve, reject) => {
     const token = wx.getStorageSync('app_token') || ''
     if (!silent) {
-      wx.showLoading({ title: '加载中...', mask: true })
+      showRequestLoading()
     }
 
     wx.request({
@@ -18,31 +51,37 @@ function request({ url, method = 'GET', data, header = {}, silent = false }) {
       },
       success: (res) => {
         if (!silent) {
-          wx.hideLoading()
+          hideRequestLoading()
         }
+
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          const { code, message, data } = res.data
+          const { code, message, data: responseData } = res.data || {}
           if (code === 200) {
-            resolve(data)
+            resolve(responseData)
           } else if (code === 401) {
             wx.removeStorageSync('app_token')
             wx.removeStorageSync('app_user')
-            wx.navigateTo({ url: '/pages/login/index' })
+            goLoginPage()
             reject(new Error(message || '未登录'))
           } else {
-            wx.showToast({ title: message || '请求失败', icon: 'none' })
+            if (!silent) {
+              wx.showToast({ title: message || '请求失败', icon: 'none' })
+            }
             reject(new Error(message || '请求失败'))
           }
-        } else {
-          wx.showToast({ title: '网络错误', icon: 'none' })
-          reject(new Error('网络错误'))
+          return
         }
+
+        if (!silent) {
+          wx.showToast({ title: '网络错误', icon: 'none' })
+        }
+        reject(new Error('网络错误'))
       },
       fail: (err) => {
         if (!silent) {
-          wx.hideLoading()
+          hideRequestLoading()
+          wx.showToast({ title: '网络异常，请检查后端服务', icon: 'none' })
         }
-        wx.showToast({ title: '网络异常，请检查后端服务', icon: 'none' })
         reject(err)
       }
     })
@@ -61,4 +100,4 @@ function post(url, data, options = {}) {
   return request({ url, method: 'POST', data, ...options })
 }
 
-module.exports = { get, post }
+module.exports = { get, post, BASE_URL }

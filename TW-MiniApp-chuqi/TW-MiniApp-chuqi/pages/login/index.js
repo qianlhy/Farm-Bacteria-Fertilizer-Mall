@@ -1,4 +1,6 @@
 const { loginWithPhone, loginWithWeChat, isLoggedIn } = require('../../utils/auth')
+const { navigateAfterLogin } = require('../../utils/nav')
+const { TAB_PAGES } = require('../../utils/env')
 
 Page({
   data: {
@@ -10,14 +12,23 @@ Page({
     wxNickname: ''
   },
 
-  onLoad() {
+  onLoad(options) {
+    this.redirectUrl = options.redirect ? decodeURIComponent(options.redirect) : ''
+
     if (isLoggedIn()) {
-      wx.switchTab({ url: '/pages/home/index' })
+      if (navigateAfterLogin(this.redirectUrl)) {
+        return
+      }
+      wx.switchTab({ url: TAB_PAGES[0] })
     }
   },
 
   goBack() {
-    wx.navigateBack()
+    wx.navigateBack({
+      fail: () => {
+        wx.switchTab({ url: TAB_PAGES[0] })
+      }
+    })
   },
 
   toggleAgree() {
@@ -59,8 +70,17 @@ Page({
     }
 
     setTimeout(() => {
-      wx.switchTab({ url: '/pages/home/index' })
-    }, 1200)
+      if (navigateAfterLogin(this.redirectUrl)) {
+        return
+      }
+
+      if (pages.length >= 2) {
+        wx.navigateBack()
+        return
+      }
+
+      wx.switchTab({ url: TAB_PAGES[0] })
+    }, 800)
   },
 
   doLogin() {

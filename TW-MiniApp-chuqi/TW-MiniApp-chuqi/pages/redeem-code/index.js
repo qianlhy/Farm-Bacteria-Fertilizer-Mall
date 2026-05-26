@@ -1,4 +1,5 @@
-const { getUser, isLoggedIn, fetchUserInfo } = require('../../utils/auth')
+const { getUser, fetchUserInfo } = require('../../utils/auth')
+const { requireLogin } = require('../../utils/nav')
 const { post } = require('../../utils/request')
 
 Page({
@@ -13,14 +14,20 @@ Page({
   },
 
   onShow() {
-    if (!isLoggedIn()) {
-      wx.navigateTo({ url: '/pages/login/index' })
+    if (!requireLogin({ redirect: true })) {
       return
     }
-    this.refreshBalances()
+    this.refreshBalances(true)
   },
 
-  refreshBalances() {
+  onLoginSuccess() {
+    this.refreshBalances(true)
+  },
+
+  async refreshBalances(forceRemote = false) {
+    if (forceRemote) {
+      await fetchUserInfo()
+    }
     const user = getUser()
     const wallet = user && user.wallet ? user.wallet : {}
     this.setData({

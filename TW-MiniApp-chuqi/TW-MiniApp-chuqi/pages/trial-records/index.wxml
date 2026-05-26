@@ -1,59 +1,83 @@
-<view class="trial-records-page" wx:if="{{booking}}">
+<view class="trial-records-page">
   <view class="trial-records-topbar">
     <view class="trial-records-topbar__back" bindtap="goBack">
       <view class="trial-records-topbar__back-icon"></view>
     </view>
   </view>
 
-  <view class="trial-progress">
-    <view class="trial-progress__title">{{booking.status === '已取消' ? '试用已取消' : '试用安排中'}}</view>
-
-    <view class="trial-progress__agent">
-      <view class="trial-progress__avatar">肽</view>
-      <view class="trial-progress__agent-text">
-        <view class="trial-progress__agent-name">肽为服务专员</view>
-        <view class="trial-progress__agent-subtitle">肽为服务顾问</view>
-      </view>
-      <view class="trial-progress__tool trial-progress__tool--phone" bindtap="callAgent"></view>
-      <view class="trial-progress__tool trial-progress__tool--message" bindtap="messageAgent"></view>
-    </view>
-
-    <view class="trial-progress__desc">
-      {{booking.status === '已取消'
-        ? '本次试用已取消，如需继续体验，可重新发起预约。'
-        : '正在为您安排试用服务，请留意我们的电话。期待与您见面！'}}
-    </view>
-
-    <view class="trial-progress-card">
-      <view class="trial-progress-card__info">
-        <view class="trial-progress-card__name">{{booking.productName}}</view>
-        <view class="trial-progress-card__label">试用品</view>
-
-        <view class="trial-progress-card__status">{{booking.status === '已取消' ? '已取消' : '安排中'}}</view>
-        <view class="trial-progress-card__status-label">试用状态</view>
-
-        <view class="trial-progress-card__service">{{booking.serviceName}}</view>
-        <view class="trial-progress-card__service-label">服务点</view>
-      </view>
-
-      <image class="trial-progress-card__thumb" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
-    </view>
-
-    <view class="trial-progress-doc" bindtap="openDocsPage">
-      <view class="trial-progress-doc__left">
-        <view class="trial-progress-doc__title">完善信息和资料</view>
-        <view class="trial-progress-doc__status">{{booking.docsCompleted ? '已完善' : '去完善'}}</view>
-      </view>
-      <view class="trial-progress-doc__action">
-        <view class="trial-progress-doc__icon-card"></view>
-        <view class="trial-progress-doc__icon-plus"></view>
-      </view>
-    </view>
+  <view wx:if="{{loading}}" class="trial-state">
+    <view class="trial-state__title">加载中...</view>
   </view>
 
-  <view class="trial-progress-footer">
-    <view class="trial-progress-footer__button" bindtap="handlePrimaryAction">
-      {{booking.docsCompleted ? '联系服务专员' : '完善信息和资料'}}
-    </view>
+  <view wx:elif="{{notLoggedIn}}" class="trial-state">
+    <view class="trial-state__title">请先登录</view>
+    <view class="trial-state__desc">登录后可查看试用进度与服务安排</view>
+    <view class="trial-state__button" bindtap="goLogin">去登录</view>
   </view>
+
+  <view wx:elif="{{loadFailed}}" class="trial-state">
+    <view class="trial-state__title">加载失败</view>
+    <view class="trial-state__desc">请检查网络后重试</view>
+    <view class="trial-state__button" bindtap="loadBooking">重新加载</view>
+  </view>
+
+  <view wx:elif="{{!booking}}" class="trial-state">
+    <view class="trial-state__title">暂无试用记录</view>
+    <view class="trial-state__desc">预约试用后，可在这里查看安排进度</view>
+    <view class="trial-state__button" bindtap="openTrialPage">立即预约试用</view>
+  </view>
+
+  <block wx:else>
+    <view class="trial-progress">
+      <view class="trial-progress__title">{{booking.status === '已取消' ? '试用已取消' : '试用安排中'}}</view>
+
+      <view class="trial-progress__agent">
+        <view class="trial-progress__avatar">肽</view>
+        <view class="trial-progress__agent-text">
+          <view class="trial-progress__agent-name">肽为服务专员</view>
+          <view class="trial-progress__agent-subtitle">肽为服务顾问</view>
+        </view>
+        <view class="trial-progress__tool trial-progress__tool--phone" bindtap="callAgent"></view>
+        <view class="trial-progress__tool trial-progress__tool--message" bindtap="messageAgent"></view>
+      </view>
+
+      <view class="trial-progress__desc">
+        {{booking.status === '已取消'
+          ? '本次试用已取消，如需继续体验，可重新发起预约。'
+          : '正在为您安排试用服务，请留意我们的电话。期待与您见面！'}}
+      </view>
+
+      <view class="trial-progress-card">
+        <view class="trial-progress-card__info">
+          <view class="trial-progress-card__name">{{booking.productName}}</view>
+          <view class="trial-progress-card__label">试用品</view>
+
+          <view class="trial-progress-card__status">{{booking.status === '已取消' ? '已取消' : '安排中'}}</view>
+          <view class="trial-progress-card__status-label">试用状态</view>
+
+          <view class="trial-progress-card__service">{{booking.serviceName}}</view>
+          <view class="trial-progress-card__service-label">服务点</view>
+        </view>
+
+        <image class="trial-progress-card__thumb" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
+      </view>
+
+      <view class="trial-progress-doc" bindtap="openDocsPage">
+        <view class="trial-progress-doc__left">
+          <view class="trial-progress-doc__title">完善信息和资料</view>
+          <view class="trial-progress-doc__status">{{booking.docsCompleted ? '已完善' : '去完善'}}</view>
+        </view>
+        <view class="trial-progress-doc__action">
+          <view class="trial-progress-doc__icon-card"></view>
+          <view class="trial-progress-doc__icon-plus"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="trial-progress-footer">
+      <view class="trial-progress-footer__button" bindtap="handlePrimaryAction">
+        {{booking.docsCompleted ? '联系服务专员' : '完善信息和资料'}}
+      </view>
+    </view>
+  </block>
 </view>

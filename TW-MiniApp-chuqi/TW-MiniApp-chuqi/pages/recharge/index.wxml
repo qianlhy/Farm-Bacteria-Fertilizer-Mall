@@ -1,4 +1,8 @@
 <view class="recharge-page">
+  <view wx:if="{{loading}}" class="recharge-loading-mask">
+    <view class="recharge-loading-mask__text">加载中...</view>
+  </view>
+
   <view class="recharge-topbar">
     <view class="recharge-topbar__back" bindtap="goBack">
       <view class="recharge-topbar__back-icon"></view>

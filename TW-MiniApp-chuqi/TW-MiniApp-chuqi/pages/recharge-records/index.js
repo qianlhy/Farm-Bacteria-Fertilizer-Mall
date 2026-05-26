@@ -1,4 +1,4 @@
-const { isLoggedIn } = require('../../utils/auth')
+const { requireLogin } = require('../../utils/nav')
 const { get } = require('../../utils/request')
 
 function formatTime(dateStr) {
@@ -15,10 +15,13 @@ Page({
   },
 
   onShow() {
-    if (!isLoggedIn()) {
-      wx.navigateTo({ url: '/pages/login/index' })
+    if (!requireLogin({ redirect: true })) {
       return
     }
+    this.loadRecords()
+  },
+
+  onLoginSuccess() {
     this.loadRecords()
   },
 
@@ -42,6 +45,7 @@ Page({
       })
     } catch (e) {
       this.setData({ records: [] })
+      wx.showToast({ title: '加载充值记录失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
     }

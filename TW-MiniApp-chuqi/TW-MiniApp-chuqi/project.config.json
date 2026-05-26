@@ -1,6 +1,6 @@
 {
   "miniprogramRoot": "./",
-  "projectname": "TW-MiniApp-Prototype",
+  "projectname": "农家菌肥商城小程序",
   "description": "农家菌肥推广与销售小程序原型",
   "appid": "wxae83cc107f51591e",
   "compileType": "miniprogram",

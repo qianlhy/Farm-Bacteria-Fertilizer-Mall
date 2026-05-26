@@ -47,6 +47,21 @@
   font-weight: 300;
 }
 
+.hero__search {
+  color: #fffef7;
+  font-size: 28rpx;
+  line-height: 1;
+  font-weight: 600;
+  width: 52rpx;
+  height: 52rpx;
+  border: 2rpx solid rgba(255, 254, 247, 0.85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
 .hero__search-circle {
   width: 24rpx;
   height: 24rpx;
@@ -427,4 +442,25 @@
 .content-card__action--danger {
   background: #fbefec;
   color: #c46f5c;
+}
+
+.moments-empty {
+  margin: 24rpx;
+  padding: 48rpx 32rpx;
+  border-radius: 24rpx;
+  background: #fffdf8;
+  text-align: center;
+}
+
+.moments-empty__title {
+  color: #4a4338;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.moments-empty__desc {
+  margin-top: 12rpx;
+  color: #8a8175;
+  font-size: 24rpx;
+  line-height: 1.6;
 }

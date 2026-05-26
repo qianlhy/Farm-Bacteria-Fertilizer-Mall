@@ -69,6 +69,40 @@ const presetArticles = {
   }
 }
 
+const presetMoments = {
+  'moment-1': {
+    id: 'moment-1',
+    sourceType: 'default',
+    channel: CHANNEL_MOMENT,
+    title: '客户案例：棚内状态更整齐',
+    subtitle: '泉州市·示范棚',
+    heroMode: 'cover',
+    heroSlides: [
+      { id: 'm1-s1', type: 'image', src: '/assets/home/about_useful.jpg' }
+    ],
+    bodyBlocks: [
+      { id: 'b1', type: 'text', value: '连续使用后，棚内管理更顺手，作物整体状态也更稳定。这一组现场图主要用于展示客户案例和实际使用反馈。' }
+    ]
+  },
+  'moment-2': {
+    id: 'moment-2',
+    sourceType: 'default',
+    channel: CHANNEL_MOMENT,
+    title: '客户使用情况记录',
+    subtitle: '厦门市·温室基地',
+    heroMode: 'video',
+    heroSlides: [],
+    heroVideo: {
+      src: '',
+      poster: '/assets/home/about_useful.jpg',
+      durationText: '00:28'
+    },
+    bodyBlocks: [
+      { id: 'b1', type: 'text', value: '这一条以视频形式展示客户现场使用过程，后续可以继续补充不同场景下的真实使用画面与反馈内容。' }
+    ]
+  }
+}
+
 function buildTextBlock(value, id) {
   return {
     id,
@@ -177,10 +211,17 @@ Page({
   },
 
   loadArticle() {
-    if (this.channel && this.articleId && this.channel !== CHANNEL_NEWS) {
+    if (this.channel === CHANNEL_MOMENT) {
       const item = getPublishedItem(this.channel, this.articleId)
+      if (item) {
+        this.setData({
+          article: normalizeCustomArticle(item)
+        })
+        return
+      }
+
       this.setData({
-        article: normalizeCustomArticle(item)
+        article: presetMoments[this.articleId] || presetMoments['moment-1']
       })
       return
     }

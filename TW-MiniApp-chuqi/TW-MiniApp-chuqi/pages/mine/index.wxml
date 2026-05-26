@@ -8,13 +8,10 @@
         mode="aspectFill"
       />
       <view wx:else class="mine-header__avatar">{{loggedIn && nickname ? nickname.slice(0, 1) : '农'}}</view>
-      <view wx:if="{{!loggedIn}}" class="mine-header__login-tip">点击登录</view>
     </view>
-    <view wx:if="{{loggedIn}}" class="mine-header__user-info">
-      <view class="mine-header__nickname">{{nickname || phone}}</view>
-      <view class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
-    </view>
-    <view wx:else class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
+    <view wx:if="{{!loggedIn}}" class="mine-header__login-tip" bindtap="handleLoginTap">点击登录</view>
+    <view wx:if="{{loggedIn}}" class="mine-header__nickname">{{nickname || phone}}</view>
+    <view class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
   </view>
 
   <view class="mine-balance-card">
@@ -41,7 +38,10 @@
 
   <view class="mine-banner">
     <image class="mine-banner__photo" src="/assets/home/about_useful.jpg" mode="aspectFill" />
-    <view class="mine-banner__text">加入肽为农家菌肥合伙人计划</view>
+    <view class="mine-banner__content">
+      <view class="mine-banner__title">加入肽为农家菌肥</view>
+      <view class="mine-banner__subtitle">合伙人计划</view>
+    </view>
   </view>
 
   <view class="mine-grid">

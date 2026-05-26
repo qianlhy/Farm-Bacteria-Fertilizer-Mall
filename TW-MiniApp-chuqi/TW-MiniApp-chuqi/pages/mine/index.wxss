@@ -7,42 +7,34 @@
 
 .mine-header {
   position: relative;
-  min-height: 120rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 8rpx;
+  padding-bottom: 8rpx;
 }
 
 .mine-header__avatar-wrap {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .mine-header__login-tip {
-  position: absolute;
-  bottom: -32rpx;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 22rpx;
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  font-weight: 600;
   color: #fff;
-  white-space: nowrap;
+  line-height: 1.2;
   text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
 
-.mine-header__user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 8rpx;
-}
-
 .mine-header__nickname {
+  margin-top: 14rpx;
   font-size: 30rpx;
   font-weight: 700;
   color: #fff;
+  line-height: 1.2;
   text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
 
@@ -69,11 +61,11 @@
 }
 
 .mine-header__slogan {
-  margin-top: 16rpx;
-  width: 520rpx;
-  font-size: 26rpx;
-  line-height: 1.5;
-  color: #fff;
+  margin-top: 10rpx;
+  width: 560rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
   text-align: center;
   text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
@@ -133,42 +125,50 @@
   border-radius: 28rpx;
   overflow: hidden;
   background: linear-gradient(135deg, #6aa325, #4e8218);
+  display: flex;
+  align-items: center;
 }
 
 .mine-banner__photo {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 260rpx;
   height: 200rpx;
+  flex-shrink: 0;
   opacity: 0.92;
 }
 
-.mine-banner__tank {
-  position: absolute;
-  right: -16rpx;
-  bottom: -8rpx;
-  width: 220rpx;
-  height: 200rpx;
-  opacity: 0.9;
+.mine-banner__content {
+  flex: 1;
+  min-width: 0;
+  padding: 0 28rpx 0 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8rpx;
 }
 
-.mine-banner__text {
-  position: absolute;
-  left: 248rpx;
-  top: 50rpx;
-  right: 140rpx;
-  font-size: 30rpx;
-  line-height: 1.5;
+.mine-banner__title {
+  font-size: 32rpx;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #fff;
+}
+
+.mine-banner__subtitle {
+  font-size: 32rpx;
+  line-height: 1.35;
   font-weight: 700;
   color: #fff;
 }
 
 .mine-grid {
   margin-top: 24rpx;
+  padding: 28rpx 12rpx 12rpx;
+  border-radius: 28rpx;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10rpx 24rpx rgba(26, 60, 16, 0.1);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  row-gap: 28rpx;
+  row-gap: 32rpx;
 }
 
 .mine-grid__item {
@@ -176,38 +176,48 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  min-height: 148rpx;
 }
 
 .mine-grid__icon-wrap {
   position: relative;
-  width: 96rpx;
-  height: 96rpx;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 22rpx;
+  background: #f7faf2;
+  box-shadow: inset 0 0 0 1rpx rgba(42, 80, 24, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .mine-grid__icon {
-  width: 64rpx;
-  height: 64rpx;
+  width: 44rpx;
+  height: 44rpx;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(18%) saturate(1200%) hue-rotate(64deg) brightness(95%) contrast(92%);
 }
 
 .mine-grid__badge {
   position: absolute;
-  top: -8rpx;
-  right: -8rpx;
+  top: -10rpx;
+  right: -10rpx;
   padding: 4rpx 10rpx;
   border-radius: 999rpx;
   background: #ff8745;
   color: #fff;
   font-size: 18rpx;
   font-weight: 700;
+  z-index: 1;
 }
 
 .mine-grid__label {
-  margin-top: 14rpx;
-  font-size: 28rpx;
-  line-height: 1.4;
-  color: #1e1e1e;
+  margin-top: 12rpx;
+  width: 100%;
+  padding: 0 4rpx;
+  font-size: 24rpx;
+  line-height: 1.35;
+  color: #2a5018;
   text-align: center;
+  word-break: break-all;
 }

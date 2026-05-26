@@ -1,45 +1,69 @@
-<view class="trial-success-page" wx:if="{{booking}}">
+<view class="trial-success-page">
   <view class="trial-success-topbar">
     <view class="trial-success-topbar__back" bindtap="goBack">
       <view class="trial-success-topbar__back-icon"></view>
     </view>
   </view>
 
-  <view class="trial-success-card">
-    <image class="trial-success-card__art" src="/pages/trial/assets/envelope-background.jpg" mode="aspectFill" />
+  <view wx:if="{{loading}}" class="trial-state">
+    <view class="trial-state__title">加载中...</view>
+  </view>
 
-    <view class="trial-success-card__content">
-      <view class="trial-success-card__title" bindtap="triggerCancelTrial">
-        {{booking.status === '已取消' ? '试用已取消' : '试用安排中'}}
-      </view>
-      <view class="trial-success-card__desc">
-        {{booking.status === '已取消'
-          ? '本次试用已取消，如需继续体验，可重新提交预约申请。'
-          : '预约成功，请留意我们的电话。服务点确认后，我们会尽快与你联系。'}}
-      </view>
+  <view wx:elif="{{notLoggedIn}}" class="trial-state">
+    <view class="trial-state__title">请先登录</view>
+    <view class="trial-state__desc">登录后可查看预约结果</view>
+    <view class="trial-state__button" bindtap="goLogin">去登录</view>
+  </view>
 
-      <view class="trial-success-card__meta-panel">
-        <view class="trial-success-card__meta-group">
-          <view class="trial-success-card__meta-value">{{booking.productName}}</view>
-          <view class="trial-success-card__meta-label">试用品</view>
+  <view wx:elif="{{loadFailed}}" class="trial-state">
+    <view class="trial-state__title">加载失败</view>
+    <view class="trial-state__desc">请检查网络后重试</view>
+    <view class="trial-state__button" bindtap="loadBooking">重新加载</view>
+  </view>
+
+  <view wx:elif="{{!booking}}" class="trial-state">
+    <view class="trial-state__title">未找到预约记录</view>
+    <view class="trial-state__desc">您可以重新发起试用预约</view>
+    <view class="trial-state__button" bindtap="openTrialPage">立即预约试用</view>
+  </view>
+
+  <block wx:else>
+    <view class="trial-success-card">
+      <image class="trial-success-card__art" src="/pages/trial/assets/envelope-background.jpg" mode="aspectFill" />
+
+      <view class="trial-success-card__content">
+        <view class="trial-success-card__title" bindtap="triggerCancelTrial">
+          {{booking.status === '已取消' ? '试用已取消' : '试用安排中'}}
+        </view>
+        <view class="trial-success-card__desc">
+          {{booking.status === '已取消'
+            ? '本次试用已取消，如需继续体验，可重新提交预约申请。'
+            : '预约成功，请留意我们的电话。服务点确认后，我们会尽快与你联系。'}}
         </view>
 
-        <view class="trial-success-card__meta-group">
-          <view class="trial-success-card__meta-value">{{maskedPhone}}</view>
-          <view class="trial-success-card__meta-label">预留手机号</view>
-        </view>
+        <view class="trial-success-card__meta-panel">
+          <view class="trial-success-card__meta-group">
+            <view class="trial-success-card__meta-value">{{booking.productName}}</view>
+            <view class="trial-success-card__meta-label">试用品</view>
+          </view>
 
-        <view class="trial-success-card__meta-group">
-          <view class="trial-success-card__meta-value">{{booking.serviceName}}</view>
-          <view class="trial-success-card__meta-label">服务点</view>
+          <view class="trial-success-card__meta-group">
+            <view class="trial-success-card__meta-value">{{maskedPhone}}</view>
+            <view class="trial-success-card__meta-label">预留手机号</view>
+          </view>
+
+          <view class="trial-success-card__meta-group">
+            <view class="trial-success-card__meta-value">{{booking.serviceName}}</view>
+            <view class="trial-success-card__meta-label">服务点</view>
+          </view>
         </view>
       </view>
+
+      <image class="trial-success-card__tank" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
     </view>
 
-    <image class="trial-success-card__tank" src="/pages/trial/assets/tank.jpg" mode="aspectFit" />
-  </view>
-
-  <view class="trial-success-actions">
-    <view class="trial-success-actions__button" bindtap="openRecords">查看试用进程</view>
-  </view>
+    <view class="trial-success-actions">
+      <view class="trial-success-actions__button" bindtap="openRecords">查看试用进程</view>
+    </view>
+  </block>
 </view>

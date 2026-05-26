@@ -1,42 +1,14 @@
 const { isLoggedIn } = require('../../utils/auth')
 const { get, post } = require('../../utils/request')
-
-const STATUS_TEXT = {
-  1: '安排中',
-  2: '已确认',
-  3: '已完成',
-  4: '已取消',
-  5: '资料待填'
-}
-
-function maskPhone(phone) {
-  const value = String(phone || '')
-  if (value.length !== 11) {
-    return value
-  }
-
-  return `${value.slice(0, 3)}****${value.slice(-4)}`
-}
-
-function mapBooking(record) {
-  return {
-    id: String(record.id),
-    bookingNo: record.bookingNo,
-    productName: record.productName,
-    serviceName: `肽为服务点 | ${record.servicePoint}`,
-    serviceAddress: record.address || '',
-    docsCompleted: record.status === 5 || record.status === 2 || record.status === 3,
-    phone: record.contactPhone,
-    status: STATUS_TEXT[record.status] || record.status,
-    statusCode: record.status,
-    createdAt: record.createdAt || ''
-  }
-}
+const { mapBooking, maskPhone } = require('../../utils/trial')
 
 Page({
   data: {
     booking: null,
-    maskedPhone: ''
+    maskedPhone: '',
+    loading: false,
+    loadFailed: false,
+    notLoggedIn: false
   },
 
   onLoad(options) {
@@ -49,27 +21,54 @@ Page({
 
   async loadBooking() {
     if (!isLoggedIn()) {
-      this.setData({ booking: null, maskedPhone: '' })
+      this.setData({
+        booking: null,
+        maskedPhone: '',
+        loading: false,
+        loadFailed: false,
+        notLoggedIn: true
+      })
       return
     }
+
+    this.setData({
+      loading: true,
+      loadFailed: false,
+      notLoggedIn: false
+    })
 
     try {
       const records = await get('/api/app/trial/records', { page: 1, pageSize: 20 })
       const list = Array.isArray(records) ? records : []
       const target = list.find(item => String(item.id) === String(this.bookingId)) || list[0] || null
-      const booking = target ? mapBooking(target) : null
+      const booking = target ? mapBooking(target, { includeStatusCode: true }) : null
 
       this.setData({
         booking,
-        maskedPhone: booking ? maskPhone(booking.phone) : ''
+        maskedPhone: booking ? maskPhone(booking.phone) : '',
+        loadFailed: false
       })
     } catch (error) {
-      this.setData({ booking: null, maskedPhone: '' })
+      this.setData({
+        booking: null,
+        maskedPhone: '',
+        loadFailed: true
+      })
+    } finally {
+      this.setData({ loading: false })
     }
   },
 
   goBack() {
     wx.navigateBack()
+  },
+
+  goLogin() {
+    wx.navigateTo({ url: '/pages/login/index' })
+  },
+
+  openTrialPage() {
+    wx.navigateTo({ url: '/pages/trial/index' })
   },
 
   triggerCancelTrial() {

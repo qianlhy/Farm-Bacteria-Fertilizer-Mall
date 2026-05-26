@@ -272,3 +272,35 @@
   font-size: 32rpx;
   font-weight: 700;
 }
+
+.trial-state {
+  padding: 120rpx 32rpx 0;
+  text-align: center;
+}
+
+.trial-state__title {
+  color: #222;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.trial-state__desc {
+  margin-top: 16rpx;
+  color: #8a8175;
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+
+.trial-state__button {
+  margin: 40rpx auto 0;
+  width: 320rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background: #10152a;
+  color: #fffef8;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

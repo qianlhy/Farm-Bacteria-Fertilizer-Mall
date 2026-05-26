@@ -1,4 +1,4 @@
-const { clearAuth, getUser, isLoggedIn } = require('../../utils/auth')
+const { clearAuth, getUser, isLoggedIn, fetchUserInfo } = require('../../utils/auth')
 const { syncTabBarSelected } = require('../../utils/tabBar')
 
 Page({
@@ -22,12 +22,12 @@ Page({
       { title: '推荐奖励', icon: '/assets/svg-icons/coupon-line.svg', auth: true },
       { title: '联系客服', icon: '/assets/svg-icons/wallet-line.svg', auth: false },
       { title: '签到抽奖', icon: '/assets/svg-icons/order-line.svg', auth: true },
-      { title: '加盟·合作', icon: '/assets/svg-icons/benefit.svg', auth: true },
-      { title: '意见反馈', icon: '/assets/svg-icons/share.svg', auth: false },
+      { title: '加盟·合作', icon: '/assets/svg-icons/mall-line.svg', auth: true },
+      { title: '意见反馈', icon: '/assets/svg-icons/dynamic.svg', auth: false },
       { title: '收费标准', icon: '/assets/svg-icons/money-line.svg', auth: false },
       { title: '找回密码', icon: '/assets/svg-icons/wallet-line.svg', auth: false },
       { title: '退出登录', icon: '/assets/svg-icons/article.svg', auth: true },
-      { title: '关于我们', icon: '/assets/svg-icons/mine.svg', auth: false }
+      { title: '关于我们', icon: '/assets/svg-icons/board.svg', auth: false }
     ]
   },
 
@@ -40,7 +40,11 @@ Page({
     this.refreshUser()
   },
 
-  refreshUser() {
+  async refreshUser() {
+    if (isLoggedIn()) {
+      await fetchUserInfo()
+    }
+
     const loggedInNow = isLoggedIn()
     const user = getUser()
 
@@ -115,6 +119,40 @@ Page({
 
     if (item.title === '兑换码') {
       wx.navigateTo({ url: '/pages/redeem-code/index' })
+      return
+    }
+
+    if (item.title === '加盟·合作') {
+      wx.navigateTo({ url: '/pages/join-partner/index' })
+      return
+    }
+
+    if (item.title === '签到抽奖') {
+      wx.navigateTo({ url: '/pages/lottery/index' })
+      return
+    }
+
+    if (item.title === '联系客服') {
+      wx.makePhoneCall({
+        phoneNumber: '4001234567',
+        fail: () => {
+          wx.setClipboardData({
+            data: '4001234567',
+            success: () => {
+              wx.showToast({ title: '已复制客服电话', icon: 'none' })
+            }
+          })
+        }
+      })
+      return
+    }
+
+    if (item.title === '关于我们') {
+      wx.showModal({
+        title: '关于我们',
+        content: '农家菌肥推广与销售小程序，专注菌肥推广、充值提货与试用服务。',
+        showCancel: false
+      })
       return
     }
 
