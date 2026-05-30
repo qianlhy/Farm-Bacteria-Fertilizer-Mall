@@ -5,6 +5,8 @@ const {
   getPublishedItem,
   upsertPublishedItem
 } = require('../../utils/publish-store')
+const { publishContent, isRemoteId } = require('../../utils/content-api')
+const { uploadImages } = require('../../utils/upload')
 
 Page({
   data: {
@@ -154,33 +156,61 @@ Page({
     })
   },
 
-  publishPost() {
+  async publishPost() {
     if (!this.data.publishEnabled) {
       return
     }
 
-    const createdAt = Date.now()
-    const item = {
-      id: this.data.editingId || `custom-${this.data.channel}-${TEMPLATE_DYNAMIC}-${createdAt}`,
-      templateType: TEMPLATE_DYNAMIC,
+    const token = wx.getStorageSync('app_token')
+    const payload = {
+      channel: this.data.channel,
+      contentType: TEMPLATE_DYNAMIC,
       title: (this.data.title || '').trim(),
       content: (this.data.content || '').trim(),
-      images: this.data.images,
-      location: this.data.selectedLocation || '',
-      createdAt
+      location: this.data.selectedLocation || ''
     }
 
-    upsertPublishedItem(this.data.channel, item)
-    wx.removeStorageSync(`draft-${this.data.channel}-${TEMPLATE_DYNAMIC}`)
+    if (this.data.isEditing && isRemoteId(this.data.editingId)) {
+      payload.id = Number(this.data.editingId)
+    }
 
-    wx.showToast({
-      title: this.data.isEditing ? '内容已更新' : '内容已发布',
-      icon: 'success'
-    })
+    wx.showLoading({ title: '发布中...', mask: true })
 
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 500)
+    try {
+      if (token) {
+        payload.images = await uploadImages(this.data.images || [])
+        await publishContent(payload)
+      } else {
+        const createdAt = Date.now()
+        const item = {
+          id: this.data.editingId || `custom-${this.data.channel}-${TEMPLATE_DYNAMIC}-${createdAt}`,
+          templateType: TEMPLATE_DYNAMIC,
+          title: payload.title,
+          content: payload.content,
+          images: this.data.images,
+          location: payload.location,
+          createdAt
+        }
+        upsertPublishedItem(this.data.channel, item)
+      }
+
+      wx.removeStorageSync(`draft-${this.data.channel}-${TEMPLATE_DYNAMIC}`)
+      wx.showToast({
+        title: this.data.isEditing ? '内容已更新' : '内容已发布',
+        icon: 'success'
+      })
+
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 500)
+    } catch (error) {
+      wx.showToast({
+        title: error.message || '发布失败',
+        icon: 'none'
+      })
+    } finally {
+      wx.hideLoading()
+    }
   },
 
   hasDraftContent() {

@@ -118,6 +118,58 @@ WHERE `created_at` IS NULL OR `updated_at` IS NULL;
 
 
 -- ============================================================
+-- 六、探索页内容管理（轮播 + 朋友圈动态种子数据）
+--     详见 database/upgrade_content_explore.sql
+--     按 post_no 幂等：存在则更新，不存在则插入
+-- ============================================================
+
+INSERT INTO `content_post`
+  (`post_no`, `user_id`, `user_nickname`, `channel`, `content_type`, `title`, `content`, `images`, `location`, `status`, `published_at`)
+VALUES
+(
+  'P001', 0, '肽为农家菌肥', 'news', 'announcement',
+  '热烈庆祝农家菌肥商城上线',
+  '农家菌肥商城正式上线，欢迎各位农户朋友使用！购买菌肥，享优惠！',
+  '[]', NULL, 2, NOW()
+),
+(
+  'P002', 0, '肽为农家菌肥', 'news', 'notice',
+  '本月下单领券活动开启，老用户转介绍可叠加福利',
+  '活动期内，指定商品支持领券后再下单。若通过老用户分享进入并完成首单，系统会给邀请人与新用户同步发放优惠券。',
+  '[]', NULL, 2, NOW()
+),
+(
+  'P003', 0, '肽为农家菌肥', 'news', 'announcement',
+  '春耕旺季发货加速，菌肥套装已覆盖 12 个示范村',
+  '围绕春耕节点，我们把菌肥产品按作物和施肥阶段重新整理成组合装，方便农户直接下单。',
+  '[]', NULL, 2, NOW()
+),
+(
+  'P004', 0, '肽为农家菌肥', 'moment', 'dynamic',
+  '客户案例：棚内管理更顺手',
+  '客户案例：连续使用后，棚内管理更顺手，作物整体状态也更稳定。以下为一组现场反馈图。',
+  '[]', '泉州市·示范棚', 2, NOW()
+),
+(
+  'P005', 0, '肽为农家菌肥', 'moment', 'dynamic',
+  '多地示范棚回访记录',
+  '多地示范棚回访记录，展示不同场景下的使用反馈。',
+  '[]', '漳州市·试验田', 2, DATE_SUB(NOW(), INTERVAL 2 DAY)
+)
+ON DUPLICATE KEY UPDATE
+  `user_id`       = VALUES(`user_id`),
+  `user_nickname` = VALUES(`user_nickname`),
+  `channel`       = VALUES(`channel`),
+  `content_type`  = VALUES(`content_type`),
+  `title`         = VALUES(`title`),
+  `content`       = VALUES(`content`),
+  `location`      = VALUES(`location`),
+  `status`        = VALUES(`status`),
+  `published_at`  = IF(`published_at` IS NULL, VALUES(`published_at`), `published_at`),
+  `updated_at`    = NOW();
+
+
+-- ============================================================
 -- 完成
 -- ============================================================
 SELECT 'migrate_incremental.sql 执行完成' AS result;

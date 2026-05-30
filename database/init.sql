@@ -324,10 +324,14 @@ INSERT INTO `sys_config` (`config_key`, `config_value`, `config_type`, `config_n
 ('trial.product.subtitle', '绿色生态，提质增产，提升地力', 'string', '试用产品描述', 'trial', 3, '试用预约产品描述'),
 ('trial.service_points', '["漳州岩溪","厦门湖里","泉州丰泽"]', 'json', '服务网点列表', 'trial', 1, '试用服务网点');
 
--- 初始化新闻内容
-INSERT INTO `content_post` (`post_no`, `user_id`, `user_nickname`, `channel`, `content_type`, `title`, `content`, `images`, `status`, `published_at`) VALUES
-('P001', 1, '菌肥用户', 'news', 'announcement', '热烈庆祝农家菌肥商城上线', '农家菌肥商城正式上线，欢迎各位农户朋友使用！购买菌肥，享优惠！', '[]', 2, NOW()),
-('P002', 1, '菌肥用户', 'news', 'notice', '充值优惠活动进行中', '即日起充值享受85折优惠，多充多送！', '[]', 2, NOW());
+-- 初始化探索页内容（轮播 + 朋友圈动态，图片可在后台替换）
+-- 已有库请改执行 database/upgrade_content_explore.sql
+INSERT INTO `content_post` (`post_no`, `user_id`, `user_nickname`, `channel`, `content_type`, `title`, `content`, `images`, `location`, `status`, `published_at`) VALUES
+('P001', 0, '肽为农家菌肥', 'news', 'announcement', '热烈庆祝农家菌肥商城上线', '农家菌肥商城正式上线，欢迎各位农户朋友使用！购买菌肥，享优惠！', '[]', NULL, 2, NOW()),
+('P002', 0, '肽为农家菌肥', 'news', 'notice', '本月下单领券活动开启，老用户转介绍可叠加福利', '活动期内，指定商品支持领券后再下单。若通过老用户分享进入并完成首单，系统会给邀请人与新用户同步发放优惠券。', '[]', NULL, 2, NOW()),
+('P003', 0, '肽为农家菌肥', 'news', 'announcement', '春耕旺季发货加速，菌肥套装已覆盖 12 个示范村', '围绕春耕节点，我们把菌肥产品按作物和施肥阶段重新整理成组合装，方便农户直接下单。', '[]', NULL, 2, NOW()),
+('P004', 0, '肽为农家菌肥', 'moment', 'dynamic', '客户案例：棚内管理更顺手', '客户案例：连续使用后，棚内管理更顺手，作物整体状态也更稳定。以下为一组现场反馈图。', '[]', '泉州市·示范棚', 2, NOW()),
+('P005', 0, '肽为农家菌肥', 'moment', 'dynamic', '多地示范棚回访记录', '多地示范棚回访记录，展示不同场景下的使用反馈。', '[]', '漳州市·试验田', 2, DATE_SUB(NOW(), INTERVAL 2 DAY));
 
 -- 已有库升级（按需执行）
 -- INSERT INTO `sys_config` (`config_key`, `config_value`, `config_type`, `config_name`, `config_group`, `sort_order`, `remark`) VALUES

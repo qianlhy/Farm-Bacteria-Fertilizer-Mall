@@ -8,6 +8,12 @@ const {
   normalizeProductConfig
 } = require('../../utils/config')
 const { post } = require('../../utils/request')
+const {
+  getDefaultAddress,
+  listAddresses,
+  removeAddress,
+  saveAddress
+} = require('../../utils/address-book')
 
 const FREIGHT_PAY_OPTIONS = [
   { key: 'cash', title: '现金支付', desc: '配送时现金支付运费' },
@@ -137,6 +143,8 @@ function buildViewModel(user, state, config, packagingOptions) {
   const isDelivery = state.deliveryMethod === 'delivery'
   const inCounty = state.areaScope === 'county'
   const deliveryAddress = String(state.deliveryAddress || '').trim()
+  const receiverName = String(state.receiverName || '').trim()
+  const receiverPhone = String(state.receiverPhone || '').trim()
   const totalKg = packaging.unitKg * quantity
   const packagingFee = roundMoney(Number(condition.fee || 0) * quantity)
   const packagingPointsCost = Math.round(packagingFee * cfg.pointsRate)
@@ -218,10 +226,6 @@ function buildViewModel(user, state, config, packagingOptions) {
     errors.push(`配送起送量为 ${formatInteger(cfg.minKg)}Kg，还差 ${formatInteger(deliveryGapKg)}Kg。`)
   }
 
-  if (isDelivery && inCounty && !deliveryAddress) {
-    errors.push('请选择或填写配送地址。')
-  }
-
   if (packagingPointsDue > pointsBalance) {
     errors.push('积分不足，无法使用积分支付包装物费用。')
   }
@@ -251,6 +255,8 @@ function buildViewModel(user, state, config, packagingOptions) {
     quantity,
     quantityText: String(quantity),
     deliveryAddress: state.deliveryAddress || '',
+    receiverName: state.receiverName || '',
+    receiverPhone: state.receiverPhone || '',
     quantityHint: getQuantityHint(packaging, cfg),
     totalKg,
     totalKgText: formatInteger(totalKg),
@@ -266,7 +272,7 @@ function buildViewModel(user, state, config, packagingOptions) {
     packagingCreditUsedText: formatMoney(packagingCreditUsed),
     freightCashDue,
     totalCashDue,
-    totalCashLabel: totalCashDue > 0 ? `￥${formatMoney(totalCashDue)}（线下支付）` : '无需现金',
+    totalCashLabel: totalCashDue > 0 ? `￥${formatMoney(totalCashDue)}` : '无需现金',
     deductKgLabel: `${formatInteger(totalKg)}Kg`,
     totalPointsLabel: packagingPointsDue > 0 ? `${formatInteger(packagingPointsDue)}积分` : '无需积分',
     subsidyLabel: subsidyUsed > 0 ? `￥${formatMoney(subsidyUsed)}` : '未使用',
@@ -322,6 +328,9 @@ function buildPickupPayload(state, viewModel) {
     freightSubsidyUsed: viewModel.subsidyUsed,
     receiverAddress: state.deliveryAddress,
     deliveryLocation: state.deliveryAddress,
+    receiverName: state.receiverName,
+    receiverPhone: state.receiverPhone,
+    contactPhone: state.receiverPhone,
     remark: `${viewModel.orderLabel} · ${viewModel.quantitySummaryText}`
   }
 }
@@ -344,6 +353,11 @@ Page({
     areaScope: 'county',
     quantityText: '1',
     deliveryAddress: '',
+    receiverName: '',
+    receiverPhone: '',
+    addressBookVisible: false,
+    addressList: [],
+    showDetail: false,
     packagingPayMethod: 'cash',
     freightPayMethod: 'subsidy',
     selectedPackaging: null,
@@ -379,7 +393,23 @@ Page({
 
   onShow() {
     syncTabBarSelected(this, '/pages/service/index')
+    this.loadSavedAddress()
     this.refreshView(true)
+  },
+
+  loadSavedAddress() {
+    const saved = getDefaultAddress()
+    if (saved && !this.data.deliveryAddress) {
+      this.setData({
+        deliveryAddress: saved.address || '',
+        receiverName: saved.contactName || '',
+        receiverPhone: saved.contactPhone || ''
+      })
+    }
+  },
+
+  refreshAddressList() {
+    this.setData({ addressList: listAddresses() })
   },
 
   onLoginSuccess() {
@@ -413,6 +443,8 @@ Page({
       areaScope: this.data.areaScope,
       quantity: this.data.quantityText,
       deliveryAddress: this.data.deliveryAddress,
+      receiverName: this.data.receiverName,
+      receiverPhone: this.data.receiverPhone,
       packagingPayMethod: this.data.packagingPayMethod,
       freightPayMethod: this.data.freightPayMethod
     }
@@ -538,12 +570,89 @@ Page({
   },
 
   onDeliveryAddressInput(event) {
-    this.setData({
-      deliveryAddress: event.detail.value || ''
-    })
-
+    this.setData({ deliveryAddress: event.detail.value || '' })
     this.syncView()
   },
+
+  onReceiverNameInput(event) {
+    this.setData({ receiverName: event.detail.value || '' })
+    this.syncView()
+  },
+
+  onReceiverPhoneInput(event) {
+    this.setData({ receiverPhone: event.detail.value || '' })
+    this.syncView()
+  },
+
+  openAddressBook() {
+    this.refreshAddressList()
+    this.setData({ addressBookVisible: true })
+  },
+
+  closeAddressBook() {
+    this.setData({ addressBookVisible: false })
+  },
+
+  applyAddress(event) {
+    const { id } = event.currentTarget.dataset
+    const target = this.data.addressList.find(item => item.id === id)
+    if (!target) {
+      return
+    }
+
+    this.setData({
+      deliveryAddress: target.address || '',
+      receiverName: target.contactName || '',
+      receiverPhone: target.contactPhone || '',
+      addressBookVisible: false
+    })
+    this.syncView()
+  },
+
+  removeAddressItem(event) {
+    const { id } = event.currentTarget.dataset
+    removeAddress(id)
+    this.refreshAddressList()
+    wx.showToast({ title: '已删除', icon: 'success' })
+  },
+
+  saveCurrentAddress() {
+    const { deliveryAddress, receiverName, receiverPhone } = this.data
+    if (!deliveryAddress.trim()) {
+      wx.showToast({ title: '请先填写卸货地址', icon: 'none' })
+      return
+    }
+
+    wx.showModal({
+      title: '保存地址',
+      editable: true,
+      placeholderText: '地址备注，如：张老板-泉州仓',
+      success: ({ confirm, content }) => {
+        if (!confirm) {
+          return
+        }
+
+        try {
+          saveAddress({
+            label: content || receiverName || '默认地址',
+            address: deliveryAddress,
+            contactName: receiverName,
+            contactPhone: receiverPhone,
+            isDefault: true
+          })
+          wx.showToast({ title: '已保存', icon: 'success' })
+        } catch (error) {
+          wx.showToast({ title: error.message || '保存失败', icon: 'none' })
+        }
+      }
+    })
+  },
+
+  toggleDetail() {
+    this.setData({ showDetail: !this.data.showDetail })
+  },
+
+  noop() {},
 
   async submitPickup() {
     if (!isLoggedIn()) {

@@ -90,8 +90,8 @@
   color: #1f1f1f;
 }
 
-.mine-balance-card__plate {
-  font-size: 24rpx;
+.mine-balance-card__guest {
+  font-size: 28rpx;
   color: #666;
 }
 

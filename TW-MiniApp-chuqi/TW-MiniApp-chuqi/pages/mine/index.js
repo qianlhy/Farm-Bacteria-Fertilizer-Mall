@@ -1,34 +1,38 @@
 const { clearAuth, getUser, isLoggedIn, fetchUserInfo } = require('../../utils/auth')
 const { syncTabBarSelected } = require('../../utils/tabBar')
 
+const TOOL_ROUTES = {
+  '账户充值': '/pages/recharge/index',
+  '充值记录': '/pages/recharge-records/index',
+  '团购核销': '/pages/group-check/index?tab=douyin',
+  '兑换码': '/pages/redeem-code/index',
+  '试用记录': '/pages/trial-records/index',
+  '加盟合作': '/pages/join-partner/index',
+  '签到抽奖': '/pages/lottery/index'
+}
+
 Page({
   data: {
     loggedIn: false,
     phone: '',
-    license: '--',
     wallet: '0',
-    coupon: '0',
+    freightSubsidy: '0',
     points: '0',
     nickname: '',
     avatar: '',
     tools: [
       { title: '账户充值', icon: '/assets/svg-icons/wallet-line.svg', auth: true },
+      { title: '充值记录', icon: '/assets/svg-icons/order-line.svg', auth: true },
       { title: '团购核销', icon: '/assets/svg-icons/coupon-line.svg', auth: false },
       { title: '兑换码', icon: '/assets/svg-icons/point-line.svg', auth: true },
-      { title: '领话费券', icon: '/assets/svg-icons/money-line.svg', auth: true },
-      { title: '礼品码', icon: '/assets/svg-icons/coupon-line.svg', auth: true },
-      { title: '结算订单', icon: '/assets/svg-icons/order-line.svg', auth: true },
-      { title: '领取积分', icon: '/assets/svg-icons/point-line.svg', auth: true, badge: 'HOT' },
-      { title: '推荐奖励', icon: '/assets/svg-icons/coupon-line.svg', auth: true },
+      { title: '试用记录', icon: '/assets/svg-icons/group-check.svg', auth: true },
+      { title: '加盟合作', icon: '/assets/svg-icons/mall-line.svg', auth: true },
+      { title: '签到抽奖', icon: '/assets/svg-icons/recharge.svg', auth: true },
       { title: '联系客服', icon: '/assets/svg-icons/wallet-line.svg', auth: false },
-      { title: '签到抽奖', icon: '/assets/svg-icons/order-line.svg', auth: true },
-      { title: '加盟·合作', icon: '/assets/svg-icons/mall-line.svg', auth: true },
-      { title: '意见反馈', icon: '/assets/svg-icons/dynamic.svg', auth: false },
-      { title: '收费标准', icon: '/assets/svg-icons/money-line.svg', auth: false },
-      { title: '找回密码', icon: '/assets/svg-icons/wallet-line.svg', auth: false },
-      { title: '退出登录', icon: '/assets/svg-icons/article.svg', auth: true },
-      { title: '关于我们', icon: '/assets/svg-icons/board.svg', auth: false }
-    ]
+      { title: '关于我们', icon: '/assets/svg-icons/board.svg', auth: false },
+      { title: '退出登录', icon: '/assets/svg-icons/article.svg', auth: true, loginOnly: true }
+    ],
+    displayTools: []
   },
 
   onShow() {
@@ -52,24 +56,26 @@ Page({
       const wallet = user.wallet || {}
       this.setData({
         loggedIn: true,
-        phone: user.phone || '微信用户',
+        phone: user.phone || user.nickname || '微信用户',
         nickname: user.nickname || '',
         avatar: user.avatar || '',
-        license: user.licensePlate || '--',
         wallet: wallet.fertilizerBalance !== undefined ? String(wallet.fertilizerBalance) : '0',
-        coupon: wallet.couponBalance !== undefined ? String(wallet.couponBalance) : '0',
-        points: wallet.pointsBalance !== undefined ? String(wallet.pointsBalance) : '0'
+        freightSubsidy: wallet.freightSubsidy !== undefined
+          ? String(wallet.freightSubsidy)
+          : String(wallet.couponBalance || 0),
+        points: wallet.pointsBalance !== undefined ? String(wallet.pointsBalance) : '0',
+        displayTools: this.data.tools.filter(item => !item.loginOnly || loggedInNow)
       })
     } else {
       this.setData({
         loggedIn: false,
-        phone: '未登录',
+        phone: '',
         nickname: '',
         avatar: '',
-        license: '--',
-        wallet: '0',
-        coupon: '0',
-        points: '0'
+        wallet: '--',
+        freightSubsidy: '--',
+        points: '--',
+        displayTools: this.data.tools.filter(item => !item.loginOnly)
       })
     }
   },
@@ -80,9 +86,21 @@ Page({
     }
   },
 
+  openPartner() {
+    if (!isLoggedIn()) {
+      wx.navigateTo({ url: '/pages/login/index' })
+      return
+    }
+    wx.navigateTo({ url: '/pages/join-partner/index' })
+  },
+
   handleToolTap(event) {
     const { index } = event.currentTarget.dataset
-    const item = this.data.tools[index]
+    const item = this.data.displayTools[index]
+
+    if (!item) {
+      return
+    }
 
     if (item.title === '退出登录') {
       wx.showModal({
@@ -91,10 +109,7 @@ Page({
         success: (res) => {
           if (res.confirm) {
             clearAuth()
-            wx.showToast({
-              title: '已退出',
-              icon: 'success'
-            })
+            wx.showToast({ title: '已退出', icon: 'success' })
             this.refreshUser()
           }
         }
@@ -107,40 +122,13 @@ Page({
       return
     }
 
-    if (item.title === '账户充值') {
-      wx.navigateTo({ url: '/pages/recharge/index' })
-      return
-    }
-
-    if (item.title === '团购核销') {
-      wx.navigateTo({ url: '/pages/group-check/index?tab=douyin' })
-      return
-    }
-
-    if (item.title === '兑换码') {
-      wx.navigateTo({ url: '/pages/redeem-code/index' })
-      return
-    }
-
-    if (item.title === '加盟·合作') {
-      wx.navigateTo({ url: '/pages/join-partner/index' })
-      return
-    }
-
-    if (item.title === '签到抽奖') {
-      wx.navigateTo({ url: '/pages/lottery/index' })
-      return
-    }
-
     if (item.title === '联系客服') {
       wx.makePhoneCall({
         phoneNumber: '4001234567',
         fail: () => {
           wx.setClipboardData({
             data: '4001234567',
-            success: () => {
-              wx.showToast({ title: '已复制客服电话', icon: 'none' })
-            }
+            success: () => wx.showToast({ title: '已复制客服电话', icon: 'none' })
           })
         }
       })
@@ -150,15 +138,18 @@ Page({
     if (item.title === '关于我们') {
       wx.showModal({
         title: '关于我们',
-        content: '农家菌肥推广与销售小程序，专注菌肥推广、充值提货与试用服务。',
+        content: '农家菌肥小程序，提供菌肥充值、提货、试用与福利服务。',
         showCancel: false
       })
       return
     }
 
-    wx.showToast({
-      title: `${item.title} 功能开发中`,
-      icon: 'none'
-    })
+    const route = TOOL_ROUTES[item.title]
+    if (route) {
+      wx.navigateTo({ url: route })
+      return
+    }
+
+    wx.showToast({ title: `${item.title} 即将上线`, icon: 'none' })
   }
 })

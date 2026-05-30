@@ -64,8 +64,18 @@ export const completeTrial = (id) => request.post(`/admin/trial/complete/${id}`)
 export const cancelTrial = (id, data) => request.post(`/admin/trial/cancel/${id}`, data)
 
 export const getContentList = (params) => request.get('/admin/content/list', { params: cleanParams(params) })
+export const getContentDetail = (postId) => request.get(`/admin/content/detail/${postId}`)
+export const saveContent = (data) => request.post('/admin/content/save', data)
 export const auditContent = (postId, data) => request.post(`/admin/content/audit/${postId}`, data)
 export const deleteContent = (postId) => request.post(`/admin/content/delete/${postId}`)
+export const uploadFile = (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return request.post('/admin/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: file.type && file.type.startsWith('video/') ? 300000 : 60000,
+  })
+}
 
 export const getPartnerList = (params) => request.get('/admin/partner/list', { params: cleanParams(params) })
 export const handlePartner = (id, data) => request.post(`/admin/partner/handle/${id}`, data)

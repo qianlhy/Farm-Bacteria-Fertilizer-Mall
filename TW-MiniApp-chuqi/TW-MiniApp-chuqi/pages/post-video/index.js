@@ -5,6 +5,8 @@ const {
   getPublishedItem,
   upsertPublishedItem
 } = require('../../utils/publish-store')
+const { publishContent, isRemoteId } = require('../../utils/content-api')
+const { uploadIfNeeded } = require('../../utils/upload')
 
 Page({
   data: {
@@ -198,36 +200,67 @@ Page({
     return `${minutes}:${seconds}`
   },
 
-  publishPost() {
+  async publishPost() {
     if (!this.data.publishEnabled) {
       return
     }
 
-    const createdAt = Date.now()
-    const item = {
-      id: this.data.editingId || `custom-${this.data.channel}-${TEMPLATE_VIDEO}-${createdAt}`,
-      templateType: TEMPLATE_VIDEO,
+    const token = wx.getStorageSync('app_token')
+    const payload = {
+      channel: this.data.channel,
+      contentType: TEMPLATE_VIDEO,
       title: (this.data.title || '').trim(),
       content: (this.data.content || '').trim(),
-      videoPath: this.data.video?.path || '',
-      videoPoster: this.data.video?.thumbTempFilePath || this.data.video?.path || '',
-      videoDuration: this.data.video?.durationText || '',
-      customVideoCover: this.data.customCover || '',
-      location: this.data.selectedLocation || '',
-      createdAt
+      location: this.data.selectedLocation || ''
     }
 
-    upsertPublishedItem(this.data.channel, item)
-    wx.removeStorageSync(`draft-${this.data.channel}-${TEMPLATE_VIDEO}`)
+    if (this.data.isEditing && isRemoteId(this.data.editingId)) {
+      payload.id = Number(this.data.editingId)
+    }
 
-    wx.showToast({
-      title: this.data.isEditing ? '视频已更新' : '视频已发布',
-      icon: 'success'
-    })
+    wx.showLoading({ title: '发布中...', mask: true })
 
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 500)
+    try {
+      if (token) {
+        payload.videoUrl = await uploadIfNeeded(this.data.video?.path || '')
+        payload.videoCover = await uploadIfNeeded(
+          this.data.customCover || this.data.video?.thumbTempFilePath || this.data.video?.path || ''
+        )
+        await publishContent(payload)
+      } else {
+        const createdAt = Date.now()
+        const item = {
+          id: this.data.editingId || `custom-${this.data.channel}-${TEMPLATE_VIDEO}-${createdAt}`,
+          templateType: TEMPLATE_VIDEO,
+          title: payload.title,
+          content: payload.content,
+          videoPath: this.data.video?.path || '',
+          videoPoster: this.data.video?.thumbTempFilePath || this.data.video?.path || '',
+          videoDuration: this.data.video?.durationText || '',
+          customVideoCover: this.data.customCover || '',
+          location: payload.location,
+          createdAt
+        }
+        upsertPublishedItem(this.data.channel, item)
+      }
+
+      wx.removeStorageSync(`draft-${this.data.channel}-${TEMPLATE_VIDEO}`)
+      wx.showToast({
+        title: this.data.isEditing ? '视频已更新' : '视频已发布',
+        icon: 'success'
+      })
+
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 500)
+    } catch (error) {
+      wx.showToast({
+        title: error.message || '发布失败',
+        icon: 'none'
+      })
+    } finally {
+      wx.hideLoading()
+    }
   },
 
   hasDraftContent() {

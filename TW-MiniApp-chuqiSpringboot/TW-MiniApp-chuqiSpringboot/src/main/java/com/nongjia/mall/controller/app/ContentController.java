@@ -38,8 +38,10 @@ public class ContentController {
     }
 
     @GetMapping("/detail/{postId}")
-    public Result<ContentPost> detail(@PathVariable Long postId) {
-        return Result.ok(contentService.getDetail(postId));
+    public Result<Map<String, Object>> detail(@PathVariable Long postId) {
+        Map<String, Object> detail = contentService.getDetailMap(postId);
+        if (detail == null) return Result.fail("内容不存在");
+        return Result.ok(detail);
     }
 
     @PostMapping("/publish")

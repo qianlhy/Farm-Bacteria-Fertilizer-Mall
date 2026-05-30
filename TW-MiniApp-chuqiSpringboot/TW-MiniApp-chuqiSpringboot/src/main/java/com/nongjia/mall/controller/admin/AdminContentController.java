@@ -60,4 +60,19 @@ public class AdminContentController {
         contentService.updateById(post);
         return Result.ok("已删除");
     }
+
+    @GetMapping("/detail/{postId}")
+    public Result<Map<String, Object>> detail(@PathVariable Long postId) {
+        Map<String, Object> detail = contentService.getPostMapById(postId);
+        if (detail == null) return Result.fail("内容不存在");
+        return Result.ok(detail);
+    }
+
+    @PostMapping("/save")
+    public Result<ContentPost> save(
+            HttpServletRequest request,
+            @RequestBody Map<String, Object> params) {
+        Long adminId = (Long) request.getAttribute("adminId");
+        return contentService.saveByAdmin(adminId, params);
+    }
 }

@@ -11,14 +11,12 @@
     </view>
     <view wx:if="{{!loggedIn}}" class="mine-header__login-tip" bindtap="handleLoginTap">点击登录</view>
     <view wx:if="{{loggedIn}}" class="mine-header__nickname">{{nickname || phone}}</view>
-    <view class="mine-header__slogan">农家菌肥，随时随地服务田间地头</view>
+    <view class="mine-header__slogan">农家菌肥，服务田间地头</view>
   </view>
 
   <view class="mine-balance-card">
-    <view class="mine-balance-card__identity">
-      <view class="mine-balance-card__phone">{{loggedIn ? phone : '登录后查看'}}</view>
-      <view class="mine-balance-card__plate">车牌号：{{license}}</view>
-    </view>
+    <view wx:if="{{loggedIn}}" class="mine-balance-card__phone">{{phone}}</view>
+    <view wx:else class="mine-balance-card__guest">登录后查看账户余额</view>
 
     <view class="mine-balance-card__stats">
       <view class="mine-balance-card__stat">
@@ -26,8 +24,8 @@
         <view class="mine-balance-card__label">提货余额(Kg)</view>
       </view>
       <view class="mine-balance-card__stat">
-        <view class="mine-balance-card__value">{{coupon}}</view>
-        <view class="mine-balance-card__label">卡券余额</view>
+        <view class="mine-balance-card__value">{{freightSubsidy}}</view>
+        <view class="mine-balance-card__label">运补余额(元)</view>
       </view>
       <view class="mine-balance-card__stat">
         <view class="mine-balance-card__value">{{points}}</view>
@@ -36,7 +34,7 @@
     </view>
   </view>
 
-  <view class="mine-banner">
+  <view class="mine-banner" bindtap="openPartner">
     <image class="mine-banner__photo" src="/assets/home/about_useful.jpg" mode="aspectFill" />
     <view class="mine-banner__content">
       <view class="mine-banner__title">加入肽为农家菌肥</view>
@@ -45,11 +43,10 @@
   </view>
 
   <view class="mine-grid">
-    <block wx:for="{{tools}}" wx:key="title">
+    <block wx:for="{{displayTools}}" wx:key="title">
       <view class="mine-grid__item" data-index="{{index}}" bindtap="handleToolTap">
         <view class="mine-grid__icon-wrap">
           <image class="mine-grid__icon" src="{{item.icon}}" mode="aspectFit" />
-          <view wx:if="{{item.badge}}" class="mine-grid__badge">{{item.badge}}</view>
         </view>
         <view class="mine-grid__label">{{item.title}}</view>
       </view>

@@ -31,7 +31,7 @@ jwt:
   ttl: 86400000
 
 app:
-  upload-path: /uploads
+  upload-path: uploads
   upload-url: http://localhost:8080/uploads/
 
 wechat:

@@ -14,7 +14,7 @@
       { "type": "folder", "value": "assets/menu" },
       { "type": "suffix", "value": ".csv" },
       { "type": "suffix", "value": ".xlsx" },
-      { "type": "suffix", "value": ".mp4" },
+      { "type": "file", "value": "assets/home/wellness_summary_video.mp4" },
       { "type": "file", "value": "pages/trial/assets/seal.png.jpeg" },
       { "type": "file", "value": "pages/trial/assets/envelope-bg-clean.jpg" },
       { "type": "file", "value": "pages/trial/assets/envelope-bg-card.jpg" },

@@ -39,7 +39,6 @@
         circular
         interval="3800"
         duration="500"
-        disable-touch="false"
         bindchange="handleNewsChange"
       >
         <block wx:for="{{headlineNews}}" wx:key="id" wx:for-item="newsItem">
@@ -51,13 +50,12 @@
               bindtap="openNewsDetail"
             >
               <view wx:if="{{newsItem.coverImage}}" class="news-slide__image-shell">
-                <image
-                  class="news-slide__image"
-                  src="{{newsItem.coverImage}}"
-                  mode="heightFix"
-                />
+                <image class="news-slide__image" src="{{newsItem.coverImage}}" mode="aspectFill" />
               </view>
-              <view wx:if="{{newsItem.coverImage}}" class="news-slide__shade"></view>
+              <view wx:if="{{newsItem.templateType === 'video'}}" class="news-slide__play">
+                <view class="news-slide__play-icon"></view>
+              </view>
+              <view class="news-slide__shade"></view>
               <view class="news-slide__overlay">
                 <view class="news-slide__title">{{newsItem.title}}</view>
               </view>
@@ -75,19 +73,28 @@
   </view>
 
   <view class="moments-section">
+    <view class="moments-section__title">朋友圈动态</view>
+
     <block wx:for="{{momentFeed}}" wx:key="id" wx:for-item="feedItem">
-      <view
-        class="content-card"
-        data-id="{{feedItem.id}}"
-        data-source-type="{{feedItem.sourceType || 'default'}}"
-        bindtap="openContentDetail"
-      >
-        <view class="content-card__title">{{feedItem.title}}</view>
-        <view class="content-card__content">{{feedItem.content}}</view>
+      <view class="moment-card">
+        <view class="moment-card__head">
+          <view class="moment-card__avatar">肽</view>
+          <view class="moment-card__meta">
+            <view class="moment-card__author">{{feedItem.author || '肽为农家菌肥'}}</view>
+            <view wx:if="{{feedItem.timeLabel}}" class="moment-card__time">{{feedItem.timeLabel}}</view>
+          </view>
+        </view>
 
         <view
-          wx:if="{{feedItem.images.length}}"
-          class="content-gallery {{feedItem.images.length === 1 ? 'content-gallery--single' : ''}} {{feedItem.images.length === 2 ? 'content-gallery--two' : ''}} {{feedItem.images.length === 3 ? 'content-gallery--three' : ''}} {{feedItem.images.length === 4 ? 'content-gallery--four' : ''}} {{feedItem.images.length === 6 ? 'content-gallery--six' : ''}} {{feedItem.images.length === 9 ? 'content-gallery--nine' : ''}}"
+          class="moment-card__content"
+          data-id="{{feedItem.id}}"
+          data-source-type="{{feedItem.sourceType || 'default'}}"
+          bindtap="openContentDetail"
+        >{{feedItem.content}}</view>
+
+        <view
+          wx:if="{{feedItem.images.length && feedItem.templateType !== 'video'}}"
+          class="content-gallery content-gallery--count-{{feedItem.images.length > 9 ? 9 : feedItem.images.length}}"
         >
           <block wx:for="{{feedItem.images}}" wx:key="*this" wx:for-item="imageSrc">
             <image
@@ -102,30 +109,32 @@
         </view>
 
         <view wx:if="{{feedItem.templateType === 'video'}}" class="content-video-card">
-          <video
-            wx:if="{{feedItem.videoPath}}"
-            class="content-video__player"
-            src="{{feedItem.videoPath}}"
-            poster="{{feedItem.videoPoster || feedItem.videoPath}}"
-            object-fit="cover"
-            controls
-          ></video>
-          <view wx:else class="content-video" catchtap="openMomentVideo" data-poster="{{feedItem.videoPoster}}">
-            <image class="content-video__poster" src="{{feedItem.videoPoster}}" mode="aspectFill" />
+          <view
+            class="content-video"
+            catchtap="openMomentVideo"
+            data-id="{{feedItem.id}}"
+            data-poster="{{feedItem.videoPoster}}"
+            data-src="{{feedItem.videoPath}}"
+          >
+            <image
+              class="content-video__poster"
+              src="{{feedItem.videoPoster || '/assets/home/about_useful.jpg'}}"
+              mode="aspectFill"
+            />
             <view class="content-video__shade"></view>
             <view class="content-video__play">
               <view class="content-video__play-icon"></view>
             </view>
-            <view class="content-video__label">{{feedItem.videoLabel}}</view>
           </view>
+          <view wx:if="{{feedItem.videoLabel}}" class="content-video__label">{{feedItem.videoLabel}}</view>
           <view wx:if="{{feedItem.videoDuration}}" class="content-video__duration">{{feedItem.videoDuration}}</view>
         </view>
 
-        <view wx:if="{{feedItem.location || feedItem.sourceType === 'custom'}}" class="content-card__footer">
-          <view wx:if="{{feedItem.location}}" class="content-card__location">{{feedItem.location}}</view>
-          <view wx:if="{{feedItem.sourceType === 'custom'}}" class="content-card__actions">
-            <view class="content-card__action" data-id="{{feedItem.id}}" data-template="{{feedItem.templateType}}" catchtap="editMoment">重新编辑</view>
-            <view class="content-card__action content-card__action--danger" data-id="{{feedItem.id}}" catchtap="deleteMoment">删除</view>
+        <view class="moment-card__footer">
+          <view wx:if="{{feedItem.location}}" class="moment-card__location">{{feedItem.location}}</view>
+          <view wx:if="{{feedItem.sourceType === 'custom'}}" class="moment-card__actions">
+            <view class="moment-card__action" data-id="{{feedItem.id}}" data-template="{{feedItem.templateType}}" catchtap="editMoment">编辑</view>
+            <view class="moment-card__action moment-card__action--danger" data-id="{{feedItem.id}}" data-source-type="{{feedItem.sourceType}}" catchtap="deleteMoment">删除</view>
           </view>
         </view>
       </view>
@@ -133,7 +142,23 @@
 
     <view wx:if="{{!momentFeed.length}}" class="moments-empty">
       <view class="moments-empty__title">暂无动态内容</view>
-      <view class="moments-empty__desc">点击右上角 + 发布第一条资讯或朋友圈</view>
+      <view class="moments-empty__desc">点击左上角 + 发布第一条资讯或朋友圈</view>
+    </view>
+  </view>
+
+  <view wx:if="{{playingVideo}}" class="video-player-mask" bindtap="closeVideoPlayer">
+    <view class="video-player-shell" catchtap="noop">
+      <video
+        class="video-player"
+        src="{{playingVideo.src}}"
+        poster="{{playingVideo.poster}}"
+        controls="{{true}}"
+        autoplay="{{true}}"
+        object-fit="contain"
+        show-fullscreen-btn="{{true}}"
+        enable-play-gesture="{{true}}"
+      ></video>
+      <view class="video-player__close" bindtap="closeVideoPlayer">关闭</view>
     </view>
   </view>
 </view>

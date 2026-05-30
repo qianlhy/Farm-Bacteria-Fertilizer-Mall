@@ -16,4 +16,7 @@ public interface ContentService extends IService<ContentPost> {
     Result<Void> delete(Long userId, Long postId);
     PageResult<List<Map<String, Object>>> listForAdmin(Map<String, Object> params);
     Result<Void> audit(Long adminId, Long postId, Integer status, String remark);
+    Result<ContentPost> saveByAdmin(Long adminId, Map<String, Object> params);
+    Map<String, Object> getDetailMap(Long postId);
+    Map<String, Object> getPostMapById(Long postId);
 }

@@ -9,6 +9,11 @@ const {
   getMediaCover,
   getPublishedItem
 } = require('../../utils/publish-store')
+const {
+  fetchContentDetail,
+  mapDetailToArticle,
+  isRemoteId
+} = require('../../utils/content-api')
 
 const presetArticles = {
   'news-1': {
@@ -210,7 +215,36 @@ Page({
     }
   },
 
+  async loadRemoteArticle() {
+    try {
+      const detail = await fetchContentDetail(this.articleId)
+      const article = mapDetailToArticle(detail, this.channel)
+      if (article) {
+        this.setData({ article })
+        return
+      }
+    } catch (error) {
+      // fallback to preset/local below
+    }
+
+    if (this.channel === CHANNEL_MOMENT) {
+      this.setData({
+        article: presetMoments[this.articleId] || presetMoments['moment-1']
+      })
+      return
+    }
+
+    this.setData({
+      article: presetArticles[this.articleId] || presetArticles['news-1']
+    })
+  },
+
   loadArticle() {
+    if (isRemoteId(this.articleId)) {
+      this.loadRemoteArticle()
+      return
+    }
+
     if (this.channel === CHANNEL_MOMENT) {
       const item = getPublishedItem(this.channel, this.articleId)
       if (item) {

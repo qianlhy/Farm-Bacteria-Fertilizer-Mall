@@ -9,6 +9,13 @@ const {
   getMediaCover,
   getPublishedItems
 } = require('../../utils/publish-store')
+const {
+  fetchExploreHome,
+  mapNewsItem,
+  mapMomentItem,
+  isRemoteId,
+  deleteContent
+} = require('../../utils/content-api')
 const { syncTabBarSelected } = require('../../utils/tabBar')
 
 const defaultHeadlineNews = [
@@ -34,34 +41,48 @@ const defaultHeadlineNews = [
   }
 ]
 
+const DEMO_IMAGE = '/assets/home/about_useful.jpg'
+const DEMO_VIDEO = '/assets/home/wellness_summary_video_compat.mp4'
+
 const defaultMomentFeed = [
   {
     id: 'moment-1',
     sourceType: 'default',
     templateType: TEMPLATE_DYNAMIC,
-    currentMediaIndex: 0,
-    title: '客户案例：棚内状态更整齐',
-    content: '连续使用后，棚内管理更顺手，作物整体状态也更稳定。这一组现场图主要用于展示客户案例和实际使用反馈。',
-    images: [
-      '/assets/home/about_useful.jpg'
-    ],
-    location: '泉州市·示范棚'
+    author: '肽为农家菌肥',
+    content: '客户案例：连续使用后，棚内管理更顺手，作物整体状态也更稳定。以下为一组现场反馈图（6 张）。',
+    images: Array.from({ length: 6 }, () => DEMO_IMAGE),
+    location: '泉州市·示范棚',
+    timeLabel: '昨天'
   },
   {
     id: 'moment-2',
     sourceType: 'default',
     templateType: TEMPLATE_VIDEO,
-    currentMediaIndex: 0,
-    title: '客户使用情况记录',
-    content: '这一条以视频形式展示客户现场使用过程，后续可以继续补充不同场景下的真实使用画面与反馈内容。',
-    videoPoster: '/assets/home/about_useful.jpg',
+    author: '肽为农家菌肥',
+    content: '客户现场使用情况记录，点击视频可直接播放。',
+    images: [],
+    videoPath: DEMO_VIDEO,
+    videoPoster: DEMO_IMAGE,
     videoLabel: '现场短视频记录',
     videoDuration: '00:28',
-    location: '厦门市·温室基地'
+    location: '厦门市·温室基地',
+    timeLabel: '2天前'
+  },
+  {
+    id: 'moment-3',
+    sourceType: 'default',
+    templateType: TEMPLATE_DYNAMIC,
+    author: '肽为农家菌肥',
+    content: '多地示范棚回访记录，展示不同场景下的使用反馈（9 张九宫格）。',
+    images: Array.from({ length: 9 }, () => DEMO_IMAGE),
+    location: '漳州市·试验田',
+    timeLabel: '3天前'
   }
 ]
 
-function buildHeadlineNews() {
+function buildHeadlineNews(apiNews = []) {
+  const remoteNews = (apiNews || []).map(mapNewsItem)
   const customHeadlines = getPublishedItems(CHANNEL_NEWS).map(item => ({
     id: item.id,
     sourceType: 'custom',
@@ -72,18 +93,23 @@ function buildHeadlineNews() {
     imageClass: item.imageClass
   }))
 
-  return customHeadlines.concat(defaultHeadlineNews).slice(0, 9)
+  const merged = remoteNews.concat(customHeadlines)
+  if (merged.length) {
+    return merged.slice(0, 9)
+  }
+
+  return defaultHeadlineNews
 }
 
-function buildMomentFeed() {
+function buildMomentFeed(apiFeed = []) {
+  const remoteFeed = (apiFeed || []).map(mapMomentItem)
   const customFeed = getPublishedItems(CHANNEL_MOMENT).map(item => ({
     id: item.id,
     sourceType: 'custom',
     channel: CHANNEL_MOMENT,
     templateType: item.templateType,
-    currentMediaIndex: 0,
-    title: item.title,
-    content: item.content || item.summary || '',
+    author: item.author || '肽为农家菌肥',
+    content: item.content || item.summary || item.title || '',
     images: item.templateType === TEMPLATE_DYNAMIC
       ? item.images
       : item.templateType === TEMPLATE_ARTICLE && getMediaCover(item)
@@ -93,10 +119,16 @@ function buildMomentFeed() {
     videoPoster: item.templateType === TEMPLATE_VIDEO ? (item.customVideoCover || item.videoPoster || item.videoPath) : '',
     videoLabel: item.templateType === TEMPLATE_VIDEO ? (item.title || item.summary || '视频内容') : '',
     videoDuration: item.templateType === TEMPLATE_VIDEO ? item.videoDuration : '',
-    location: item.location || ''
+    location: item.location || '',
+    timeLabel: item.timeLabel || '刚刚'
   }))
 
-  return customFeed.concat(defaultMomentFeed).slice(0, 20)
+  const merged = remoteFeed.concat(customFeed)
+  if (merged.length) {
+    return merged.slice(0, 20)
+  }
+
+  return defaultMomentFeed
 }
 
 const plusMenuItems = [
@@ -150,16 +182,35 @@ Page({
     momentFeed: buildMomentFeed(),
     plusMenuItems,
     currentNewsIndex: 0,
-    plusMenuVisible: false
+    plusMenuVisible: false,
+    playingVideo: null,
+    loadingRemote: false
   },
 
   onShow() {
     syncTabBarSelected(this, '/pages/explore/index')
-    this.setData({
-      headlineNews: buildHeadlineNews(),
-      momentFeed: buildMomentFeed(),
-      currentNewsIndex: 0
-    })
+    this.loadRemoteContent()
+  },
+
+  async loadRemoteContent() {
+    this.setData({ loadingRemote: true })
+
+    try {
+      const homeData = await fetchExploreHome()
+      this.setData({
+        headlineNews: buildHeadlineNews(homeData?.headlineNews || []),
+        momentFeed: buildMomentFeed(homeData?.feed || []),
+        currentNewsIndex: 0
+      })
+    } catch (error) {
+      this.setData({
+        headlineNews: buildHeadlineNews(),
+        momentFeed: buildMomentFeed(),
+        currentNewsIndex: 0
+      })
+    } finally {
+      this.setData({ loadingRemote: false })
+    }
   },
 
   handleNewsChange(event) {
@@ -203,24 +254,17 @@ Page({
     const { id, sourceType } = event.currentTarget.dataset
     this.closePlusMenu()
 
-    const url = sourceType === 'custom'
-      ? `/pages/news-detail/index?channel=news&id=${id}`
-      : `/pages/news-detail/index?id=${id}`
+    const url = sourceType === 'default'
+      ? `/pages/news-detail/index?id=${id}`
+      : `/pages/news-detail/index?channel=news&id=${id}`
 
     wx.navigateTo({ url })
   },
 
   openContentDetail(event) {
-    const { id, sourceType } = event.currentTarget.dataset
+    const { id } = event.currentTarget.dataset
 
     if (!id) {
-      return
-    }
-
-    if (sourceType === 'custom') {
-      wx.navigateTo({
-        url: `/pages/news-detail/index?channel=moment&id=${id}`
-      })
       return
     }
 
@@ -244,21 +288,30 @@ Page({
   },
 
   openMomentVideo(event) {
-    const { poster } = event.currentTarget.dataset
+    const { id, poster, src } = event.currentTarget.dataset
     this.closePlusMenu()
 
-    if (poster) {
-      wx.previewImage({
-        current: poster,
-        urls: [poster]
-      })
+    const feedItem = this.data.momentFeed.find(item => item.id === id)
+    const videoPath = src || (feedItem && feedItem.videoPath) || ''
+
+    if (!videoPath) {
+      wx.showToast({ title: '暂无视频资源', icon: 'none' })
+      if (poster) {
+        wx.previewImage({ current: poster, urls: [poster] })
+      }
       return
     }
 
-    wx.showToast({
-      title: '演示内容，正式版将接入视频',
-      icon: 'none'
+    this.setData({
+      playingVideo: {
+        src: videoPath,
+        poster: poster || (feedItem && feedItem.videoPoster) || ''
+      }
     })
+  },
+
+  closeVideoPlayer() {
+    this.setData({ playingVideo: null })
   },
 
   previewMomentImage(event) {
@@ -288,7 +341,7 @@ Page({
   },
 
   deleteMoment(event) {
-    const { id } = event.currentTarget.dataset
+    const { id, sourceType } = event.currentTarget.dataset
 
     if (!id) {
       return
@@ -297,20 +350,29 @@ Page({
     wx.showModal({
       title: '删除内容',
       content: '确认删除这条已发布内容吗？',
-      success: ({ confirm }) => {
+      success: async ({ confirm }) => {
         if (!confirm) {
           return
         }
 
-        deletePublishedItem(CHANNEL_MOMENT, id)
-        this.setData({
-          momentFeed: buildMomentFeed()
-        })
+        try {
+          if (sourceType === 'api' && isRemoteId(id)) {
+            await deleteContent(id)
+          } else {
+            deletePublishedItem(CHANNEL_MOMENT, id)
+          }
 
-        wx.showToast({
-          title: '已删除',
-          icon: 'success'
-        })
+          await this.loadRemoteContent()
+          wx.showToast({
+            title: '已删除',
+            icon: 'success'
+          })
+        } catch (error) {
+          wx.showToast({
+            title: error.message || '删除失败',
+            icon: 'none'
+          })
+        }
       }
     })
   }
