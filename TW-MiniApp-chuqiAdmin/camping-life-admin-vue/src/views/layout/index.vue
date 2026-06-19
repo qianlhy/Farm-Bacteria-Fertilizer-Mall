@@ -21,6 +21,10 @@
           <el-icon><Document /></el-icon>
           <span>内容管理</span>
         </el-menu-item>
+        <el-menu-item index="/crops">
+          <el-icon><Apple /></el-icon>
+          <span>农业作物</span>
+        </el-menu-item>
         <el-menu-item index="/partner">
           <el-icon><UserFilled /></el-icon>
           <span>合伙人申请</span>

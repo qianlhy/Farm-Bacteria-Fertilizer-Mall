@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard" v-loading="loading">
     <el-row :gutter="20" class="stat-cards">
       <el-col :span="6">
         <div class="stat-card blue">
@@ -117,13 +117,21 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import { getDashboard } from '@/api'
 
 const stats = ref({})
+const loading = ref(false)
 
 onMounted(async () => {
-  const res = await getDashboard()
-  if (res.code === 200) stats.value = res.data
+  loading.value = true
+  try {
+    const res = await getDashboard()
+    if (res.code === 200) stats.value = res.data
+    else ElMessage.error(res.message || '加载工作台数据失败')
+  } finally {
+    loading.value = false
+  }
 })
 
 function getStatusType(s) {

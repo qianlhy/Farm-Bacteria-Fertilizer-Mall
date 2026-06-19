@@ -31,7 +31,7 @@
           <template #default="{ row }">
             化肥: {{ row.fertilizerBalance || 0 }}kg<br/>
             积分: {{ row.pointsBalance || 0 }}<br/>
-            运费补贴: {{ row.freightSubsidy || 0 }}元
+            运装补贴: {{ row.freightSubsidy || 0 }}元
           </template>
         </el-table-column>
         <el-table-column prop="userType" label="类型" width="80">
@@ -74,7 +74,7 @@
         <el-descriptions-item label="邀请码">{{ currentUser.inviteCode }}</el-descriptions-item>
         <el-descriptions-item label="化肥余额">{{ currentUser.fertilizerBalance }} kg</el-descriptions-item>
         <el-descriptions-item label="积分余额">{{ currentUser.pointsBalance }}</el-descriptions-item>
-        <el-descriptions-item label="运费补贴">{{ currentUser.freightSubsidy }} 元</el-descriptions-item>
+        <el-descriptions-item label="运装补贴">{{ currentUser.freightSubsidy }} 元</el-descriptions-item>
         <el-descriptions-item label="优惠券">{{ currentUser.couponBalance }} 元</el-descriptions-item>
         <el-descriptions-item label="注册时间">{{ currentUser.createdAt }}</el-descriptions-item>
       </el-descriptions>
@@ -89,7 +89,7 @@
             <el-option label="扣除化肥" value="fertilizer_sub" />
             <el-option label="增加积分" value="points_add" />
             <el-option label="扣除积分" value="points_sub" />
-            <el-option label="增加运费补贴" value="freight_add" />
+            <el-option label="增加运装补贴" value="freight_add" />
             <el-option label="增加优惠券" value="coupon_add" />
           </el-select>
         </el-form-item>

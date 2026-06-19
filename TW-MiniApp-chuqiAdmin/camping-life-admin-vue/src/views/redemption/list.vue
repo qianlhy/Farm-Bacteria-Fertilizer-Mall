@@ -23,7 +23,7 @@
       <el-table :data="list" v-loading="loading" stripe>
         <el-table-column prop="code" label="兑换码" width="160" />
         <el-table-column prop="batchNo" label="批次号" width="170" />
-        <el-table-column prop="freightAmount" label="运补(元)" width="100" />
+        <el-table-column prop="freightAmount" label="运装补贴(元)" width="120" />
         <el-table-column prop="packagingAmount" label="包装抵扣(元)" width="120" />
         <el-table-column prop="pointsAmount" label="积分" width="90" />
         <el-table-column prop="status" label="状态" width="100">
@@ -51,7 +51,7 @@
 
     <el-dialog v-model="generateVisible" title="生成兑换码" width="520px">
       <el-form :model="generateForm" label-width="110px">
-        <el-form-item label="运费补贴(元)">
+        <el-form-item label="运装补贴(元)">
           <el-input-number v-model="generateForm.freightAmount" :min="0" :precision="2" :step="10" />
         </el-form-item>
         <el-form-item label="包装抵扣(元)">

@@ -13,7 +13,7 @@ const DEFAULT_PRODUCT_CONFIG = {
   originalPrice: '1400',
   discountRate: '0.85',
   amountKg: '1000',
-  minKg: '1000',
+  minKg: '100',
   freightPerKg: '0.1',
   blueBucketNew: '35',
   blueBucketUsed: '15',
@@ -40,7 +40,7 @@ function normalizeProductConfig(raw) {
     originalPrice: toNumber(source.originalPrice, 1400),
     discountRate: toNumber(source.discountRate, 0.85),
     amountKg: toNumber(source.amountKg, 1000),
-    minKg: toNumber(source.minKg, 1000),
+    minKg: toNumber(source.minKg, 100),
     freightPerKg: toNumber(source.freightPerKg, 0.1),
     blueBucketNew: toNumber(source.blueBucketNew, 35),
     blueBucketUsed: toNumber(source.blueBucketUsed, 15),
@@ -95,13 +95,13 @@ async function fetchServicePoints(forceRefresh = false) {
 
 function buildPackagingOptions(config) {
   const cfg = normalizeProductConfig(config)
-  const blueMinCount = cfg.blueBucketMinCount
+  const blueMinCount = Math.max(1, Math.ceil(cfg.minKg / cfg.blueBucketKg))
   const minKgText = `${cfg.minKg}Kg`
 
   return [
     {
       key: 'blueBucket',
-      title: '蓝桶',
+      title: '25L桶',
       unitKg: cfg.blueBucketKg,
       unitLabel: `${cfg.blueBucketKg}Kg / 桶`,
       quantityUnit: '桶',
@@ -142,7 +142,6 @@ function buildPackagingOptions(config) {
 
 function buildDeliveryOptions(config) {
   const cfg = normalizeProductConfig(config)
-  const minTon = cfg.minKg / cfg.tonBucketKg
 
   return [
     {
@@ -153,17 +152,15 @@ function buildDeliveryOptions(config) {
     {
       key: 'delivery',
       title: '配送',
-      desc: `县城范围内可送，起送量 ${minTon} 吨，配送费 ${cfg.freightPerKg} 元 / Kg。`
+      desc: `县城范围内可送，起送量 ${cfg.minKg}Kg，配送费 ${cfg.freightPerKg} 元 / Kg。`
     }
   ]
 }
 
 function buildPackagingPayOptions(config) {
-  const cfg = normalizeProductConfig(config)
   return [
     { key: 'cash', title: '现金支付', desc: '包装物费用现金结算' },
-    { key: 'credit', title: '包装抵扣', desc: '使用兑换获得的包装费抵扣' },
-    { key: 'points', title: '积分支付', desc: `按 1 元 = ${cfg.pointsRate} 积分抵扣` }
+    { key: 'credit', title: '包装抵扣', desc: '使用兑换获得的包装费抵扣' }
   ]
 }
 

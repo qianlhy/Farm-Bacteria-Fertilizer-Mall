@@ -31,12 +31,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                     "/api/app/auth/login",
                     "/api/app/auth/wx-login",
+                    "/api/app/pay/notify",
                     "/api/app/config/product",
                     "/api/app/config/service-points",
                     "/api/app/content/home",
                     "/api/app/content/news",
                     "/api/app/content/moments",
-                    "/api/app/content/detail/**"
+                    "/api/app/content/detail/**",
+                    "/api/app/crops/list",
+                    "/api/app/crops/detail/**"
                 );
 
         registry.addInterceptor(adminAuthInterceptor)

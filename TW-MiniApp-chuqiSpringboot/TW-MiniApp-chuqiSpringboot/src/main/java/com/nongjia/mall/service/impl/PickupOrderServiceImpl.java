@@ -22,6 +22,10 @@ import com.nongjia.mall.service.PickupOrderService;
 
 import com.nongjia.mall.service.SysConfigService;
 
+import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.math.BigDecimal;
+
+import java.time.LocalDateTime;
 
 import java.time.format.DateTimeFormatter;
 
@@ -43,6 +49,10 @@ import java.util.Map;
 @Service
 
 public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, PickupOrder> implements PickupOrderService {
+
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PickupOrderServiceImpl.class);
 
 
 
@@ -130,7 +140,7 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
         double pointsRate = sysConfigService.getPointsRate();
 
-        double minKg = Double.parseDouble(cfg(config, "minKg", "1000"));
+        double minKg = Double.parseDouble(cfg(config, "minKg", "100"));
 
 
 
@@ -186,53 +196,25 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
         );
 
-        if (wallet == null) return Result.fail("钱包不存在");
+        if (wallet == null) {
 
+            LOGGER.warn("提货下单失败：钱包不存在，userId={}", userId);
 
-
-        int rows = userWalletMapper.deductFertilizer(userId, totalKg, wallet.getVersion());
-
-        if (rows == 0) return Result.fail("化肥余额不足");
-
-
-
-        if (packagePoints > 0 && "points".equals(params.get("packagePayment"))) {
-
-            int pRows = userWalletMapper.deductPoints(userId, (long) packagePoints);
-
-            if (pRows == 0) {
-
-                userWalletMapper.addFertilizer(userId, totalKg, wallet.getVersion() + 1);
-
-                return Result.fail("积分不足");
-
-            }
-
-        }
-
-        if (packagePrice > 0 && "credit".equals(params.get("packagePayment")) && packagingCreditUsed > 0) {
-
-            if (packagingCreditUsed > packagePrice) packagingCreditUsed = packagePrice;
-
-            int creditRows = userWalletMapper.deductPackagingCredit(userId, packagingCreditUsed);
-
-            if (creditRows == 0) {
-
-                userWalletMapper.addFertilizer(userId, totalKg, wallet.getVersion() + 1);
-
-                return Result.fail("包装抵扣余额不足");
-
-            }
+            return Result.fail("钱包不存在");
 
         }
 
 
 
-        if ("delivery".equals(pickupType) && freightSubsidyUsed > 0) {
+        double deductKg = totalKg + totalAmount; // 1元=1Kg：包装费+配送费折算成额度，统一从化肥额度扣减
 
-            if (freightSubsidyUsed > totalFreight) freightSubsidyUsed = totalFreight;
+        int rows = userWalletMapper.deductFertilizer(userId, deductKg, wallet.getVersion());
 
-            userWalletMapper.deductFreightSubsidy(userId, freightSubsidyUsed);
+        if (rows == 0) {
+
+            LOGGER.warn("提货下单失败：额度不足，userId={}, needKg={}", userId, deductKg);
+
+            return Result.fail("额度不足，本次需 " + (int) Math.ceil(deductKg) + "Kg（含包装费/配送费）");
 
         }
 
@@ -262,7 +244,7 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
         order.setPackagePrice(BigDecimal.valueOf(packagePrice));
 
-        order.setPackagePoints(packagePoints);
+        order.setPackagePoints(0);
 
         order.setTotalKg(BigDecimal.valueOf(totalKg));
 
@@ -270,9 +252,9 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
         order.setTotalFreight(BigDecimal.valueOf(totalFreight));
 
-        order.setFreightPayment(freightPayment);
+        order.setFreightPayment("quota");
 
-        order.setFreightSubsidyUsed(BigDecimal.valueOf(freightSubsidyUsed));
+        order.setFreightSubsidyUsed(BigDecimal.ZERO);
 
         order.setPickupFee(BigDecimal.valueOf(pickupFee));
 
@@ -297,6 +279,8 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
         dto.setBalanceAfter(wallet.getFertilizerBalance().doubleValue());
 
         dto.setPointsAfter(wallet.getPointsBalance());
+
+        LOGGER.info("提货下单成功，userId={}, orderNo={}, totalKg={}, pickupType={}", userId, order.getOrderNo(), totalKg, pickupType);
 
         return Result.ok("下单成功", dto);
 
@@ -344,6 +328,64 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
 
 
+    @Override
+    public Result<Void> packOrder(Long orderId) {
+        PickupOrder order = pickupOrderMapper.selectById(orderId);
+        if (order == null) return Result.fail("订单不存在");
+        if (order.getStatus() != 1) return Result.fail("仅待确认订单可开始打包");
+        order.setStatus(2);
+        order.setConfirmedAt(LocalDateTime.now());
+        pickupOrderMapper.updateById(order);
+        return Result.ok("已开始打包");
+    }
+
+    @Override
+    public Result<Void> shipOrder(Long orderId) {
+        PickupOrder order = pickupOrderMapper.selectById(orderId);
+        if (order == null) return Result.fail("订单不存在");
+        if (order.getStatus() != 2) return Result.fail("仅打包中订单可发货");
+        order.setStatus(3);
+        order.setShippedAt(LocalDateTime.now());
+        pickupOrderMapper.updateById(order);
+        return Result.ok("已发货");
+    }
+
+    @Override
+    public Result<Void> receiveOrder(Long orderId) {
+        PickupOrder order = pickupOrderMapper.selectById(orderId);
+        if (order == null) return Result.fail("订单不存在");
+        if (order.getStatus() != 3) return Result.fail("仅已发货订单可确认收货");
+        order.setStatus(4);
+        order.setCompletedAt(LocalDateTime.now());
+        pickupOrderMapper.updateById(order);
+        return Result.ok("已收货");
+    }
+
+    @Override
+    @Transactional
+    public Result<Void> cancelByAdmin(Long orderId, String remark) {
+        PickupOrder order = pickupOrderMapper.selectById(orderId);
+        if (order == null) return Result.fail("订单不存在");
+        if (order.getStatus() != 1) return Result.fail("订单已进入打包，无法取消");
+
+        double refundKg = (order.getTotalKg() != null ? order.getTotalKg().doubleValue() : 0)
+            + (order.getTotalAmount() != null ? order.getTotalAmount().doubleValue() : 0);
+        if (refundKg > 0) {
+            UserWallet wallet = userWalletMapper.selectOne(
+                new LambdaQueryWrapper<UserWallet>().eq(UserWallet::getUserId, order.getUserId())
+            );
+            if (wallet != null) {
+                userWalletMapper.addFertilizer(order.getUserId(), refundKg, wallet.getVersion());
+            }
+        }
+
+        order.setStatus(5);
+        order.setRemark(remark != null && !remark.isEmpty() ? remark : "管理员取消");
+        pickupOrderMapper.updateById(order);
+        LOGGER.info("提货订单取消并退还额度，orderId={}, refundKg={}", orderId, refundKg);
+        return Result.ok("已取消并退还额度");
+    }
+
     private PickupOrderDTO toDTO(PickupOrder o) {
 
         if (o == null) return null;
@@ -376,11 +418,19 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
         dto.setFreightSubsidyUsed(o.getFreightSubsidyUsed() != null ? o.getFreightSubsidyUsed().doubleValue() : 0);
 
-        dto.setTotalAmount(o.getTotalAmount() != null ? o.getTotalAmount().doubleValue() : 0);
+        double amount = o.getTotalAmount() != null ? o.getTotalAmount().doubleValue() : 0;
+
+        double kg = o.getTotalKg() != null ? o.getTotalKg().doubleValue() : 0;
+
+        dto.setTotalAmount(amount);
+
+        dto.setDeductKg(kg + amount);
 
         dto.setCreatedAt(o.getCreatedAt() != null ? o.getCreatedAt().format(DF) : null);
 
         dto.setConfirmedAt(o.getConfirmedAt() != null ? o.getConfirmedAt().format(DF) : null);
+
+        dto.setShippedAt(o.getShippedAt() != null ? o.getShippedAt().format(DF) : null);
 
         dto.setCompletedAt(o.getCompletedAt() != null ? o.getCompletedAt().format(DF) : null);
 

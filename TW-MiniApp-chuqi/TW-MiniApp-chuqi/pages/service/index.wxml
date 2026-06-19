@@ -2,7 +2,10 @@
   <view class="pickup-shell">
     <view class="pickup-header">
       <view class="pickup-header__title">提货</view>
-      <view class="pickup-header__balance">余额 {{pickupBalanceText}} Kg</view>
+      <view class="pickup-header__right">
+        <view class="pickup-header__records" bindtap="goRecords">提货记录</view>
+        <view class="pickup-header__balance">余额 {{pickupBalanceText}} Kg</view>
+      </view>
     </view>
 
     <view class="pickup-card">
@@ -53,7 +56,7 @@
 
       <view wx:if="{{needsCountyScope}}" class="pickup-address-block">
         <view class="pickup-address-block__toolbar">
-          <view class="pickup-address-block__hint">县城范围内配送，起送 1 吨</view>
+          <view class="pickup-address-block__hint">县城范围内配送，起送 {{minKgText}}Kg</view>
           <view class="pickup-address-block__pick" bindtap="openAddressBook">地址簿</view>
         </view>
 
@@ -79,41 +82,28 @@
     </view>
 
     <view class="pickup-card">
-      <view class="pickup-card__label">支付</view>
+      <view class="pickup-card__label">额度支付</view>
+      <view class="pickup-pay-line">
+        <text>提货量</text>
+        <text>{{totalKgText}} Kg</text>
+      </view>
       <view wx:if="{{packagingPayAvailable}}" class="pickup-pay-line">
-        <text>包装费 ￥{{packagingFeeText}}</text>
-        <view class="pickup-chip-row pickup-chip-row--inline">
-          <block wx:for="{{packagingPayOptions}}" wx:key="key">
-            <view
-              class="pickup-chip pickup-chip--small {{packagingPayMethod === item.key ? 'pickup-chip--active' : ''}}"
-              data-key="{{item.key}}"
-              bindtap="selectPackagingPayMethod"
-            >{{item.title}}</view>
-          </block>
-        </view>
+        <text>包装费（￥{{packagingFeeText}}）</text>
+        <text>{{packagingFeeKgText}} Kg</text>
       </view>
       <view wx:if="{{freightAvailable}}" class="pickup-pay-line">
-        <text>配送费 ￥{{deliveryFeeText}}</text>
-        <view class="pickup-chip-row pickup-chip-row--inline">
-          <block wx:for="{{freightPayOptions}}" wx:key="key">
-            <view
-              class="pickup-chip pickup-chip--small {{freightPayMethod === item.key ? 'pickup-chip--active' : ''}}"
-              data-key="{{item.key}}"
-              bindtap="selectFreightPayMethod"
-            >{{item.title}}</view>
-          </block>
-        </view>
+        <text>配送费（￥{{deliveryFeeText}}）</text>
+        <text>{{deliveryFeeKgText}} Kg</text>
       </view>
-      <view class="pickup-summary-line" bindtap="toggleDetail">
-        <text>本次扣减 {{deductKgLabel}} · 现金 {{totalCashLabel}}</text>
-        <text class="pickup-summary-line__toggle">{{showDetail ? '收起' : '明细'}}</text>
+      <view class="pickup-summary-line">
+        <text>合计扣减额度</text>
+        <text class="pickup-summary-line__strong">{{deductKgLabel}}</text>
       </view>
-      <view wx:if="{{showDetail}}" class="pickup-detail">
-        <view class="pickup-detail__row"><text>积分</text><text>{{totalPointsLabel}}</text></view>
-        <view class="pickup-detail__row"><text>运补抵扣</text><text>{{subsidyLabel}}</text></view>
-        <view class="pickup-detail__row"><text>包装抵扣</text><text>{{packagingCreditLabel}}</text></view>
-        <view class="pickup-detail__row"><text>提货后余额</text><text>{{balanceAfterText}} Kg</text></view>
+      <view class="pickup-pay-line pickup-pay-line--muted">
+        <text>提货后余额</text>
+        <text>{{balanceAfterText}} Kg</text>
       </view>
+      <view class="pickup-pay-tip">包装费、配送费按 1 元 = 1 Kg 折算，统一从额度扣减。</view>
     </view>
 
     <view wx:if="{{primaryError}}" class="pickup-tip pickup-tip--error">{{primaryError}}</view>

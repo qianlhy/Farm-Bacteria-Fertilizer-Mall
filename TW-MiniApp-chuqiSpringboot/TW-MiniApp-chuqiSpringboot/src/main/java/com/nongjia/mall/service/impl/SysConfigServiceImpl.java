@@ -38,7 +38,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         map.put("originalPrice", getOr(flat, "product.recharge.original_price", "1400"));
         map.put("discountRate", getOr(flat, "product.recharge.discount_rate", "0.85"));
         map.put("amountKg", getOr(flat, "product.recharge.amount_kg", "1000"));
-        map.put("minKg", getOr(flat, "product.delivery.min_kg", "1000"));
+        map.put("minKg", getOr(flat, "product.delivery.min_kg", "100"));
         map.put("freightPerKg", getOr(flat, "product.delivery.freight_per_kg", "0.1"));
         map.put("blueBucketNew", getOr(flat, "product.package.blue_bucket_new", "35"));
         map.put("blueBucketUsed", getOr(flat, "product.package.blue_bucket_used", "15"));

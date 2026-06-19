@@ -24,6 +24,21 @@
   color: #24351d;
 }
 
+.pickup-header__right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.pickup-header__records {
+  font-size: 26rpx;
+  color: #2f7d32;
+  padding: 6rpx 18rpx;
+  border: 1rpx solid #bfe0bf;
+  border-radius: 999rpx;
+  background: #f2f9f1;
+}
+
 .pickup-header__balance {
   font-size: 26rpx;
   color: #5a6b52;
@@ -180,14 +195,41 @@
 }
 
 .pickup-pay-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 16rpx 0;
   border-bottom: 1rpx solid #f0ece2;
   font-size: 26rpx;
   color: #4a5544;
 }
 
+.pickup-pay-line--muted {
+  color: #8a9384;
+  font-size: 24rpx;
+}
+
+.pickup-summary-line__strong {
+  color: #2a5018;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.pickup-pay-tip {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #9aa291;
+  line-height: 1.5;
+}
+
 .pickup-pay-line:last-of-type {
   border-bottom: none;
+}
+
+.pickup-pay-line__note {
+  float: right;
+  color: #8a9384;
+  font-size: 24rpx;
 }
 
 .pickup-summary-line {

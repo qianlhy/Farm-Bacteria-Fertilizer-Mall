@@ -7,8 +7,7 @@ const TOOL_ROUTES = {
   '团购核销': '/pages/group-check/index?tab=douyin',
   '兑换码': '/pages/redeem-code/index',
   '试用记录': '/pages/trial-records/index',
-  '加盟合作': '/pages/join-partner/index',
-  '签到抽奖': '/pages/lottery/index'
+  '成为合伙人': '/pages/join-partner/index'
 }
 
 Page({
@@ -26,8 +25,7 @@ Page({
       { title: '团购核销', icon: '/assets/svg-icons/coupon-line.svg', auth: false },
       { title: '兑换码', icon: '/assets/svg-icons/point-line.svg', auth: true },
       { title: '试用记录', icon: '/assets/svg-icons/group-check.svg', auth: true },
-      { title: '加盟合作', icon: '/assets/svg-icons/mall-line.svg', auth: true },
-      { title: '签到抽奖', icon: '/assets/svg-icons/recharge.svg', auth: true },
+      { title: '成为合伙人', icon: '/assets/svg-icons/mall-line.svg', auth: true },
       { title: '联系客服', icon: '/assets/svg-icons/wallet-line.svg', auth: false },
       { title: '关于我们', icon: '/assets/svg-icons/board.svg', auth: false },
       { title: '退出登录', icon: '/assets/svg-icons/article.svg', auth: true, loginOnly: true }
@@ -138,7 +136,7 @@ Page({
     if (item.title === '关于我们') {
       wx.showModal({
         title: '关于我们',
-        content: '农家菌肥小程序，提供菌肥充值、提货、试用与福利服务。',
+        content: '农家菌肥小程序，提供菌肥充值、提货、试用与农业作物试验报告服务。',
         showCancel: false
       })
       return

@@ -34,6 +34,14 @@ public class RechargeController {
         return rechargeService.submit(userId, paymentMethod, quantity);
     }
 
+    @PostMapping("/wechat-pay")
+    public Result<Map<String, String>> wechatPay(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody Map<String, Object> params) {
+        Integer quantity = Integer.parseInt(params.get("quantity").toString());
+        return rechargeService.createWechatPayOrder(userId, quantity);
+    }
+
     @GetMapping("/records")
     public Result<List<RechargeRecord>> records(
             @RequestAttribute("userId") Long userId,

@@ -142,9 +142,48 @@ Page({
       confirmText: '确认支付',
       success: async (res) => {
         if (!res.confirm) return
-        await this.doRecharge('cash')
+        await this.doWechatPay()
       }
     })
+  },
+
+  async doWechatPay() {
+    if (this.data.submitting) return
+    this.setData({ submitting: true })
+
+    try {
+      const result = await post('/api/app/recharge/wechat-pay', {
+        quantity: this.data.quantity
+      })
+
+      // 后端未启用真实支付时直接到账
+      if (!result || result.paid === 'true' || !result.package) {
+        wx.showToast({ title: '支付成功', icon: 'success' })
+        setTimeout(() => this.refreshPage(true), 500)
+        return
+      }
+
+      wx.requestPayment({
+        timeStamp: result.timeStamp,
+        nonceStr: result.nonceStr,
+        package: result.package,
+        signType: result.signType || 'RSA',
+        paySign: result.paySign,
+        success: () => {
+          wx.showToast({ title: '支付成功', icon: 'success' })
+          // 到账以服务端回调为准，稍作延迟后刷新余额
+          setTimeout(() => this.refreshPage(true), 1500)
+        },
+        fail: (err) => {
+          const cancelled = err && err.errMsg && err.errMsg.indexOf('cancel') >= 0
+          wx.showToast({ title: cancelled ? '已取消支付' : '支付失败', icon: 'none' })
+        }
+      })
+    } catch (err) {
+      // request.js 已统一提示
+    } finally {
+      this.setData({ submitting: false })
+    }
   },
 
   async submitPointsExchange() {

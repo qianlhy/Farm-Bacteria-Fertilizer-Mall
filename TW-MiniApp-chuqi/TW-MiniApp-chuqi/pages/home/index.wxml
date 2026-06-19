@@ -17,23 +17,6 @@
       </view>
     </view>
 
-    <view wx:if="{{loggedIn}}" class="home-card__stats">
-      <view class="home-card__stat">
-        <view class="home-card__stat-value">{{couponBalance}}</view>
-        <view class="home-card__stat-label">卡券</view>
-      </view>
-      <view class="home-card__stat-divider"></view>
-      <view class="home-card__stat">
-        <view class="home-card__stat-value">{{freightSubsidy}}</view>
-        <view class="home-card__stat-label">运补</view>
-      </view>
-      <view class="home-card__stat-divider"></view>
-      <view class="home-card__stat">
-        <view class="home-card__stat-value">{{pointsBalance}}</view>
-        <view class="home-card__stat-label">积分</view>
-      </view>
-    </view>
-
     <view class="home-card__top-actions">
       <block wx:for="{{topActions}}" wx:key="title">
         <view class="home-card__feature" data-title="{{item.title}}" bindtap="openFeature">

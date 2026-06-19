@@ -6,9 +6,9 @@ spring:
     name: farm-fertilizer-mall
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farm_fertilizer_mall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
-    username: root
-    password: root
+    url: ${DB_URL:jdbc:mysql://localhost:3306/farm_fertilizer_mall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:2faddec1bdadc4a9}
   servlet:
     multipart:
       max-file-size: 100MB
@@ -26,15 +26,28 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+# 敏感配置统一通过环境变量注入，默认值仅用于本地开发，生产环境务必覆盖
 jwt:
-  secret: farm-fertilizer-mall-secret-key-2024-nongjia-key
-  ttl: 86400000
+  secret: ${JWT_SECRET:farm-fertilizer-mall-secret-key-2024-nongjia-key}
+  ttl: ${JWT_TTL:86400000}
 
 app:
-  upload-path: uploads
-  upload-url: http://localhost:8080/uploads/
+  upload-path: ${UPLOAD_PATH:uploads}
+  upload-url: ${UPLOAD_URL:https://www.twst.work/uploads/}
 
 wechat:
-  app-id: wxae83cc107f51591e
-  app-secret: ${WECHAT_APP_SECRET:}
-  mock-enabled: true
+  app-id: ${WECHAT_APP_ID:wxae83cc107f51591e}
+  app-secret: ${WECHAT_APP_SECRET:d1f2abea2be686cb341c0ee9684b0ee6}
+  mock-enabled: ${WECHAT_MOCK_ENABLED:false}
+  pay:
+    # 是否启用真实微信支付（false 时走模拟到账，便于本地开发）
+    enabled: ${WECHAT_PAY_ENABLED:true}
+    mch-id: ${WECHAT_PAY_MCH_ID:1746348061}
+    api-v3-key: ${WECHAT_PAY_API_V3_KEY:a7Kp2Qx9Lm4Tz8Nc1Vw6Rj3Hs0Yd5FbU}
+    merchant-serial-number: ${WECHAT_PAY_SERIAL:16DAAFC9F5BE1A38F17AFAA246B66EEA6FCAFB7A}
+    public-key-id: ${WECHAT_PAY_PUBLIC_KEY_ID:PUB_KEY_ID_0117463480612026060100381811000207}
+    # 商户私钥与微信支付公钥（已打包进 classpath:wxpay/）
+    private-key-path: ${WECHAT_PAY_PRIVATE_KEY:classpath:wxpay/apiclient_key.pem}
+    public-key-path: ${WECHAT_PAY_PUBLIC_KEY:classpath:wxpay/pub_key.pem}
+    # 支付结果回调地址（必须为公网 HTTPS，且与小程序后端同域）
+    notify-url: ${WECHAT_PAY_NOTIFY_URL:https://www.twst.work/api/app/pay/notify}

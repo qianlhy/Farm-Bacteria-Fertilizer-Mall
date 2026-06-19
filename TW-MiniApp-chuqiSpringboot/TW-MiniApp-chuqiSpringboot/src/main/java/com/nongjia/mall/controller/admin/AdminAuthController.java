@@ -27,7 +27,7 @@ public class AdminAuthController {
         AdminUser admin = adminService.login(username, password);
         if (admin == null) return Result.fail("用户名或密码错误");
 
-        String token = jwtUtil.generateToken(admin.getId(), admin.getUsername());
+        String token = jwtUtil.generateToken(admin.getId(), admin.getUsername(), JwtUtil.TYPE_ADMIN);
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
         data.put("adminId", admin.getId());
@@ -47,10 +47,17 @@ public class AdminAuthController {
         return Result.ok(admin);
     }
 
+    /**
+     * 初始化管理员：仅当系统中尚不存在任何管理员时允许调用（用于首次部署引导）。
+     * 一旦已存在管理员，该接口将被拒绝，避免被滥用创建后门账号。
+     */
     @PostMapping("/init")
     public Result<String> initAdmin(@RequestParam(defaultValue = "admin") String username,
                                     @RequestParam(defaultValue = "admin123") String password) {
+        if (adminService.count() > 0) {
+            return Result.fail(403, "管理员已存在，初始化接口已禁用");
+        }
         adminService.initAdminIfNotExists(username, password);
-        return Result.ok("管理员初始化成功，用户名: " + username + "，密码: " + password, null);
+        return Result.ok("管理员初始化成功，用户名: " + username + "，请使用初始化时设置的密码登录", null);
     }
 }

@@ -20,7 +20,7 @@ import java.util.UUID;
 public class FileUploadServiceImpl implements FileUploadService {
 
     private static final Set<String> ALLOWED_EXT = Set.of(
-        "jpg", "jpeg", "png", "gif", "webp", "bmp", "mp4", "mov", "m4v"
+        "jpg", "jpeg", "png", "gif", "webp", "bmp", "mp4", "mov", "m4v", "pdf"
     );
 
     @Value("${app.upload-path:uploads}")

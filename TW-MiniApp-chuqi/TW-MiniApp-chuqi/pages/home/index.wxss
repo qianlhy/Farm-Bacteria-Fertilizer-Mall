@@ -183,7 +183,7 @@
 
 .home-card__bottom-actions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .home-card__bottom-item {

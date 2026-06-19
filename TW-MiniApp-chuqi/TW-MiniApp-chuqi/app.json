@@ -101,6 +101,14 @@
     {
       "root": "pages/lottery",
       "pages": ["index"]
+    },
+    {
+      "root": "pages/crop-detail",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/pickup-records",
+      "pages": ["index"]
     }
   ],
   "window": {
@@ -135,7 +143,7 @@
       },
       {
         "pagePath": "pages/benefit/index",
-        "text": "福利",
+        "text": "农业",
         "iconPath": "assets/tabbar/service.png",
         "selectedIconPath": "assets/tabbar/service-active.png"
       },

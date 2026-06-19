@@ -15,6 +15,8 @@ import com.nongjia.mall.mapper.UserWalletMapper;
 import com.nongjia.mall.service.UserService;
 import com.nongjia.mall.service.UserWalletService;
 import com.nongjia.mall.service.WeChatService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ import java.util.Map;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -52,8 +56,9 @@ public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impleme
                 userBuilder.setPhone(phone);
                 userBuilder.setNickname("用户" + phone.substring(phone.length() - 4));
             });
+            log.info("手机号注册新用户，userId={}", user.getId());
         }
-
+        log.info("用户手机号登录成功，userId={}", user.getId());
         return Result.ok(buildLoginResult(user));
     }
 
@@ -72,6 +77,7 @@ public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impleme
                 userBuilder.setNickname(nickname);
                 userBuilder.setAvatar(dto.getAvatar());
             });
+            log.info("微信注册新用户，userId={}", user.getId());
         } else {
             boolean changed = false;
             if (StrUtil.isNotBlank(dto.getNickname()) && !dto.getNickname().equals(user.getNickname())) {
@@ -87,6 +93,7 @@ public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impleme
             }
         }
 
+        log.info("用户微信登录成功，userId={}", user.getId());
         return Result.ok(buildLoginResult(user));
     }
 

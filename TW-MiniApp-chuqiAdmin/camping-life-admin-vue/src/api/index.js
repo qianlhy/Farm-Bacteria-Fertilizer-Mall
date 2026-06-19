@@ -16,18 +16,32 @@ request.interceptors.request.use((config) => {
   return config
 })
 
+function handleSessionExpired(message) {
+  const userStore = useUserStore()
+  userStore.logout()
+  if (router.currentRoute.value.path !== '/login') {
+    router.push('/login')
+  }
+  ElMessage.error(message || '登录已过期，请重新登录')
+}
+
 request.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    const data = response.data
+    // 后端鉴权失败时返回 HTTP 200 + body { code: 401 }，需在此统一拦截登出
+    if (data && data.code === 401) {
+      handleSessionExpired(data.message)
+      return Promise.reject(new Error(data.message || '登录已过期'))
+    }
+    return data
+  },
   (error) => {
     if (error.response) {
       const { status, data } = error.response
       if (status === 401) {
-        const userStore = useUserStore()
-        userStore.logout()
-        router.push('/login')
-        ElMessage.error('登录已过期，请重新登录')
+        handleSessionExpired('登录已过期，请重新登录')
       } else {
-        ElMessage.error(data.message || '请求失败')
+        ElMessage.error((data && data.message) || '请求失败')
       }
     } else {
       ElMessage.error('网络错误')
@@ -54,8 +68,9 @@ export const adjustWallet = (data) => request.post('/admin/users/wallet/adjust',
 export const getRechargeList = (params) => request.get('/admin/orders/recharge-list', { params })
 export const confirmRecharge = (orderId) => request.post(`/admin/orders/recharge/confirm/${orderId}`)
 export const getPickupList = (params) => request.get('/admin/orders/pickup-list', { params: cleanParams(params) })
-export const confirmPickup = (orderId) => request.post(`/admin/orders/pickup/confirm/${orderId}`)
-export const completePickup = (orderId) => request.post(`/admin/orders/pickup/complete/${orderId}`)
+export const packPickup = (orderId) => request.post(`/admin/orders/pickup/pack/${orderId}`)
+export const shipPickup = (orderId) => request.post(`/admin/orders/pickup/ship/${orderId}`)
+export const receivePickup = (orderId) => request.post(`/admin/orders/pickup/receive/${orderId}`)
 export const cancelPickup = (orderId, data) => request.post(`/admin/orders/pickup/cancel/${orderId}`, data)
 
 export const getTrialList = (params) => request.get('/admin/trial/list', { params })
@@ -86,3 +101,8 @@ export const disableRedemptionCode = (id) => request.post(`/admin/redemption/dis
 
 export const getConfigList = () => request.get('/admin/config/list')
 export const updateConfig = (data) => request.post('/admin/config/update', data)
+
+export const getCropList = (params) => request.get('/admin/crops/list', { params: cleanParams(params) })
+export const getCropDetail = (id) => request.get(`/admin/crops/detail/${id}`)
+export const saveCrop = (data) => request.post('/admin/crops/save', data)
+export const deleteCrop = (id) => request.post(`/admin/crops/delete/${id}`)

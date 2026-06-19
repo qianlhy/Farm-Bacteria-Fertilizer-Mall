@@ -310,7 +310,7 @@ INSERT INTO `sys_config` (`config_key`, `config_value`, `config_type`, `config_n
 ('product.recharge.original_price', '1400', 'number', '原价(元/吨)', 'product', 2, '每吨原价'),
 ('product.recharge.discount_rate', '0.85', 'number', '折扣率', 'product', 3, '折扣率，0.85=85折'),
 ('product.recharge.amount_kg', '1000', 'number', '每份数量(kg)', 'product', 4, '每份多少公斤'),
-('product.delivery.min_kg', '1000', 'number', '最低起送量(kg)', 'delivery', 1, '送货最低起送量'),
+('product.delivery.min_kg', '100', 'number', '最低起送量(kg)', 'delivery', 1, '送货最低起送量'),
 ('product.delivery.freight_per_kg', '0.1', 'number', '每公斤运费(元)', 'delivery', 2, '送货每公斤运费'),
 ('product.package.blue_bucket_new', '35', 'number', '蓝桶新桶价格', 'package', 1, '新蓝桶价格'),
 ('product.package.blue_bucket_used', '15', 'number', '蓝桶旧桶价格', 'package', 2, '旧蓝桶价格'),

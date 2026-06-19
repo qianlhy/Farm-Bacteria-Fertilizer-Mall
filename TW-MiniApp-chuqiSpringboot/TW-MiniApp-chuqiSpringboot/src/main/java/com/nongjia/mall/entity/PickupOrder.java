@@ -38,6 +38,7 @@ public class PickupOrder {
     private String deliveryLocation;
     private String remark;
     private LocalDateTime confirmedAt;
+    private LocalDateTime shippedAt;
     private LocalDateTime completedAt;
 
     @TableField(fill = FieldFill.INSERT)

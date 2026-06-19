@@ -10,7 +10,7 @@
     <view class="redeem-account__name">{{accountName}}</view>
     <view class="redeem-account__stats">
       <view class="redeem-account__stat">
-        <view class="redeem-account__label">运补(元)</view>
+        <view class="redeem-account__label">运装补贴(元)</view>
         <view class="redeem-account__value">{{freightSubsidyText}}</view>
       </view>
       <view class="redeem-account__stat">
@@ -26,7 +26,7 @@
 
   <view class="redeem-card">
     <view class="redeem-card__title">输入兑换码</view>
-    <view class="redeem-card__desc">兑换后可获得运费补贴、包装费抵扣或积分，提货时可直接使用。</view>
+    <view class="redeem-card__desc">兑换后可获得运装补贴或积分，提货时可直接使用。</view>
     <input
       class="redeem-card__input"
       placeholder="请输入兑换码"
@@ -42,7 +42,7 @@
   <view wx:if="{{lastResult}}" class="redeem-result">
     <view class="redeem-result__title">本次兑换</view>
     <view class="redeem-result__summary">{{lastResult.summary}}</view>
-    <view class="redeem-result__row">当前运补：￥{{lastResult.freightSubsidyAfter}}</view>
+    <view class="redeem-result__row">当前运装补贴：￥{{lastResult.freightSubsidyAfter}}</view>
     <view class="redeem-result__row">当前包装抵扣：￥{{lastResult.packagingCreditAfter}}</view>
     <view class="redeem-result__row">当前积分：{{lastResult.pointsAfter}}</view>
   </view>

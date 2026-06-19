@@ -18,9 +18,11 @@ public class PickupOrderDTO {
     private String freightPayment;
     private Double freightSubsidyUsed;
     private Double totalAmount;
+    private Double deductKg;
     private Double balanceAfter;
     private Long pointsAfter;
     private String createdAt;
     private String confirmedAt;
+    private String shippedAt;
     private String completedAt;
 }

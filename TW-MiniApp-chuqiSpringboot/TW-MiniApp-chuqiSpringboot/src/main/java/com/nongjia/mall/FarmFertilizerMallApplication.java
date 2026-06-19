@@ -11,3 +11,4 @@ public class FarmFertilizerMallApplication {
         SpringApplication.run(FarmFertilizerMallApplication.class, args);
     }
 }
+ 

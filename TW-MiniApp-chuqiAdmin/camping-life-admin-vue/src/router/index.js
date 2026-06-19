@@ -20,6 +20,7 @@ const routes = [
       { path: 'orders/trial', name: 'TrialOrders', component: () => import('@/views/order/trial.vue'), meta: { title: '试用预约' } },
       { path: 'content', name: 'Content', component: () => import('@/views/content/list.vue'), meta: { title: '内容管理' } },
       { path: 'content/edit', name: 'ContentEdit', component: () => import('@/views/content/edit.vue'), meta: { title: '编辑内容' } },
+      { path: 'crops', name: 'Crops', component: () => import('@/views/crops/list.vue'), meta: { title: '农业作物' } },
       { path: 'partner', name: 'Partner', component: () => import('@/views/partner/list.vue'), meta: { title: '合伙人申请' } },
       { path: 'redemption', name: 'Redemption', component: () => import('@/views/redemption/list.vue'), meta: { title: '兑换码管理' } },
       { path: 'config', name: 'Config', component: () => import('@/views/config/index.vue'), meta: { title: '系统配置' } },
@@ -37,6 +38,8 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   if (to.path !== '/login' && !userStore.token) {
     next('/login')
+  } else if (to.path === '/login' && userStore.token) {
+    next('/dashboard')
   } else {
     next()
   }

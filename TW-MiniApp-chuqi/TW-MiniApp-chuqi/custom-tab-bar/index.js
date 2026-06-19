@@ -1,3 +1,5 @@
+const { isLoggedIn } = require('../utils/auth')
+
 Component({
   data: {
     selected: 0,
@@ -27,7 +29,7 @@ Component({
       },
       {
         key: 'benefit',
-        text: '福利',
+        text: '农业',
         pagePath: '/pages/benefit/index',
         icon: '/assets/svg-icons/benefit.svg',
         activeIcon: '/assets/svg-icons/benefit-active.svg'
@@ -71,9 +73,7 @@ Component({
     },
 
     checkLogin() {
-      const user = wx.getStorageSync('app_user')
-      const token = wx.getStorageSync('app_token')
-      const loggedIn = !!(user && token)
+      const loggedIn = isLoggedIn()
       if (loggedIn !== this.data.loggedIn) {
         this.setData({ loggedIn })
       }

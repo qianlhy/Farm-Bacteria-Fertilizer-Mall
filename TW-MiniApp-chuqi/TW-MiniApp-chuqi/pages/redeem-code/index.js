@@ -67,7 +67,7 @@ Page({
       this.refreshBalances()
 
       const rewards = []
-      if (result.freightAmount > 0) rewards.push(`运补 ￥${result.freightAmount}`)
+      if (result.freightAmount > 0) rewards.push(`运装补贴 ￥${result.freightAmount}`)
       if (result.packagingAmount > 0) rewards.push(`包装抵扣 ￥${result.packagingAmount}`)
       if (result.pointsAmount > 0) rewards.push(`积分 ${result.pointsAmount}`)
 

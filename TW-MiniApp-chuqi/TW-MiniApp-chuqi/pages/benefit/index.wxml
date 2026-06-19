@@ -1,14 +1,21 @@
-<view class="benefit-page">
-  <view class="benefit-hero">
-    <view class="benefit-hero__eyebrow">ACTIVITY BENEFITS</view>
-    <view class="benefit-hero__title">活动福利</view>
+<view class="agri-page">
+  <view class="agri-hero">
+    <view class="agri-hero__eyebrow">AGRICULTURE</view>
+    <view class="agri-hero__title">农业作物</view>
+    <view class="agri-hero__subtitle">点击作物查看试验报告</view>
   </view>
 
-  <block wx:for="{{benefits}}" wx:key="title">
-    <view class="benefit-card">
-      <view class="benefit-card__title">{{item.title}}</view>
-      <view class="benefit-card__desc">{{item.desc}}</view>
-      <view class="benefit-card__button" data-title="{{item.title}}" bindtap="handleBenefitAction">{{item.action}}</view>
-    </view>
-  </block>
+  <view class="agri-grid">
+    <block wx:for="{{crops}}" wx:key="id">
+      <view class="agri-card" data-id="{{item.id}}" bindtap="openCrop">
+        <image class="agri-card__cover" src="{{item.cover}}" mode="aspectFill" />
+        <view class="agri-card__body">
+          <view class="agri-card__name">{{item.name}}</view>
+          <view class="agri-card__desc">{{item.summary}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view wx:if="{{loaded && !crops.length}}" class="agri-empty">作物内容整理中，敬请期待</view>
 </view>

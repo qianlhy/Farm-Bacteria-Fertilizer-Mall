@@ -3,7 +3,7 @@
     <view class="join-topbar__back" bindtap="goBack">
       <view class="join-topbar__back-icon"></view>
     </view>
-    <view class="join-topbar__title">我要加盟</view>
+    <view class="join-topbar__title">成为合伙人</view>
   </view>
 
   <view class="join-brand">

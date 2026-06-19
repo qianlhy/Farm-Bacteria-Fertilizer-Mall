@@ -1,0 +1,30 @@
+<view class="crop-page">
+  <view class="crop-topbar">
+    <view class="crop-topbar__back" bindtap="goBack">
+      <view class="crop-topbar__back-icon"></view>
+    </view>
+    <view class="crop-topbar__title">{{crop.name || '作物详情'}}</view>
+  </view>
+
+  <block wx:if="{{crop}}">
+    <image class="crop-header" src="{{crop.headerImage}}" mode="aspectFill" />
+
+    <view class="crop-content">
+      <view class="crop-content__title">{{crop.title}}</view>
+      <view class="crop-content__body">{{crop.body}}</view>
+    </view>
+
+    <view class="crop-report">
+      <view class="crop-report__label">试验报告</view>
+      <view class="crop-report__file {{hasPdf ? '' : 'crop-report__file--disabled'}}" bindtap="openReport">
+        <view class="crop-report__icon">PDF</view>
+        <view class="crop-report__info">
+          <view class="crop-report__name">{{crop.reportName}}</view>
+          <view class="crop-report__hint">{{hasPdf ? '点击查看 / 下载报告' : '报告整理中，敬请期待'}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:elif="{{loaded}}" class="crop-empty">未找到该作物信息</view>
+</view>

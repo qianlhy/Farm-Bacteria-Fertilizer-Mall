@@ -16,9 +16,7 @@ const {
 } = require('../../utils/address-book')
 
 const FREIGHT_PAY_OPTIONS = [
-  { key: 'cash', title: '现金支付', desc: '配送时现金支付运费' },
-  { key: 'subsidy', title: '运费补贴', desc: '运补余额足够时全额抵扣' },
-  { key: 'mixed', title: '组合支付', desc: '运补不足时差额现金补足' }
+  { key: 'cash', title: '现金支付', desc: '配送时现金支付运费' }
 ]
 
 function roundMoney(value) {
@@ -119,7 +117,8 @@ function getQuantityHint(option, config) {
   }
 
   if (option.key === 'blueBucket') {
-    return `1 桶 = ${config.blueBucketKg}Kg，配送需满 ${config.blueBucketMinCount} 桶。`
+    const minCount = Math.max(1, Math.ceil(config.minKg / config.blueBucketKg))
+    return `1 桶 = ${config.blueBucketKg}Kg，配送需满 ${minCount} 桶。`
   }
 
   if (option.key === 'tonBucket') {
@@ -165,48 +164,9 @@ function buildViewModel(user, state, config, packagingOptions) {
     }
   }
 
-  let packagingCashDue = packagingFee
-  let packagingPointsDue = 0
-  let packagingCreditUsed = 0
-  let packagingPayHint = '转罐自备容器，不收包装物费用。'
-
-  if (packagingFee > 0) {
-    if (state.packagingPayMethod === 'points') {
-      packagingCashDue = 0
-      packagingPointsDue = packagingPointsCost
-      packagingPayHint = `本次包装物费用将使用 ${formatInteger(packagingPointsCost)} 积分抵扣。`
-    } else if (state.packagingPayMethod === 'credit') {
-      packagingCreditUsed = Math.min(packagingCreditBalance, packagingFee)
-      packagingCashDue = roundMoney(packagingFee - packagingCreditUsed)
-      packagingPayHint = packagingCreditBalance >= packagingFee
-        ? '包装物费用将由包装抵扣余额全额抵扣。'
-        : `当前包装抵扣仅够 ￥${formatMoney(packagingCreditUsed)}，剩余现金 ￥${formatMoney(packagingCashDue)}。`
-    } else {
-      packagingPayHint = `包装物费用现金支付 ￥${formatMoney(packagingFee)}，或改用包装抵扣 / 积分支付。`
-    }
-  }
-
-  let subsidyUsed = 0
-  let freightCashDue = 0
-  let freightPayHint = '自提无需支付配送费。'
-
-  if (deliveryFee > 0) {
-    if (state.freightPayMethod === 'cash') {
-      freightCashDue = deliveryFee
-      freightPayHint = `配送费将现金支付 ￥${formatMoney(deliveryFee)}。`
-    } else if (state.freightPayMethod === 'subsidy') {
-      subsidyUsed = Math.min(freightSubsidyBalance, deliveryFee)
-      freightPayHint = freightSubsidyBalance >= deliveryFee
-        ? '配送费将由运补余额全额抵扣。'
-        : `当前运补仅够抵扣 ￥${formatMoney(subsidyUsed)}，请切换为组合支付或现金支付。`
-    } else {
-      subsidyUsed = Math.min(freightSubsidyBalance, deliveryFee)
-      freightCashDue = roundMoney(deliveryFee - subsidyUsed)
-      freightPayHint = subsidyUsed > 0
-        ? `先抵扣运补 ￥${formatMoney(subsidyUsed)}，剩余现金 ￥${formatMoney(freightCashDue)}。`
-        : `当前无可用运补，本次配送费将现金支付 ￥${formatMoney(deliveryFee)}。`
-    }
-  }
+  // 统一额度支付：1 元 = 1 Kg，包装费 + 配送费折算成额度，与提货量一起从化肥余额扣减
+  const deductKg = roundMoney(totalKg + packagingFee + deliveryFee)
+  const balanceAfter = roundMoney(Math.max(pickupBalance - deductKg, 0))
 
   const errors = []
 
@@ -214,8 +174,8 @@ function buildViewModel(user, state, config, packagingOptions) {
     errors.push('请先登录后再提交提货。')
   }
 
-  if (pickupBalance < totalKg) {
-    errors.push(`化肥提货余额不足，本次需 ${formatInteger(totalKg)}Kg，当前 ${formatWeight(pickupBalance)}Kg。`)
+  if (pickupBalance < deductKg) {
+    errors.push(`额度不足，本次共需 ${formatInteger(deductKg)}Kg（含包装/配送费），当前 ${formatWeight(pickupBalance)}Kg。`)
   }
 
   if (isDelivery && !inCounty) {
@@ -226,29 +186,9 @@ function buildViewModel(user, state, config, packagingOptions) {
     errors.push(`配送起送量为 ${formatInteger(cfg.minKg)}Kg，还差 ${formatInteger(deliveryGapKg)}Kg。`)
   }
 
-  if (packagingPointsDue > pointsBalance) {
-    errors.push('积分不足，无法使用积分支付包装物费用。')
-  }
-
-  if (packagingFee > 0 && state.packagingPayMethod === 'credit' && packagingCreditBalance <= 0) {
-    errors.push('包装抵扣余额不足，请先兑换包装抵扣或使用其他支付方式。')
-  }
-
-  if (deliveryFee > 0 && state.freightPayMethod === 'subsidy' && freightSubsidyBalance < deliveryFee) {
-    errors.push('运补余额不足，请切换为组合支付或现金支付。')
-  }
-
-  const totalCashDue = roundMoney(packagingCashDue + freightCashDue)
-  const balanceAfter = roundMoney(Math.max(pickupBalance - totalKg, 0))
-  const pointsAfter = Math.max(pointsBalance - packagingPointsDue, 0)
-  const freightSubsidyAfter = roundMoney(Math.max(freightSubsidyBalance - subsidyUsed, 0))
-  const packagingCreditAfter = roundMoney(Math.max(packagingCreditBalance - packagingCreditUsed, 0))
-
   return {
     accountName: loggedIn ? getAccountName(user) : '未登录',
     pickupBalanceText: formatWeight(pickupBalance),
-    freightSubsidyBalanceText: formatMoney(freightSubsidyBalance),
-    packagingCreditBalanceText: formatMoney(packagingCreditBalance),
     pointsBalanceText: formatInteger(pointsBalance),
     selectedPackaging: packaging,
     selectedCondition: condition,
@@ -260,31 +200,19 @@ function buildViewModel(user, state, config, packagingOptions) {
     quantityHint: getQuantityHint(packaging, cfg),
     totalKg,
     totalKgText: formatInteger(totalKg),
+    minKgText: formatInteger(cfg.minKg),
     packagingFee,
     packagingFeeText: formatMoney(packagingFee),
-    packagingPointsCost,
-    packagingPointsCostText: formatInteger(packagingPointsCost),
+    packagingFeeKgText: formatInteger(packagingFee),
     deliveryFee,
     deliveryFeeText: formatMoney(deliveryFee),
-    subsidyUsed,
-    subsidyUsedText: formatMoney(subsidyUsed),
-    packagingCreditUsed,
-    packagingCreditUsedText: formatMoney(packagingCreditUsed),
-    freightCashDue,
-    totalCashDue,
-    totalCashLabel: totalCashDue > 0 ? `￥${formatMoney(totalCashDue)}` : '无需现金',
-    deductKgLabel: `${formatInteger(totalKg)}Kg`,
-    totalPointsLabel: packagingPointsDue > 0 ? `${formatInteger(packagingPointsDue)}积分` : '无需积分',
-    subsidyLabel: subsidyUsed > 0 ? `￥${formatMoney(subsidyUsed)}` : '未使用',
-    packagingCreditLabel: packagingCreditUsed > 0 ? `￥${formatMoney(packagingCreditUsed)}` : '未使用',
+    deliveryFeeKgText: formatInteger(deliveryFee),
+    deductKg,
+    deductKgText: formatInteger(deductKg),
+    deductKgLabel: `${formatInteger(deductKg)}Kg`,
     balanceAfterText: formatWeight(balanceAfter),
-    pointsAfterText: formatInteger(pointsAfter),
-    freightSubsidyAfterText: formatMoney(freightSubsidyAfter),
-    packagingCreditAfterText: formatMoney(packagingCreditAfter),
     deliveryHint,
     deliveryWarning,
-    packagingPayHint,
-    freightPayHint,
     canSubmit: errors.length === 0,
     primaryError: errors[0] || '',
     packagingSummaryText: `${condition.label} · ${formatMoney(condition.fee)} 元 / ${packaging.quantityUnit}`,
@@ -322,10 +250,7 @@ function buildPickupPayload(state, viewModel) {
     packageNewOrUsed,
     totalKg: viewModel.totalKg,
     quantity: viewModel.quantity,
-    packagePayment: state.packagingPayMethod,
-    packagingCreditUsed: viewModel.packagingCreditUsed,
-    freightPayment: state.freightPayMethod,
-    freightSubsidyUsed: viewModel.subsidyUsed,
+    freightPayment: 'quota',
     receiverAddress: state.deliveryAddress,
     deliveryLocation: state.deliveryAddress,
     receiverName: state.receiverName,
@@ -359,16 +284,19 @@ Page({
     addressList: [],
     showDetail: false,
     packagingPayMethod: 'cash',
-    freightPayMethod: 'subsidy',
+    freightPayMethod: 'cash',
     selectedPackaging: null,
     selectedCondition: null,
     quantityHint: '',
+    minKgText: '100',
     quantitySummaryText: '',
     packagingSummaryText: '',
     packagingFeeText: '0',
-    packagingPointsCostText: '0',
+    packagingFeeKgText: '0',
     deliveryFeeText: '0',
-    totalCashLabel: '无需现金',
+    deliveryFeeKgText: '0',
+    totalKgText: '0',
+    deductKgText: '0',
     deductKgLabel: '0Kg',
     totalPointsLabel: '无需积分',
     subsidyLabel: '未使用',
@@ -652,6 +580,17 @@ Page({
     this.setData({ showDetail: !this.data.showDetail })
   },
 
+  goRecords() {
+    if (!isLoggedIn()) {
+      wx.showToast({ title: '请先登录', icon: 'none' })
+      setTimeout(() => {
+        wx.navigateTo({ url: '/pages/login/index' })
+      }, 800)
+      return
+    }
+    wx.navigateTo({ url: '/pages/pickup-records/index' })
+  },
+
   noop() {},
 
   async submitPickup() {
@@ -680,6 +619,24 @@ Page({
         title: viewModel.primaryError || '当前条件无法提货',
         icon: 'none'
       })
+      return
+    }
+
+    const feeText = viewModel.packagingFee + viewModel.deliveryFee > 0
+      ? `（含包装/配送费 ${formatInteger(viewModel.packagingFee + viewModel.deliveryFee)}Kg）`
+      : ''
+    const confirmed = await new Promise(resolve => {
+      wx.showModal({
+        title: '确认提货',
+        content: `本次将从额度扣减 ${viewModel.deductKgText}Kg${feeText}。订单一旦进入打包将无法取消，是否继续？`,
+        confirmText: '确认提货',
+        cancelText: '再想想',
+        success: res => resolve(Boolean(res.confirm)),
+        fail: () => resolve(false)
+      })
+    })
+
+    if (!confirmed) {
       return
     }
 

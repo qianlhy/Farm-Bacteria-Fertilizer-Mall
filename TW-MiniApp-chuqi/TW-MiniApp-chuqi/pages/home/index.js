@@ -7,9 +7,6 @@ Page({
     userPhone: '未登录',
     userName: '',
     fertilizerBalance: '0',
-    couponBalance: '0',
-    freightSubsidy: '0',
-    pointsBalance: '0',
     topActions: [
       {
         icon: '/assets/svg-icons/group-check.svg',
@@ -25,8 +22,6 @@ Page({
       }
     ],
     bottomActions: [
-      { title: '领取运补' },
-      { title: '获取积分', badge: 'HOT' },
       { title: '成为合伙人' }
     ]
   },
@@ -54,20 +49,14 @@ Page({
         loggedIn: true,
         userPhone: user.phone || '',
         userName: user.nickname || '',
-        fertilizerBalance: wallet.fertilizerBalance !== undefined ? wallet.fertilizerBalance : '0',
-        couponBalance: wallet.couponBalance !== undefined ? wallet.couponBalance : '0',
-        freightSubsidy: wallet.freightSubsidy !== undefined ? wallet.freightSubsidy : '0',
-        pointsBalance: wallet.pointsBalance !== undefined ? wallet.pointsBalance : '0'
+        fertilizerBalance: wallet.fertilizerBalance !== undefined ? wallet.fertilizerBalance : '0'
       })
     } else {
       this.setData({
         loggedIn: false,
         userPhone: '未登录',
         userName: '',
-        fertilizerBalance: '0',
-        couponBalance: '0',
-        freightSubsidy: '0',
-        pointsBalance: '0'
+        fertilizerBalance: '0'
       })
     }
   },
@@ -102,28 +91,6 @@ Page({
       }
       wx.navigateTo({
         url: '/pages/recharge/index'
-      })
-      return
-    }
-
-    if (title === '领取运补') {
-      if (!isLoggedIn()) {
-        wx.navigateTo({ url: '/pages/login/index' })
-        return
-      }
-      wx.navigateTo({
-        url: '/pages/benefit-officer/index'
-      })
-      return
-    }
-
-    if (title === '获取积分') {
-      if (!isLoggedIn()) {
-        wx.navigateTo({ url: '/pages/login/index' })
-        return
-      }
-      wx.switchTab({
-        url: '/pages/benefit/index'
       })
       return
     }

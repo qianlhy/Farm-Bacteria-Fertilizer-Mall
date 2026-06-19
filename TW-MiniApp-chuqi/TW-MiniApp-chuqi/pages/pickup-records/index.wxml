@@ -1,0 +1,26 @@
+<view class="pickup-records-page">
+  <view class="pickup-records-topbar">
+    <view class="pickup-records-topbar__back" bindtap="goBack">
+      <view class="pickup-records-topbar__back-icon"></view>
+    </view>
+    <view class="pickup-records-topbar__title">提货记录</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="pickup-records-empty">加载中...</view>
+  <view wx:elif="{{!records.length}}" class="pickup-records-empty">暂无提货记录</view>
+
+  <block wx:if="{{records.length}}" wx:for="{{records}}" wx:key="id">
+    <view class="pickup-record-card">
+      <view class="pickup-record-card__head">
+        <view class="pickup-record-card__no">单号 {{item.orderNo}}</view>
+        <view class="pickup-record-card__status">{{item.statusText}}</view>
+      </view>
+      <view class="pickup-record-card__row">提货量：{{item.totalKg}} Kg · {{item.pickupTypeText}}</view>
+      <view wx:if="{{item.receiverAddress}}" class="pickup-record-card__row">地址：{{item.receiverAddress}}</view>
+      <view class="pickup-record-card__foot">
+        <view class="pickup-record-card__time">{{item.createdAt}}</view>
+        <view class="pickup-record-card__amount">扣减额度 {{item.deductKg}} Kg</view>
+      </view>
+    </view>
+  </block>
+</view>

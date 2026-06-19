@@ -23,14 +23,6 @@
         <view class="mine-balance-card__value">{{wallet}}</view>
         <view class="mine-balance-card__label">提货余额(Kg)</view>
       </view>
-      <view class="mine-balance-card__stat">
-        <view class="mine-balance-card__value">{{freightSubsidy}}</view>
-        <view class="mine-balance-card__label">运补余额(元)</view>
-      </view>
-      <view class="mine-balance-card__stat">
-        <view class="mine-balance-card__value">{{points}}</view>
-        <view class="mine-balance-card__label">积分余额</view>
-      </view>
     </view>
   </view>
 

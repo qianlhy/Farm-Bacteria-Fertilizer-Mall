@@ -9,6 +9,7 @@ import com.nongjia.mall.entity.SysUser;
 import com.nongjia.mall.mapper.PickupOrderMapper;
 import com.nongjia.mall.mapper.RechargeRecordMapper;
 import com.nongjia.mall.mapper.SysUserMapper;
+import com.nongjia.mall.service.PickupOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,8 @@ public class AdminOrderController {
     private PickupOrderMapper pickupOrderMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private PickupOrderService pickupOrderService;
 
     @GetMapping("/recharge-list")
     public Result<Map<String, Object>> rechargeList(
@@ -94,33 +97,24 @@ public class AdminOrderController {
         return Result.ok(data);
     }
 
-    @PostMapping("/pickup/confirm/{orderId}")
-    public Result<Void> confirmPickup(@PathVariable Long orderId) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        order.setStatus(2);
-        order.setConfirmedAt(LocalDateTime.now());
-        pickupOrderMapper.updateById(order);
-        return Result.ok("已确认");
+    @PostMapping("/pickup/pack/{orderId}")
+    public Result<Void> packPickup(@PathVariable Long orderId) {
+        return pickupOrderService.packOrder(orderId);
     }
 
-    @PostMapping("/pickup/complete/{orderId}")
-    public Result<Void> completePickup(@PathVariable Long orderId) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        order.setStatus(3);
-        order.setCompletedAt(LocalDateTime.now());
-        pickupOrderMapper.updateById(order);
-        return Result.ok("已完成");
+    @PostMapping("/pickup/ship/{orderId}")
+    public Result<Void> shipPickup(@PathVariable Long orderId) {
+        return pickupOrderService.shipOrder(orderId);
+    }
+
+    @PostMapping("/pickup/receive/{orderId}")
+    public Result<Void> receivePickup(@PathVariable Long orderId) {
+        return pickupOrderService.receiveOrder(orderId);
     }
 
     @PostMapping("/pickup/cancel/{orderId}")
-    public Result<Void> cancelPickup(@PathVariable Long orderId, @RequestBody Map<String, String> params) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        order.setStatus(4);
-        order.setRemark(params.getOrDefault("remark", "管理员取消"));
-        pickupOrderMapper.updateById(order);
-        return Result.ok("已取消");
+    public Result<Void> cancelPickup(@PathVariable Long orderId, @RequestBody(required = false) Map<String, String> params) {
+        String remark = params != null ? params.getOrDefault("remark", "管理员取消") : "管理员取消";
+        return pickupOrderService.cancelByAdmin(orderId, remark);
     }
 }

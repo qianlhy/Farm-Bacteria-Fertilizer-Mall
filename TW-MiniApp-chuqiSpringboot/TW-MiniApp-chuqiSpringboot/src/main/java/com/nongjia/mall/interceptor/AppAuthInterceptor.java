@@ -1,47 +1,22 @@
 package com.nongjia.mall.interceptor;
 
 import com.nongjia.mall.config.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
+/**
+ * 小程序端鉴权拦截器：接受小程序用户 token（含历史未带类型的 token）。
+ */
 @Component
-public class AppAuthInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private JwtUtil jwtUtil;
+public class AppAuthInterceptor extends BaseAuthInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return true;
-        }
-
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            sendUnauthorized(response, "未登录");
-            return false;
-        }
-
-        String token = authHeader.substring(7);
-        if (jwtUtil.isTokenExpired(token)) {
-            sendUnauthorized(response, "登录已过期");
-            return false;
-        }
-
-        Long userId = jwtUtil.getUserId(token);
-        request.setAttribute("userId", userId);
-        return true;
+    protected String attributeName() {
+        return "userId";
     }
 
-    private void sendUnauthorized(HttpServletResponse response, String msg) throws IOException {
-        response.setContentType("application/json;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write("{\"code\":401,\"message\":\"" + msg + "\"}");
+    @Override
+    protected boolean acceptType(String type) {
+        // 兼容历史未携带 type 的 token；明确为 admin 类型的 token 不允许访问 app 接口
+        return type == null || JwtUtil.TYPE_APP.equals(type);
     }
 }

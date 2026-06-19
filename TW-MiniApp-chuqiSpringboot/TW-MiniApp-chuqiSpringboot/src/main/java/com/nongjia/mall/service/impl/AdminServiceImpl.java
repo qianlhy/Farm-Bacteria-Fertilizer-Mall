@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nongjia.mall.entity.AdminUser;
 import com.nongjia.mall.mapper.AdminUserMapper;
 import com.nongjia.mall.service.AdminService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Service
 public class AdminServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> implements AdminService {
 
+    private static final Logger log = LoggerFactory.getLogger(AdminServiceImpl.class);
+
     @Autowired
     private AdminUserMapper adminUserMapper;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -22,27 +26,23 @@ public class AdminServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> im
     @Override
     @Transactional
     public AdminUser login(String username, String password) {
-        // 测试账号 bypass
-        if ("test".equals(username) && "test123".equals(password)) {
-            AdminUser fake = new AdminUser();
-            fake.setId(1L);
-            fake.setUsername("test");
-            fake.setRealName("测试管理员");
-            fake.setRole("super");
-            fake.setStatus(1);
-            return fake;
-        }
-
         AdminUser admin = adminUserMapper.selectOne(
             new LambdaQueryWrapper<AdminUser>()
                 .eq(AdminUser::getUsername, username)
                 .eq(AdminUser::getStatus, 1)
         );
-        if (admin == null) return null;
-        if (!passwordEncoder.matches(password, admin.getPassword())) return null;
+        if (admin == null) {
+            log.warn("管理员登录失败：用户名不存在或已禁用，username={}", username);
+            return null;
+        }
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            log.warn("管理员登录失败：密码错误，username={}", username);
+            return null;
+        }
         admin.setLastLoginAt(LocalDateTime.now());
         admin.setLastLoginIp("127.0.0.1");
         adminUserMapper.updateById(admin);
+        log.info("管理员登录成功，adminId={}, username={}", admin.getId(), username);
         return admin;
     }
 

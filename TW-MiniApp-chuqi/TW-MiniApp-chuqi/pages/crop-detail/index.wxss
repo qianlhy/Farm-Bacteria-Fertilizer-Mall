@@ -1,0 +1,126 @@
+.crop-page {
+  min-height: 100vh;
+  padding: 110rpx 0 80rpx;
+  background: #f0ece2;
+  box-sizing: border-box;
+}
+
+.crop-topbar {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 0 24rpx 24rpx;
+}
+
+.crop-topbar__back {
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-topbar__back-icon {
+  width: 22rpx;
+  height: 22rpx;
+  border-left: 5rpx solid #222;
+  border-bottom: 5rpx solid #222;
+  transform: rotate(45deg);
+}
+
+.crop-topbar__title {
+  flex: 1;
+  text-align: center;
+  padding-right: 52rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.crop-header {
+  width: 100%;
+  height: 380rpx;
+  display: block;
+}
+
+.crop-content {
+  margin: 24rpx;
+  padding: 32rpx;
+  background: #fffdf8;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 24rpx rgba(125, 92, 41, 0.08);
+}
+
+.crop-content__title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #4a3f2a;
+}
+
+.crop-content__body {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #5b513c;
+  white-space: pre-wrap;
+}
+
+.crop-report {
+  margin: 0 24rpx;
+}
+
+.crop-report__label {
+  margin: 8rpx 4rpx 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4a3f2a;
+}
+
+.crop-report__file {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx;
+  background: #fffdf8;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 24rpx rgba(125, 92, 41, 0.08);
+}
+
+.crop-report__file--disabled {
+  opacity: 0.6;
+}
+
+.crop-report__icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  background: #e2483a;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-report__info {
+  flex: 1;
+}
+
+.crop-report__name {
+  font-size: 28rpx;
+  color: #4a3f2a;
+}
+
+.crop-report__hint {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #8a8067;
+}
+
+.crop-empty {
+  margin-top: 120rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #b0a890;
+}
