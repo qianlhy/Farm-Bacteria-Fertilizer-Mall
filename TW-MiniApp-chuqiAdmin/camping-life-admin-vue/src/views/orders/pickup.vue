@@ -96,26 +96,62 @@ function deductKg(row) {
 }
 
 async function handlePack(row) {
-  await ElMessageBox.confirm('确认开始打包该订单？', '开始打包')
-  const res = await packPickup(row.id)
-  if (res.code === 200) { ElMessage.success('已开始打包'); loadData() }
+  try {
+    await ElMessageBox.confirm('确认开始打包该订单？', '开始打包')
+  } catch {
+    return
+  }
+  try {
+    await packPickup(row.id)
+    ElMessage.success('已开始打包')
+    loadData()
+  } catch {
+    // 错误提示由 axios 拦截器统一处理
+  }
 }
 
 async function handleShip(row) {
-  await ElMessageBox.confirm('确认该订单已发货？', '发货')
-  const res = await shipPickup(row.id)
-  if (res.code === 200) { ElMessage.success('已发货'); loadData() }
+  try {
+    await ElMessageBox.confirm('确认该订单已发货？', '发货')
+  } catch {
+    return
+  }
+  try {
+    await shipPickup(row.id)
+    ElMessage.success('已发货')
+    loadData()
+  } catch {
+    // 错误提示由 axios 拦截器统一处理
+  }
 }
 
 async function handleReceive(row) {
-  await ElMessageBox.confirm('确认该订单已收货？', '确认收货')
-  const res = await receivePickup(row.id)
-  if (res.code === 200) { ElMessage.success('已收货'); loadData() }
+  try {
+    await ElMessageBox.confirm('确认该订单已收货？', '确认收货')
+  } catch {
+    return
+  }
+  try {
+    await receivePickup(row.id)
+    ElMessage.success('已收货')
+    loadData()
+  } catch {
+    // 错误提示由 axios 拦截器统一处理
+  }
 }
 
 async function handleCancel(row) {
-  await ElMessageBox.confirm('取消后将退还用户已扣额度，确认取消？', '取消', { type: 'warning' })
-  const res = await cancelPickup(row.id, { remark: '管理员取消' })
-  if (res.code === 200) { ElMessage.success('已取消并退还额度'); loadData() }
+  try {
+    await ElMessageBox.confirm('取消后将退还用户已扣额度，确认取消？', '取消', { type: 'warning' })
+  } catch {
+    return
+  }
+  try {
+    await cancelPickup(row.id, { remark: '管理员取消' })
+    ElMessage.success('已取消并退还额度')
+    loadData()
+  } catch {
+    // 错误提示由 axios 拦截器统一处理
+  }
 }
 </script>

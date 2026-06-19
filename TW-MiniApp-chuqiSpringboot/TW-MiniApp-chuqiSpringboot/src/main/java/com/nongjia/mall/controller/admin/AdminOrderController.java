@@ -97,7 +97,7 @@ public class AdminOrderController {
         return Result.ok(data);
     }
 
-    @PostMapping("/pickup/pack/{orderId}")
+    @PostMapping({"/pickup/pack/{orderId}", "/pickup/confirm/{orderId}"})
     public Result<Void> packPickup(@PathVariable Long orderId) {
         return pickupOrderService.packOrder(orderId);
     }

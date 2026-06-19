@@ -46,6 +46,10 @@ Page({
     this.loadRecords()
   },
 
+  onPullDownRefresh() {
+    this.loadRecords().finally(() => wx.stopPullDownRefresh())
+  },
+
   async loadRecords() {
     this.setData({ loading: true })
     try {

@@ -5,6 +5,7 @@ package com.nongjia.mall.service.impl;
 import cn.hutool.core.util.IdUtil;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -330,34 +331,46 @@ public class PickupOrderServiceImpl extends ServiceImpl<PickupOrderMapper, Picku
 
     @Override
     public Result<Void> packOrder(Long orderId) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        if (order.getStatus() != 1) return Result.fail("仅待确认订单可开始打包");
-        order.setStatus(2);
-        order.setConfirmedAt(LocalDateTime.now());
-        pickupOrderMapper.updateById(order);
+        int rows = pickupOrderMapper.update(null, new LambdaUpdateWrapper<PickupOrder>()
+            .eq(PickupOrder::getId, orderId)
+            .eq(PickupOrder::getStatus, 1)
+            .set(PickupOrder::getStatus, 2)
+            .set(PickupOrder::getConfirmedAt, LocalDateTime.now()));
+        if (rows == 0) {
+            PickupOrder order = pickupOrderMapper.selectById(orderId);
+            if (order == null) return Result.fail("订单不存在");
+            return Result.fail("仅待确认订单可开始打包");
+        }
         return Result.ok("已开始打包");
     }
 
     @Override
     public Result<Void> shipOrder(Long orderId) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        if (order.getStatus() != 2) return Result.fail("仅打包中订单可发货");
-        order.setStatus(3);
-        order.setShippedAt(LocalDateTime.now());
-        pickupOrderMapper.updateById(order);
+        int rows = pickupOrderMapper.update(null, new LambdaUpdateWrapper<PickupOrder>()
+            .eq(PickupOrder::getId, orderId)
+            .eq(PickupOrder::getStatus, 2)
+            .set(PickupOrder::getStatus, 3)
+            .set(PickupOrder::getShippedAt, LocalDateTime.now()));
+        if (rows == 0) {
+            PickupOrder order = pickupOrderMapper.selectById(orderId);
+            if (order == null) return Result.fail("订单不存在");
+            return Result.fail("仅打包中订单可发货");
+        }
         return Result.ok("已发货");
     }
 
     @Override
     public Result<Void> receiveOrder(Long orderId) {
-        PickupOrder order = pickupOrderMapper.selectById(orderId);
-        if (order == null) return Result.fail("订单不存在");
-        if (order.getStatus() != 3) return Result.fail("仅已发货订单可确认收货");
-        order.setStatus(4);
-        order.setCompletedAt(LocalDateTime.now());
-        pickupOrderMapper.updateById(order);
+        int rows = pickupOrderMapper.update(null, new LambdaUpdateWrapper<PickupOrder>()
+            .eq(PickupOrder::getId, orderId)
+            .eq(PickupOrder::getStatus, 3)
+            .set(PickupOrder::getStatus, 4)
+            .set(PickupOrder::getCompletedAt, LocalDateTime.now()));
+        if (rows == 0) {
+            PickupOrder order = pickupOrderMapper.selectById(orderId);
+            if (order == null) return Result.fail("订单不存在");
+            return Result.fail("仅已发货订单可确认收货");
+        }
         return Result.ok("已收货");
     }
 

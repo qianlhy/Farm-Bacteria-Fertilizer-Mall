@@ -33,6 +33,11 @@ request.interceptors.response.use(
       handleSessionExpired(data.message)
       return Promise.reject(new Error(data.message || '登录已过期'))
     }
+    // 业务失败（HTTP 200 但 code != 200）也要提示，否则页面看起来“没反应”
+    if (data && typeof data.code === 'number' && data.code !== 200) {
+      ElMessage.error(data.message || '操作失败')
+      return Promise.reject(new Error(data.message || '操作失败'))
+    }
     return data
   },
   (error) => {
@@ -68,10 +73,10 @@ export const adjustWallet = (data) => request.post('/admin/users/wallet/adjust',
 export const getRechargeList = (params) => request.get('/admin/orders/recharge-list', { params })
 export const confirmRecharge = (orderId) => request.post(`/admin/orders/recharge/confirm/${orderId}`)
 export const getPickupList = (params) => request.get('/admin/orders/pickup-list', { params: cleanParams(params) })
-export const packPickup = (orderId) => request.post(`/admin/orders/pickup/pack/${orderId}`)
-export const shipPickup = (orderId) => request.post(`/admin/orders/pickup/ship/${orderId}`)
-export const receivePickup = (orderId) => request.post(`/admin/orders/pickup/receive/${orderId}`)
-export const cancelPickup = (orderId, data) => request.post(`/admin/orders/pickup/cancel/${orderId}`, data)
+export const packPickup = (orderId) => request.post(`/admin/orders/pickup/confirm/${orderId}`, {})
+export const shipPickup = (orderId) => request.post(`/admin/orders/pickup/ship/${orderId}`, {})
+export const receivePickup = (orderId) => request.post(`/admin/orders/pickup/receive/${orderId}`, {})
+export const cancelPickup = (orderId, data) => request.post(`/admin/orders/pickup/cancel/${orderId}`, data || {})
 
 export const getTrialList = (params) => request.get('/admin/trial/list', { params })
 export const confirmTrial = (id) => request.post(`/admin/trial/confirm/${id}`)
