@@ -52,24 +52,6 @@
         />
       </view>
 
-      <view class="trial-docs-map-block">
-        <view class="trial-docs-map-head">
-          <view class="trial-docs-field__label">当前地点</view>
-          <view class="trial-docs-location" bindtap="fillCurrentLocation">获取当前地址</view>
-        </view>
-        <view class="trial-docs-map-shell">
-          <map
-            class="trial-docs-map"
-            latitude="{{mapLatitude}}"
-            longitude="{{mapLongitude}}"
-            scale="15"
-            show-location
-          ></map>
-          <view class="trial-docs-map__pin"></view>
-        </view>
-        <view class="trial-docs-map__caption">{{currentLocationText || '点击上方按钮获取地图上的当前位置'}}</view>
-      </view>
-
       <view class="trial-docs-field">
         <view class="trial-docs-field__label">详细收货地址</view>
         <input

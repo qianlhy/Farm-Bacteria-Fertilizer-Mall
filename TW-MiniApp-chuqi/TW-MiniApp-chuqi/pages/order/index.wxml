@@ -1,6 +1,38 @@
-<view class="page-shell action-page">
-  <view class="action-card soft-card">
-    <view class="action-card__title">订购中心</view>
-    <view class="action-card__desc">这里可以继续扩展商品列表、规格选择、购物车和支付流程。</view>
+<view class="order-center">
+  <view class="order-center__entries">
+    <view class="order-entry" bindtap="goRechargeRecords">
+      <view class="order-entry__name">充值记录</view>
+      <view class="order-entry__arrow">›</view>
+    </view>
+  </view>
+
+  <view class="order-center__title">提货订单</view>
+
+  <block wx:if="{{loggedIn}}">
+    <view wx:if="{{loading}}" class="order-center__empty">加载中...</view>
+    <view wx:elif="{{!records.length}}" class="order-center__empty">
+      <view>暂无提货订单</view>
+      <view class="order-center__empty-btn" bindtap="goPickup">去提货</view>
+    </view>
+
+    <block wx:for="{{records}}" wx:key="id">
+      <view class="order-card">
+        <view class="order-card__head">
+          <view class="order-card__no">单号 {{item.orderNo}}</view>
+          <view class="order-card__status">{{item.statusText}}</view>
+        </view>
+        <view class="order-card__row">提货量：{{item.totalKg}} Kg · {{item.pickupTypeText}}</view>
+        <view wx:if="{{item.receiverAddress}}" class="order-card__row">地址：{{item.receiverAddress}}</view>
+        <view class="order-card__foot">
+          <view class="order-card__time">{{item.createdAt}}</view>
+          <view class="order-card__amount">扣减额度 {{item.deductKg}} Kg</view>
+        </view>
+      </view>
+    </block>
+  </block>
+
+  <view wx:else class="order-center__empty">
+    <view>登录后查看你的订单</view>
+    <view class="order-center__empty-btn" bindtap="goLogin">去登录</view>
   </view>
 </view>

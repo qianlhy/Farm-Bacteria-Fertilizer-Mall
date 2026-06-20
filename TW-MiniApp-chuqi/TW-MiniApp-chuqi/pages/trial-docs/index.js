@@ -92,27 +92,6 @@ Page({
     this.updateSubmitState()
   },
 
-  fillCurrentLocation() {
-    wx.getLocation({
-      type: 'gcj02',
-      success: ({ latitude, longitude }) => {
-        const currentLocationText = `当前位置 ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
-        this.setData({
-          mapLatitude: latitude,
-          mapLongitude: longitude,
-          currentLocationText,
-          deliveryAddress: this.data.deliveryAddress || currentLocationText
-        })
-        this.updateSubmitState()
-      },
-      fail: () => {
-        wx.showToast({
-          title: '暂时无法获取当前位置',
-          icon: 'none'
-        })
-      }
-    })
-  },
 
   updateSubmitState() {
     const {

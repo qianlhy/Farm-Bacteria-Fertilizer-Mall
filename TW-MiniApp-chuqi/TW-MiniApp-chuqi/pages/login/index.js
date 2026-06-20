@@ -35,6 +35,14 @@ Page({
     this.setData({ agreed: !this.data.agreed })
   },
 
+  openUserAgreement() {
+    wx.navigateTo({ url: '/pages/agreement/index?type=user' })
+  },
+
+  openPrivacyPolicy() {
+    wx.navigateTo({ url: '/pages/agreement/index?type=privacy' })
+  },
+
   ensureAgreed() {
     if (!this.data.agreed) {
       wx.showToast({

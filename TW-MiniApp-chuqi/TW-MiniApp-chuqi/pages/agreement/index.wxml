@@ -1,0 +1,24 @@
+<view class="agreement-page">
+  <view class="agreement-topbar">
+    <view class="agreement-topbar__back" bindtap="goBack">
+      <view class="agreement-topbar__back-icon"></view>
+    </view>
+    <view class="agreement-topbar__title">{{doc.title}}</view>
+  </view>
+
+  <view class="agreement-body">
+    <view class="agreement-head">
+      <view class="agreement-head__title">{{doc.title}}</view>
+      <view class="agreement-head__date">{{doc.updatedAt}}</view>
+    </view>
+
+    <block wx:for="{{doc.sections}}" wx:key="heading">
+      <view class="agreement-section">
+        <view class="agreement-section__heading">{{item.heading}}</view>
+        <block wx:for="{{item.paragraphs}}" wx:for-item="para" wx:key="*this">
+          <view class="agreement-section__para">{{para}}</view>
+        </block>
+      </view>
+    </block>
+  </view>
+</view>

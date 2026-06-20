@@ -2,6 +2,7 @@ const { clearAuth, getUser, isLoggedIn, fetchUserInfo } = require('../../utils/a
 const { syncTabBarSelected } = require('../../utils/tabBar')
 
 const TOOL_ROUTES = {
+  '我的订单': '/pages/order/index',
   '账户充值': '/pages/recharge/index',
   '充值记录': '/pages/recharge-records/index',
   '团购核销': '/pages/group-check/index?tab=douyin',
@@ -20,6 +21,7 @@ Page({
     nickname: '',
     avatar: '',
     tools: [
+      { title: '我的订单', icon: '/assets/svg-icons/order-line.svg', auth: true },
       { title: '账户充值', icon: '/assets/svg-icons/wallet-line.svg', auth: true },
       { title: '充值记录', icon: '/assets/svg-icons/order-line.svg', auth: true },
       { title: '团购核销', icon: '/assets/svg-icons/coupon-line.svg', auth: false },

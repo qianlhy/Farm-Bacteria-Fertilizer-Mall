@@ -29,9 +29,9 @@
     <view class="login-form__agree-row" bindtap="toggleAgree">
       <view class="login-form__checkbox {{agreed ? 'login-form__checkbox--checked' : ''}}"></view>
       <text class="login-form__agree-text">已阅读并同意</text>
-      <text class="login-form__link">《用户协议》</text>
+      <text class="login-form__link" catchtap="openUserAgreement">《用户协议》</text>
       <text class="login-form__agree-text">和</text>
-      <text class="login-form__link">《隐私政策》</text>
+      <text class="login-form__link" catchtap="openPrivacyPolicy">《隐私政策》</text>
     </view>
 
     <button
